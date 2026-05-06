@@ -1,0 +1,19 @@
+<?php
+require_once('connections/connect-db.php');
+if(isset($_POST['search'])) {
+    $search = "%" . $_POST['search'] . "%";
+    $stmt = $pdo->prepare("SELECT * FROM ammunitions WHERE ammo_name LIKE ? AND is_deleted = 0 LIMIT 10");
+    $stmt->execute([$search]);
+    
+    $response = [];
+    while($row = $stmt->fetch()) {
+        $response[] = [
+            "value" => $row['ammoID'],
+            "label" => $row['ammo_name'],
+            "stock" => $row['ammo_rounds'],
+            "manufacturer" => $row['manufacturer']
+        ];
+    }
+    echo json_encode($response);
+}
+?>  
