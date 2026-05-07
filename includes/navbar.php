@@ -184,12 +184,12 @@ body {
                 </div>
             </li>
 
-            <li class="nav-item nav-status-group d-none d-sm-flex">
+            <!-- <li class="nav-item nav-status-group d-none d-sm-flex">
                 <div class="d-flex flex-column align-items-end">
                     <p id="clock">12:45:08</p>
                     <p id="date">20 APR 2026</p>
                 </div>
-            </li>
+            </li> -->
 
             <li class="nav-item dropdown ml-3">
                 <a class="nav-link" id="profileDropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">

@@ -220,8 +220,8 @@ try {
             </a>
             <div class="collapse" id="returns">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="not-returns-firearms">Firearm Returns</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="not-returns-ammo">Ammunition Returns</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="not-returns-firearms">Deployed Firearm </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="not-returns-ammo">Deployed Ammo</a></li>
                 </ul>
             </div>
         </li>
