@@ -28,6 +28,7 @@ $row = $stmt->fetch();
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
       :root {
         --bg-tactical: #0d0f12;

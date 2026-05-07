@@ -21,6 +21,7 @@ $records = $history->fetchAll();
     <meta charset="utf-8">
     <title>PROFILE | <?= $officer['full_name'] ?></title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         body { background: #020408; color: #fff; font-family: 'JetBrains Mono'; }
         .profile-header { border-bottom: 2px solid #00f2ff; padding: 20px; margin-bottom: 30px; }

@@ -18,7 +18,7 @@ if(!isset($_SESSION["username"]) || ($_SESSION["user_role"] != 'Armourer' && $_S
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
-    
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         :root {
             --neon-cyan: #00f2ff;

@@ -58,7 +58,7 @@ try {
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;500&display=swap" rel="stylesheet">
-    
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         :root {
             --cmd-bg: #05070a;

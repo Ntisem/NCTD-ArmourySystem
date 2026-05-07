@@ -29,6 +29,7 @@ if($admin_data) {
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         :root { --neon-cyan: #00f2ff; --panel-dark: #05070a; }
         body { background-color: var(--panel-dark); font-family: 'JetBrains Mono', monospace; }

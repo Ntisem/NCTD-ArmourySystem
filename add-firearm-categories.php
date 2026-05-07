@@ -20,6 +20,7 @@ $a_id   = $_SESSION['adminID'] ?? 0;
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         :root { --neon-cyan: #00f2ff; --neon-green: #00ffa3; --neon-red: #ff4b2b; }
         .tactical-card { background: #0b0e14; border: 1px solid #1a1f2b; }

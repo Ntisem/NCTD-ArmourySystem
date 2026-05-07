@@ -18,6 +18,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] != 'Armourer') {
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="shortcut icon" href="assets/images/favicon.png" />
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
       body {
         background-color: #05070a;

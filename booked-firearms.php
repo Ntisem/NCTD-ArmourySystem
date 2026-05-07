@@ -58,7 +58,7 @@ $bookings = $stmt->fetchAll();
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;500&display=swap" rel="stylesheet">
-    
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         :root { 
             --neon: #00f2ff; 

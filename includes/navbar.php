@@ -148,7 +148,7 @@ body {
 
         <ul class="navbar-nav w-100">
             <li class="nav-item w-100">
-                <a href="search.php" class="ml-3"> 
+                <a href="search" class="ml-3"> 
                     <button class="btn btn-outline-danger btn-sm" style="border-radius: 0; font-size: 0.7rem; letter-spacing: 1px;">
                         <i class="mdi mdi-magnify"></i> INTEL SEARCH
                     </button>

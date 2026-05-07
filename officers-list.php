@@ -150,7 +150,7 @@ if (isset($_GET['view_id'])) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
-
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         :root { --neon: #00f2ff; --bg-deep: #020408; --card-bg: #0a0d12; --danger: #ff3333; --text-main: #e0e0e0; }
         body { background: var(--bg-deep); font-family: 'JetBrains Mono', monospace; color: var(--text-main); }

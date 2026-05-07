@@ -44,6 +44,7 @@ $unit_dept    = $row['unit_dept'] ?? '';
     <link rel="stylesheet" href="dist/css/theme.min.css">
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
       body, .main-panel, .card, .table, .modal-content {
         background-color: #05070a !important;

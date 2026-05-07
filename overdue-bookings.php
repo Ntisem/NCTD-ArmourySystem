@@ -21,6 +21,7 @@ $bookings = $stmt->fetchAll();
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         :root { 
             --neon: #00f2ff; 

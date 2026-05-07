@@ -49,6 +49,7 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
 
     <style>
         :root { --neon-cyan: #00f2ff; --neon-amber: #f9a602; --panel-dark: #05070a; --neon-red: #ff4b2b; }

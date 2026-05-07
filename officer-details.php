@@ -38,6 +38,7 @@ $bookings = $stmt_bookings->fetchAll();
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
 
     <style>
         :root { 

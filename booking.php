@@ -21,7 +21,7 @@ $admin = $stmt->fetch();
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         :root { --neon: #00f2ff; --bg-deep: #020408; --card-bg: #0a0d12; --input-border: #00f2ff; --danger: #ff3333; }
         body { background: var(--bg-deep); font-family: 'JetBrains Mono', monospace; color: #e0e0e0; }

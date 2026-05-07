@@ -27,7 +27,7 @@ $admin_data = $stmtAdmin->fetch();
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
-    
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         :root { --bg-deep: #05070a; --neon-cyan: #00f2ff; --neon-amber: #f9a602; --tactical-red: #ff3e3e; --success-green: #00ffa3; }
         body { background-color: var(--bg-deep) !important; font-family: 'JetBrains Mono', monospace; color: #e0e0e0; }

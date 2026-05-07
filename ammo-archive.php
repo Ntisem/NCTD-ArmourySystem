@@ -11,6 +11,7 @@ $archived = $stmt->fetchAll();
 <head>
     <title>HQ COMMAND | AMMO_ARCHIVE</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
 </head>
 <body class="bg-dark text-white">
     <div class="container-scroller p-4">

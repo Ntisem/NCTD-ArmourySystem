@@ -14,6 +14,7 @@ if (!$asset) { die("[CRITICAL_ERROR]: ASSET_NOT_FOUND"); }
 <head>
     <title>HQ | DEEP_DIVE: <?= $asset['firearm_serial_no'] ?></title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         body { background: #05070a; color: #e0e0e0; font-family: 'JetBrains Mono', monospace; }
         .detail-box { border-left: 4px solid #00f2ff; background: #0a0c10; padding: 15px; margin-bottom: 15px; transition: 0.3s; }

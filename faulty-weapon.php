@@ -37,6 +37,7 @@ $faulty_weapons = $stmt_faulty->fetchAll();
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
       :root {
         --bg-tactical: #0d0f12;

@@ -23,6 +23,7 @@ if(!$row) { die("RECORDS_NOT_FOUND: ACCESS_DENIED"); }
     <title>GPS ARMOURY - UPDATE_FIREARM</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         :root { --neon-cyan: #00f2ff; --neon-amber: #f9a602; --tactical-bg: #05070a; }
         body { background: var(--tactical-bg); color: #fff; font-family: 'Roboto Mono', monospace; }
