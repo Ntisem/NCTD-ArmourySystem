@@ -221,7 +221,7 @@ if (isset($_GET['view_id'])) {
                         </div>
                     </div>
                     <a href="officers-list.php" class="btn btn-danger-tactical ml-2"><i class="mdi mdi-refresh"></i> RESET</a>
-                      <a href="javascript:history.back()" class="btn btn-tactical ml-2">
+                      <a href="armourer" class="btn btn-tactical ml-2">
                         <i class="mdi mdi-arrow-left mr-1"></i>BACK
                     </a>
                 </div>
