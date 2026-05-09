@@ -1,256 +1,387 @@
-
-<?php  require_once('connections/connect-db.php');?>
-<?php  
-require_once('functions.php');
+<?php 
+require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
-?>
 
-<?php
-    // session_start();
-    if(!isset($_SESSION["username"])) {
-        header("location: login");
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login.php");
+    exit();
+}
+
+// Fetch current admin details
+$stmt = $pdo->prepare("SELECT adminID, fullname, service_no, rank FROM admin_lists WHERE username = ?");
+$stmt->execute([$_SESSION['username']]);
+$admin = $stmt->fetch();
+
+// --- START DATABASE LOGIC FOR FILTERING ---
+$officer_rank = $_GET['Rank'] ?? null;
+$startDate = $_GET['start_date'] ?? null;
+$endDate = $_GET['end_date'] ?? null;
+
+$query = "SELECT * FROM officers WHERE 1=1";
+$params = [];
+
+// Apply Rank and Status Filter if Rank is selected
+if (!empty($officer_rank)) {
+    $query .= " AND (
+        (`rank` = ? AND `officer_status` = 'Active') 
+        OR 
+        (`rank` = ? AND `officer_status` = 'Active In Service')
+    )";
+    $params[] = $officer_rank;
+    $params[] = $officer_rank;
+}
+
+// Apply Date Range Filter if provided
+if (!empty($startDate) && !empty($endDate)) {
+    $query .= " AND DATE(created_at) BETWEEN ? AND ?";
+    $params[] = $startDate;
+    $params[] = $endDate;
+}
+
+$query .= " ORDER BY officer_service_no ASC";
+
+$stmt = $pdo->prepare($query);
+$stmt->execute($params);
+$officers = $stmt->fetchAll();
+// --- END DATABASE LOGIC ---
+
+// 1. Handle Officer Update
+if (isset($_POST['update_officer'])) {
+    $officerID          = (int)$_POST['edit_officerID'];
+    $officer_service_no = trim($_POST['edit_officer_service_no']);
+    $rank               = trim($_POST['edit_rank']);
+    $full_name          = trim($_POST['edit_full_name']);
+    $gender             = trim($_POST['edit_gender']);
+    $dept_unit          = trim($_POST['edit_dept_unit']);
+    $phone              = trim($_POST['edit_phone']);
+    $email              = trim($_POST['edit_email']);
+    $current_image      = $_POST['edit_current_image'];
+
+    $officer_image = $current_image;
+
+    if (isset($_FILES['officer_image']) && $_FILES['officer_image']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath   = $_FILES['officer_image']['tmp_name'];
+        $fileName      = $_FILES['officer_image']['name'];
+        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        
+        $allowedExtensions = ['jpg', 'jpeg', 'png'];
+        if (in_array($fileExtension, $allowedExtensions)) {
+            $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+            $uploadFileDir = 'uploads/';
+            if(!is_dir($uploadFileDir)) mkdir($uploadFileDir, 0755, true);
+            
+            if(move_uploaded_file($fileTmpPath, $uploadFileDir . $newFileName)) {
+                $officer_image = $newFileName;
+            }
+        }
+    }
+
+    try {
+        $pdo->beginTransaction();
+        $sql = "UPDATE officers SET officer_service_no = ?, rank = ?, full_name = ?, gender = ?, dept_unit = ?, phone = ?, email = ?, officer_image = ? WHERE officerID = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$officer_service_no, $rank, $full_name, $gender, $dept_unit, $phone, $email, $officer_image, $officerID]);
+
+        $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
+        $log_action = "UPDATED_OFFICER: " . $full_name . " (SN: " . $officer_service_no . ")";
+        $log->execute([$admin['adminID'], $admin['fullname'], $log_action, $_SESSION['user_role']]);
+
+        $pdo->commit();
+        header("Location: officers-list.php?status=success");
+        exit();
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        header("Location: officers-list.php?status=error");
         exit();
     }
+}
+
+// 2. Handle Officer Deletion
+if (isset($_POST['delete_officer'])) {
+    $id = $_POST['delete_id'];
+    try {
+        $pdo->beginTransaction();
+        $stmt = $pdo->prepare("DELETE FROM officers WHERE officerID = ?");
+        $stmt->execute([$id]);
+
+        $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
+        $log->execute([$admin['adminID'], $admin['fullname'], "DELETED_OFFICER_ID_" . $id, $_SESSION['user_role']]);
+
+        $pdo->commit();
+        header("Location: officers-list.php?status=success");
+        exit();
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        header("Location: officers-list.php?status=error");
+        exit();
+    }
+}
+
+// 3. Handle AJAX View Request
+if (isset($_GET['view_id'])) {
+    $id = (int)$_GET['view_id'];
+    $stmt = $pdo->prepare("SELECT * FROM officers WHERE officerID = ?");
+    $stmt->execute([$id]);
+    $off = $stmt->fetch();
+    if ($off) {
+        echo '<div class="row text-light"><div class="col-md-4 text-center">';
+        echo '<img src="uploads/' . htmlspecialchars($off['officer_image']) . '" style="width: 150px; height: 150px; border-radius: 5px; border: 2px solid var(--neon); object-fit: cover;" class="mb-3">';
+        echo '</div><div class="col-md-8">';
+        echo '<p><strong>Service No:</strong> ' . htmlspecialchars($off['officer_service_no']) . '</p>';
+        echo '<p><strong>Rank:</strong> ' . htmlspecialchars($off['rank']) . '</p>';
+        echo '<p><strong>Full Name:</strong> ' . htmlspecialchars($off['full_name']) . '</p>';
+        echo '<p><strong>Status:</strong> ' . htmlspecialchars($off['officer_status']) . '</p>';
+        echo '<p><strong>Dept/Unit:</strong> ' . htmlspecialchars($off['dept_unit']) . '</p>';
+        echo '<p><strong>Phone:</strong> ' . htmlspecialchars($off['phone']) . '</p>';
+        echo '</div></div>';
+    }
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - OFFICERS LIST</title>
-    <!-- plugins:css -->
+    <title>COMMAND_TERMINAL | OFFICERS_DIRECTORY</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <!-- <link rel="stylesheet" href="dist/css/theme.css"> -->
-    <link rel="stylesheet" href="dist/css/theme.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
-    <!-- endinject -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  <!-- Theme style -->
-    <!-- endinject -->
-    <!-- Layout styles -->
-    <link rel="stylesheet" href="assets/css/style.css">
-    <!-- End layout styles -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
     <link rel="shortcut icon" href="assets/images/favicon.png" />
-  </head>
-  <body onload=display_ct();>
-    <div class="container-scroller">
-    <!-- partial:includes/_sidebar.html -->
-    <?php  require_once('includes/sidebar.php');?>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:includes/_navbar.html -->
-        <?php  require_once('includes/navbar.php');?>
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title"> Officers List </h3>
-              <nav aria-label="breadcrumb">
-                
-              </nav>
-            </div>
-          <section class="content">
-          <div class="container-fluid">
-           <div class="row">
-          <div class="col-12">
-            
-            <div class="card">
-              <!-- /.card-header -->
-              <div class="card-body">
-              <p class="card-description"><a href="add-new-officer"><code><i class="mdi mdi-account-plus f-22 text-green" 
-                    data-toggle="tooltip" data-placement="right" title="Click to Add New Officer"></i></code></a>
-                    </p>
-                <table id="officers-list" class="table table-bordered ">
-                  <thead>
-                  <tr>
-                  <tr>
-                  <th> # </th>
-                  <th> User </th>
-                  <th> Serv. No. </th>
-                  <th> Rank </th>
-                  <th> Name </th>
-                  <th> Phone Number </th>
-                  <th> Email </th>
-                  <th>Unit/Dept</th>
-                  <th>Date/Time</th>
-                  <th>Actions</th>
-                </tr>
-                  </thead>
-                  <tbody>
-                  <?php
-                      $username=$_SESSION['username']; 
-                      $query = mysqli_query($connect_db,"SELECT * FROM `admin_lists` WHERE `username`='$username'")
-                      or die( mysqli_error($connect_db));
-                      while ($row = mysqli_fetch_array($query)) {
-                        $profile_image = $row['profile_image'];
-                        $fullname = $row['fullname'];
-                        $_SESSION['fullname'] =  $fullname;
-                        $user_status= $row['user_role'];
-                        $_SESSION['user_status'] =  $user_status; 
-                        $service_no = $row['service_no'];
-                        $_SESSION['service_no']=$service_no;
-                        $admin_rank =$row['rank'];
-                        $_SESSION['rank']=$admin_rank;
-                        $adminID_armourerID =$row['adminID'];
-                        $_SESSION['adminID']=$adminID_armourerID;    
-                        $_SESSION['adminID_armourerID']=$adminID_armourerID; 
-                        $admin_armourer_user_role = $row['user_role'];
-                        $_SESSION['user_role'] =  $admin_armourer_user_role;   
-                        $_SESSION['admin_armourer_user_role'] =  $admin_armourer_user_role;                
-                        $armourer_admin_name  =  $service_no.' '.$admin_rank.' '.$fullname;
-                        $_SESSION['armourer_admin_name'] = $armourer_admin_name;
-                            }
-                  
-                  
-                          $query = mysqli_query($connect_db,"SELECT * FROM `officers`  ORDER BY `officerID` ASC")
-                          or die( mysqli_error($connect_db));
-                          while ($row = mysqli_fetch_array($query)) {
-                              $output = "";
-                              $officer_image = $row['officer_image'];
-                              $_SESSION['officer_image'] = $officer_image;
-                              if(empty($officer_image))
-                              {
-                              echo
-                              $output .= '
-                            <tr>
-                            <td> '.$row['officerID'].' </td>
-                            <td class="py-1">
-                              <img src="assets/images/officer_images/avatar_placeholder.png" alt="image" />
-                            </td>
-                            <td> '.$row['officer_service_no'].' </td>
-                            <td> '.$row['rank'].'</td>
-                            <td><a style="text-decoration:none;color:#fff;" href="officers-booking?officerID='.$row['officerID'].'">
-                             '.$row['full_name'].'</a></td>
-                            <td> '.$row['phone_no'].' </td>
-                            <td> '.$row['officer_email'].' </td>
-                            <td>
-                              <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'.$row['dept_unit'].'</div>
-                              </div>
-                            </td>
-                            <td> '.$row['datetime'].' </td>
-                            <td> 
-                            <a href="#edit-officer-'.$row['officerID'].'" data-toggle="modal"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                            &nbsp; &nbsp;<a href="#delete-officer-'.$row['officerID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
-                            </td>
-                          </tr>
-                          ';
-                        }else{
-                          echo
-                          $output .= '
-                          <tr>
-                            <td> '.$row['officerID'].' </td>
-                            <td class="py-1">
-                              <img src="assets/images/officer_images/'.$row['officer_image'].'" alt="image" />
-                            </td>
-                            <td> '.$row['officer_service_no'].' </td>
-                            <td> '.$row['rank'].'</td>
-                            <td><a style="text-decoration:none;color:#fff;" href="officers-booking?officerID='.$row['officerID'].'">
-                            '.$row['full_name'].'</a></td>
-                            <td> '.$row['phone_no'].' </td>
-                            <td> '.$row['officer_email'].' </td>
-                            <td>
-                              <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'.$row['dept_unit'].'</div>
-                              </div>
-                            </td>
-                            <td> '.$row['datetime'].' </td>
-                            <td> 
-                            <a href="#edit-officer-'.$row['officerID'].'" data-toggle="modal"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                            &nbsp; &nbsp;<a href="#delete-officer-'.$row['officerID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
-                            </td>
-                            </tr>
-                          
-                          ';
-                          include('actions_modals.php');
-                        }
-                        include('actions_modals.php');
-                          }?>
-                        </tbody>
-                  </tfoot>
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div></div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
-    </section>
- 
-          <!-- partial:partials/_footer.html -->
-          <?php  require_once('includes/footer.php');?>
-          <!-- partial -->
-          <!-- partial -->
-        </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <!-- DataTables  & Plugins -->
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="plugins/jszip/jszip.min.js"></script>
-<script src="plugins/pdfmake/pdfmake.min.js"></script>
-<script src="plugins/pdfmake/vfs_fonts.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <style>
+        :root { --neon: #00f2ff; --bg-deep: #020408; --card-bg: #0a0d12; --danger: #ff3333; --text-main: #e0e0e0; }
+        body { background: var(--bg-deep); font-family: 'JetBrains Mono', monospace; color: var(--text-main); }
+        
+        .card { background: var(--card-bg); border: 1px solid rgba(0, 242, 255, 0.2); border-radius: 4px; }
+        .btn-tactical { background: transparent; border: 1px solid var(--neon); color: var(--neon); font-size: 12px; transition: 0.3s; }
+        .btn-tactical:hover { background: var(--neon); color: var(--bg-deep); box-shadow: 0 0 10px var(--neon); }
+        .btn-danger-tactical { background: transparent; border: 1px solid var(--danger); color: var(--danger); font-size: 12px; transition: 0.3s; }
+        .btn-danger-tactical:hover { background: var(--danger); color: #fff; box-shadow: 0 0 10px var(--danger); }
+        
+        /* Landscape Dropdown Styling */
+        .landscape-dropdown-menu {
+            width: 90vw !important; max-width: 1100px;
+            background: #06090e !important; border: 1px solid var(--neon) !important;
+            padding: 20px !important; left: 50% !important; transform: translateX(-50%) !important;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+        }
+        .tactical-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;
+        }
+        .tactical-grid .dropdown-item {
+            border: 1px solid rgba(0, 242, 255, 0.2); color: var(--text-main) !important;
+            text-align: center; padding: 12px 5px; font-weight: bold; font-size: 11px;
+        }
+        .tactical-grid .dropdown-item:hover { background: var(--neon) !important; color: #000 !important; }
 
-<script>
-  $(function () {
-    $("#officers-list").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#officers-list_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script>
-  </body>
+        .table { color: var(--text-main); }
+        .table thead th { border-bottom: 2px solid var(--neon); color: var(--neon); text-transform: uppercase; font-size: 11px; }
+        .form-control { background: #111 !important; border: 1px solid rgba(0, 242, 255, 0.3) !important; color: #fff !important; }
+        
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
+        .t-toast { background: var(--card-bg); border-left: 5px solid var(--neon); padding: 15px; margin-bottom: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+    <div id="toast-container"></div>
+    <div class="container-fluid p-4">
+        
+        <div class="card mb-4">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <h4 class="m-0"><i class="mdi mdi-shield-account text-info"></i> OFFICERS_DIRECTORY 
+                    <?php if($officer_rank): ?> <span class="badge badge-outline-info ml-2">[<?php echo $officer_rank; ?>]</span><?php endif; ?>
+                </h4>
+                <div class="d-flex">
+                    <a href="add-officer.php" class="btn btn-tactical mr-2"><i class="mdi mdi-plus"></i> ADD_NEW</a>
+                    
+                    <div class="dropdown">
+                        <button class="btn btn-tactical dropdown-toggle" type="button" data-toggle="dropdown">
+                            <<< SELECT_RANK_FILTER >>>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right landscape-dropdown-menu">
+                            <h6 class="dropdown-header text-info mb-3">[ PERSONNEL_HIERARCHY_LEVELS ]</h6>
+                            <div class="tactical-grid">
+                                <a href="officers-list.php?Rank=COP" class="dropdown-item">COP</a>
+                                <a href="officers-list.php?Rank=DCOP" class="dropdown-item">DCOP</a>
+                                <a href="officers-list.php?Rank=ACP" class="dropdown-item">ACP</a>
+                                <a href="officers-list.php?Rank=C/SUPT" class="dropdown-item">C/SUPT</a>
+                                <a href="officers-list.php?Rank=SUPT" class="dropdown-item">SUPT</a>
+                                <a href="officers-list.php?Rank=DSP" class="dropdown-item">DSP</a>
+                                <a href="officers-list.php?Rank=ASP" class="dropdown-item">ASP</a>
+                                <a href="officers-list.php?Rank=C/INSPR" class="dropdown-item">C/INSPR</a>
+                                <a href="officers-list.php?Rank=INSPR" class="dropdown-item">INSPECTOR</a>
+                                <a href="officers-list.php?Rank=SGT" class="dropdown-item">SERGEANT</a>
+                                <a href="officers-list.php?Rank=CPL" class="dropdown-item">CORPORAL</a>
+                                <a href="officers-list.php?Rank=L/CPL" class="dropdown-item">L/CORPORAL</a>
+                                <a href="officers-list.php?Rank=CONST" class="dropdown-item">CONSTABLE</a>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="officers-list.php" class="btn btn-danger-tactical ml-2"><i class="mdi mdi-refresh"></i> RESET</a>
+                      <a href="armourer" class="btn btn-tactical ml-2">
+                        <i class="mdi mdi-arrow-left mr-1"></i>BACK
+                    </a>
+                </div>
+            </div>
+            
+            <form method="GET" class="form-inline p-3 border-top border-secondary">
+                <input type="hidden" name="Rank" value="<?php echo htmlspecialchars($officer_rank ?? ''); ?>">
+                <label class="mx-2 text-info">DATE_START:</label>
+                <input type="date" name="start_date" class="form-control form-control-sm" value="<?php echo $startDate; ?>">
+                <label class="mx-2 text-info">DATE_END:</label>
+                <input type="date" name="end_date" class="form-control form-control-sm" value="<?php echo $endDate; ?>">
+                <button type="submit" class="btn btn-tactical btn-sm ml-3">EXECUTE_SEARCH</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="officerTable" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>IMG</th>
+                                <th>SERVICE_NO</th>
+                                <th>RANK</th>
+                                <th>FULL_NAME</th>
+                                <th>DEPT/UNIT</th>
+                                <th>STATUS</th>
+                                <th>ACTION_PROTOCOLS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $n=1; foreach($officers as $row): ?>
+                            <tr>
+                                <td><?php echo $n++; ?></td>
+                                <td><img src="assets/images/officer_images/<?php echo $row['officer_image']; ?>" style="width:35px; height:35px; border-radius:3px; border:1px solid var(--neon);"></td>
+                                <td class="text-info font-weight-bold"><?php echo $row['officer_service_no']; ?></td>
+                                <td><?php echo $row['rank']; ?></td>
+                                <td><?php echo $row['full_name']; ?></td>
+                                <td><?php echo $row['dept_unit']; ?></td>
+                                <td>
+                                    <span class="badge <?php echo ($row['officer_status']=='Active') ? 'badge-success' : 'badge-primary'; ?>">
+                                        <?php echo strtoupper($row['officer_status']); ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-tactical btn-sm" onclick="viewDetails(<?php echo $row['officerID']; ?>)"><i class="mdi mdi-eye"></i></button>
+                                    <button class="btn btn-tactical btn-sm" onclick='openEditModal(<?php echo json_encode($row); ?>)'><i class="mdi mdi-pencil"></i></button>
+                                    <a href="officer-details.php?officerID=<?php echo $row['officerID']; ?>" class="btn btn-tactical btn-sm"><i class="mdi mdi-radar"></i></a>
+                                    <button class="btn btn-danger-tactical btn-sm" onclick="confirmDelete(<?php echo $row['officerID']; ?>)"><i class="mdi mdi-delete"></i></button>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="viewModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content bg-dark border-info"><div class="modal-body" id="viewModalBody"></div></div></div></div>
+
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog">
+            <form action="" method="POST" enctype="multipart/form-data" class="modal-content bg-dark border-info">
+                <div class="modal-header border-info"><h5 class="modal-title text-info">EDIT_OFFICER_RECORD</h5></div>
+                <div class="modal-body">
+                    <input type="hidden" name="edit_officerID" id="edit_officerID">
+                    <input type="hidden" name="edit_current_image" id="edit_current_image">
+                    <div class="form-group"><label>SERVICE NO</label><input type="text" name="edit_officer_service_no" id="edit_officer_service_no" class="form-control" required></div>
+                    <div class="form-group"><label>RANK</label><input type="text" name="edit_rank" id="edit_rank" class="form-control" required></div>
+                    <div class="form-group"><label>FULL NAME</label><input type="text" name="edit_full_name" id="edit_full_name" class="form-control" required></div>
+                    <div class="form-group"><label>DEPT/UNIT</label><input type="text" name="edit_dept_unit" id="edit_dept_unit" class="form-control" required></div>
+                    <div class="form-group"><label>GENDER</label>
+                        <select name="edit_gender" id="edit_gender" class="form-control">
+                            <option value="Male">Male</option><option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>PHONE</label><input type="text" name="edit_phone" id="edit_phone" class="form-control"></div>
+                    <div class="form-group"><label>EMAIL</label><input type="email" name="edit_email" id="edit_email" class="form-control"></div>
+                    <div class="form-group"><label>UPDATE IMAGE</label><input type="file" name="officer_image" class="form-control"></div>
+                </div>
+                <div class="modal-footer border-info">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ABORT</button>
+                    <button type="submit" name="update_officer" class="btn btn-tactical">COMMIT_CHANGES</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <form action="" method="POST" class="modal-content bg-dark border-danger">
+                <div class="modal-body text-center p-4">
+                    <i class="mdi mdi-alert-decagram text-danger" style="font-size: 50px;"></i>
+                    <h4 class="text-light mt-3">CONFIRM_DELETION?</h4>
+                    <p>This action will purge the officer record from the mainframe.</p>
+                    <input type="hidden" name="delete_id" id="delete_id">
+                    <button type="button" class="btn btn-tactical" data-dismiss="modal">CANCEL</button>
+                    <button type="submit" name="delete_officer" class="btn btn-danger-tactical">PROCEED_DELETE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#officerTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'excel', text: 'CSV', className: 'btn btn-tactical mx-1' },
+                    { extend: 'pdf', text: 'PDF', className: 'btn btn-tactical mx-1' },
+                    { extend: 'print', text: 'COPY', className: 'btn btn-tactical mx-1' }
+                ],
+                "order": [[ 2, "asc" ]] // Order by Service No
+            });
+
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('status')) {
+                let msg = params.get('status') === 'success' ? '[SIGNAL]: OP_SUCCESSFUL' : '[SIGNAL]: OP_FAILED';
+                $('<div class="t-toast">'+msg+'</div>').appendTo('#toast-container').fadeIn().delay(3000).fadeOut();
+            }
+        });
+
+        function viewDetails(id) {
+            $.get('officers-list.php?view_id=' + id, function(data) {
+                $('#viewModalBody').html(data);
+                $('#viewModal').modal('show');
+            });
+        }
+
+        function openEditModal(off) {
+            $('#edit_officerID').val(off.officerID);
+            $('#edit_officer_service_no').val(off.officer_service_no);
+            $('#edit_rank').val(off.rank);
+            $('#edit_full_name').val(off.full_name);
+            $('#edit_gender').val(off.gender);
+            $('#edit_dept_unit').val(off.dept_unit);
+            $('#edit_phone').val(off.phone);
+            $('#edit_email').val(off.email);
+            $('#edit_current_image').val(off.officer_image);
+            $('#editModal').modal('show');
+        }
+
+        function confirmDelete(id) {
+            $('#delete_id').val(id);
+            $('#deleteModal').modal('show');
+        }
+    </script>
+</body>
 </html>

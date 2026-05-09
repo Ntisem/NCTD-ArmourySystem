@@ -7,7 +7,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"])) {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
         header("location: login");
         exit();
     }
@@ -107,7 +107,8 @@ require_once('includes/user_auth.php');
                               <input type="hidden" name="user_role" class="form-control" id="exampleInputName1" value="<?php echo $user_role; ?>">
                               
                               <label style="margin-bottom:10px;" for="exampleInputName1"><code style="color:#fff">Issuing Officer:</code></label>   
-                              <label class="badge badge-dark col-sm-8 col-form-label"><code style="color:#fff"><?php echo $service_no.' '.$admin_rank.' '.$fullname ?></code></label>  
+                              <label class="badge badge-dark" style="margin-bottom:10px;" for="exampleInputName1"> Administrator: 
+                              <?php echo $service_no.' '.$admin_rank.' '.$fullname ?></label>   
                               <input type="hidden" name="armourer_issuer" class="form-control" id="exampleInputName1" 
                               value="<?php echo $service_no.' '.$admin_rank.' '.$fullname ?>">
                         </div>
@@ -319,6 +320,7 @@ require_once('includes/user_auth.php');
 
  
     </script>
+  
 <script>
   $(function () {
     $("#administrators-list").DataTable({

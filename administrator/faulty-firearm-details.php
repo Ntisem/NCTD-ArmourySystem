@@ -6,7 +6,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"])) {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
         header("location: login");
         exit();
     }
@@ -218,7 +218,7 @@ header .calendar-current-date {
                                       <tbody>
                                         <tr>
                                           <td>Firearm Image</td>
-                                          <td><img src="assets/images/faulty_firearm_images/'.$row['faulty_firearm_image'].' "alt="" style="height:250px;width:350px;"></td>
+                                          <td><img src="assets/images/faulty_firearm_images/'.$row['faulty_firearm_image'].' "alt="" style="height:250px;width:250px;"></td>
                                         </tr>
                                         <tr>
                                         <td>Serial No.</td>
@@ -232,10 +232,7 @@ header .calendar-current-date {
                                       <td>Type</td>
                                       <td>'.$row['faulty_firearm_type'].'</td>
                                       </tr>
-                                      <tr>
-                                      <td>Quantity</td>
-                                      <td>'.$row['faulty_quantity'].'</td>
-                                      </tr>
+                                     
                                       <tr>
                                       <td>Class</td>
                                       <td>'.$row['faulty_firearm_class'].'</td>

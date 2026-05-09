@@ -1,25 +1,17 @@
-
-<?php  require_once('connections/connect-db.php');
-
-require_once('functions.php');
-require_once('includes/user_auth.php');
-
+<?php
+require_once('connections/connect-db.php');
 if(isset($_POST['search'])){
-    $search = mysqli_real_escape_string($connect_db,$_POST['search']);
-
-    $query = "SELECT * FROM `ammunitions` WHERE ammo_name like '%$search%' or
-    manufacturer like '%$search%' or ammo_type like '%$search%' or ammo_name like '%$search%' or 
-    ammo_application like '%$search%' or ammo_type like '%$search%'";
-
-    $result = mysqli_query($connect_db,$query);
+    $search = "%" . $_POST['search'] . "%";
+    $stmt = $pdo->prepare("SELECT * FROM ammunitions WHERE ammo_name LIKE ? AND is_deleted = 0 LIMIT 10");
+    $stmt->execute([$search]);
     
-    while($row = mysqli_fetch_array($result) ){
-        $response[] = array("value"=>$row['ammoID'],"value2"=>$row['ammo_rounds'],"label" =>$row['ammo_serial_no'].' '.$row['ammo_name'].' ['.$row['ammo_type'].']');
+    $response = [];
+    while($row = $stmt->fetch()){
+        $response[] = [
+            "value" => $row['ammoID'],
+            "label" => $row['ammo_name'],
+            "stock" => $row['ammo_rounds']
+        ];
     }
- 
     echo json_encode($response);
 }
- 
-exit;
-
-?>

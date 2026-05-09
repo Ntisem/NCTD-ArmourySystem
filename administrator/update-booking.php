@@ -7,11 +7,12 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"])) {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
         header("location: login");
         exit();
     }
 ?>
+
  <?php
   $firearm_booking_ticket=$_GET['firearm-booking-ticket'];
 
@@ -51,8 +52,6 @@ require_once('includes/user_auth.php');
   $_SESSION['comment'] = $comment;   
   $returns =$row['returns'];
   $_SESSION['returns'] = $returns;
-  $bookingCode =$row['bookingCode'];
-  $_SESSION['bookingCode'] = $bookingCode;
   }?>
 
 <!DOCTYPE html>
@@ -61,7 +60,7 @@ require_once('includes/user_auth.php');
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - <?php echo 'Firearm Booking Ticket-'.$row['bookingCode'];?>]</title>
+    <title>GPS ARMOURY SYSTEM - <?php echo 'Firearm Booking Ticket-GPSA-'.$booking_ticket.': '.$firearm_name ?></title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
@@ -95,7 +94,7 @@ require_once('includes/user_auth.php');
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-            <h3 class="page-title">Updating Firearm Booking Ticket#<code class="success3">[<?php echo $bookingCode; ?>]</code></h3>
+            <h3 class="page-title">Updating Firearm Booking Ticket#<code class="success3">[GPSFAB<?php echo $firearm_booking_ticket; ?>]</code></h3>
               <nav aria-label="breadcrumb">
               
               </nav>
@@ -207,11 +206,10 @@ require_once('includes/user_auth.php');
                             <select name="firearm_name" class="form-control">
                               <option value="<?php echo $firearm_name ?>"><?php echo $firearm_name ?></option>
                             <?php
-                                $query = mysqli_query($connect_db,"SELECT * FROM `firearms` ORDER BY `firearmID` ASC")         
+                                $query = mysqli_query($connect_db,"SELECT * FROM `firearms`ORDER BY `firearmID` ASC")         
                                    or die( mysqli_error($connect_db));
                                    while ($row = mysqli_fetch_array($query)) {
-                                    $firearm_image = $row['firearm_image'];  
-                                    $_SESSION['firearm_image'] =$firearm_image;  
+                            
                                     $output = "";
                                                   
                                     echo   
@@ -272,17 +270,15 @@ require_once('includes/user_auth.php');
                              <select name="ammunition_name" class="form-control">
                              <option value="<?php echo $ammunition_name ?>"><?php echo $ammunition_name ?></option>
                              <?php
-                                $query = mysqli_query($connect_db,"SELECT `ammoID`, `ammo_image`, `ammo_serial_no`, `ammo_type`,
-                                 `ammo_name`, `ammo_application`, `ammo_rounds`, `grain_weight`, `datetime` 
-                                 FROM `ammunitions` ORDER BY `ammoID` ASC")         
+                                $query = mysqli_query($connect_db,"SELECT * FROM `ammunitions` ORDER BY `ammoID` ASC")         
                                    or die( mysqli_error($connect_db));
                                    while ($row = mysqli_fetch_array($query)) {
                                     $output = "";
                                                   
                                     echo   
                                     $output .='
-                                          <option value="'.$row['ammo_serial_no'].' '.$row['ammo_name'].' ( '.$row['ammo_type'].') ">
-                                          '.$row['ammo_serial_no'].' '.$row['ammo_name'].'<code> ('.$row['ammo_type'].')</code></option>';
+                                          <option value=" '.$row['ammo_name'].' ( '.$row['ammo_type'].') ">
+                                           '.$row['ammo_name'].'<code> ('.$row['ammo_type'].')</code></option>';
                                    }
                               ?>
                              </select>

@@ -7,7 +7,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"])) {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
         header("location: login");
         exit();
     }

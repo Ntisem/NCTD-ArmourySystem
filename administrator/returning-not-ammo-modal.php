@@ -4,7 +4,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header" style="background:orange;" >
-        <h5 class="modal-title" id="exampleModalLabel" style="color:#000;">Booking Ticket-[<?php echo $row['bookingCode'];?>]</h5>     
+        <h5 class="modal-title" id="exampleModalLabel" style="color:#000;">Booking Ticket-[GPSAMB<?php echo $row['book_ammoID']; ?><?php echo $row['officerID']; ?>]</h5>     
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

@@ -6,7 +6,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"])) {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
         header("location: login");
         exit();
     }
@@ -168,14 +168,12 @@ header .calendar-current-date {
                   
                     <div class="row">
                       <?php
-                    if(isset($_GET['ammoID']) && $_GET['ammoID']>0 && isset($_GET['ammo_serial_no'])
-                     && $_GET['ammo_serial_no']!=''){
+                    if(isset($_GET['ammoID']) && $_GET['ammoID']>0){
 
                         $ammoID=mysqli_real_escape_string($connect_db,$_GET['ammoID']);
-                        $ammo_serial_no=mysqli_real_escape_string($connect_db,$_GET['ammo_serial_no']);
+                       
 
-                        $sql="SELECT * FROM `ammunitions` WHERE `ammoID` ='$ammoID' AND
-                            `ammo_serial_no`='$ammo_serial_no'";
+                        $sql="SELECT * FROM `ammunitions` WHERE `ammoID` ='$ammoID'";
                             $firearm_result=mysqli_query($connect_db,$sql);
                             if(mysqli_num_rows( $firearm_result)>0){
                             $row=mysqli_fetch_assoc( $firearm_result);
@@ -187,27 +185,16 @@ header .calendar-current-date {
                                 <div class="card-body">
                                 <a href="ammo-bookings-under?ammoID='.$row['ammoID'].'" type="button" class="btn btn-primary btn-lg btn-block" style="margin-bottom:30px;">
                                 <i class="mdi mdi-book"></i> Bookings</a>
-                                  <p class="card-description"><strong>Ammunition-</strong><code>'.$row['ammo_serial_no'].''.$row['ammo_name'].'</code>
+                                  <p class="card-description"><strong>Ammunition-</strong><code>'.$row['ammo_name'].'</code>
                                   </p>
                                   <div class="table-responsive">
                                     <table class="table">
                                       <tbody>
                                       <tr>
-                                      <td>Ammo Image</td>
-                                      <td><img src="assets/images/ammo_images/'.$row['ammo_image'].'" alt="" style="height: 250px;width:250px"></td>
-                                      </tr>
-                                      <tr>
-                                      <td>Ammo Serial No.</td>
-                                      <td>'.$row['ammo_serial_no'].'</td>
-                                      </tr>
-                                      <tr>
                                       <td>Ammo Name</td>
                                       <td>'.$row['ammo_name'].'</td>
                                       </tr>
-                                      <tr>
-                                      <td>Ammo Type</td>
-                                      <td>'.$row['ammo_type'].'</td>
-                                      </tr>                                    
+                                                                    
                                       <tr>
                                       <td>Ammo Application</td>
                                       <td>'.$row['ammo_application'].'</td>
@@ -217,10 +204,7 @@ header .calendar-current-date {
                                       <td>Quantity</td>
                                       <td>'.$row['ammo_rounds'].'</td>
                                       </tr>
-                                      <tr>
-                                      <td>Grain Weight</td>
-                                      <td>'.$row['grain_weight'].'</td>
-                                      </tr>
+                              
                                       <tr>
                                       <td>Brought In Date</td>
                                       <td>'.$row['datetime'].'</td>

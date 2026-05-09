@@ -1,259 +1,195 @@
-
-<?php  require_once('connections/connect-db.php');?>
 <?php  
+require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
-?>
 
-<?php
-    // session_start();
-    if(!isset($_SESSION["username"])) {
-        header("location: login");
-        exit();
-    }
+// Security Check
+if(!isset($_SESSION["username"]) || ($_SESSION["user_role"] != 'Armourer' && $_SESSION["user_role"] != 'SuperAdmin')) {
+    header("location: login");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
+<head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - BOOKING HISTORY</title>
-    <!-- plugins:css -->
+    <title>NCTD // DEPLOYMENT_LOG_HISTORY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <!-- <link rel="stylesheet" href="dist/css/theme.css"> -->
-    <link rel="stylesheet" href="dist/css/theme.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
-    <!-- endinject -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-     <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  <!-- Theme style -->
-    <!-- endinject -->
-    <!-- Layout styles -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- End layout styles -->
     <link rel="shortcut icon" href="assets/images/favicon.png" />
-  </head>
-  <body onload=display_ct();>
+    <style>
+        :root {
+            --neon-cyan: #00f2ff;
+            --neon-amber: #f9a602;
+            --tactical-bg: #05070a;
+            --glass-overlay: rgba(0, 242, 255, 0.03);
+        }
+
+        body { 
+            background-color: var(--tactical-bg); 
+            font-family: 'Roboto Mono', monospace; 
+            color: #e0e0e0;
+        }
+
+        /* --- TACTICAL TABLE STYLING --- */
+        .table-responsive-tactical {
+            background: rgba(10, 12, 16, 0.95);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            padding: 20px;
+        }
+
+        .table thead th {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-cyan);
+            border-bottom: 2px solid var(--neon-cyan) !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.75rem;
+        }
+
+        .table td { 
+            border-color: rgba(255, 255, 255, 0.05) !important;
+            vertical-align: middle;
+        }
+
+        /* --- SEARCH/FILTER PANEL --- */
+        .search-vault {
+            background: linear-gradient(180deg, #0a0c10 0%, #05070a 100%);
+            border: 1px solid var(--neon-amber);
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .btn-tactical {
+            background: transparent;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .btn-tactical:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .status-badge {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 0;
+            border: 1px solid;
+            font-size: 0.65rem;
+        }
+
+        .status-overdue { border-color: #ff3e3e; color: #ff3e3e; background: rgba(255, 62, 62, 0.1); }
+        .status-returned { border-color: var(--neon-cyan); color: var(--neon-cyan); background: rgba(0, 242, 255, 0.1); }
+    </style>
+</head>
+
+<body>
     <div class="container-scroller">
-    <!-- partial:includes/_sidebar.html -->
-    <?php  require_once('includes/sidebar.php');?>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:includes/_navbar.html -->
-        <?php  require_once('includes/navbar.php');?>
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-            <h3 class="page-title"> Booking History </h3>
-              <h3 class="page-title"><code><a href="booking-history" class="btn btn-outline-danger btn-fw"> [ Booked Firearm ]</a>
-            </code>&nbsp;&nbsp;<code><a href="booked-ammo" class="btn btn-outline-info btn-fw">[ Booked Ammo ]</a>
-            </code>&nbsp;<code><a href="booked-other-assets" class="btn btn-outline-info btn-fw">[ Booked Assets ]</a></code></h3> 
-              <nav aria-label="breadcrumb">
-                
-              </nav>
-            </div>
-          <!-- content-wrapper ends -->
-          <section class="content">
-          <div class="container-fluid">
-           <div class="row">
-          <div class="col-12">
-            
-            <div class="card">
-              <!-- /.card-header -->
-              <div class="card-body">
-              <p class="card-description"><a href="booking"><code><i class="mdi mdi-plus f-22 text-green"></i><i class="mdi mdi-book f-22 text-green" 
-                    data-toggle="tooltip" data-placement="right" title="Click to Book for Asset/Weapon"></i></code></a>
-                    </p>
-                <table id="administrators-list" class="table table-bordered ">
-                  <thead>
-                  
-                      <tr>
-                        <!-- <th> Ticket# </th> -->
-                        <th> Issued Date </th>
-                        <th> Officer</th>
-                        <!-- <th> Product</th> -->
-                        <th> Firearm Name </th>
-                        <th> Ammo Rounds </th>
-                        <th> Returns </th>
-                        <th> Duty & Location </th>
-                        <th>Actions</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-
-                      <?php  
-                         $username=$_SESSION['username']; 
-                         $query = mysqli_query($connect_db,"SELECT * FROM `admin_lists` WHERE `username`='$username'")
-                         or die( mysqli_error($connect_db));
-                         while ($row = mysqli_fetch_array($query)) {
-                                 $profile_image = $row['profile_image'];
-                                 $fullname = $row['fullname'];
-                                 $_SESSION['fullname'] =  $fullname;
-                                 $user_role = $row['user_role'];
-                                 $_SESSION['user_role'] =  $user_role; 
-                                 $service_no = $row['service_no'];
-                                 $_SESSION['service_no']=$service_no;
-                                 $admin_rank =$row['rank'];
-                                 $_SESSION['rank']=$admin_rank;
-                                 $adminID =$row['adminID'];
-                                 $_SESSION['adminID']=$adminID;                           
-                                 $armourer_admin_name  =  $service_no.' '.$admin_rank.' '.$fullname;
-                                 $_SESSION['armourer_admin_name'] = $armourer_admin_name;
-                               }      
-                   
-                          $query = mysqli_query($connect_db,"SELECT * FROM `bookings` ORDER BY `bookingID` DESC")
-
-                          or die( mysqli_error($connect_db));
-                          while ($row = mysqli_fetch_array($query)) {
-
-                              $output = "";
-                              $officer_image = $row['officer_image'];
-                              $_SESSION['officer_image'] = $officer_image;
-                              if($row['returns']=='Not-Return')
-                              {
-                              echo
-                              $output .= '
-                            <tr>
-                           
-                            <td> '.$row['issuing_date'].' </td>
-                            <td>
-                            <a href="#booking-details-'.$row['bookingID'].'" data-toggle="modal" style="text-decoration:none;color:#fff;">
-                            <img src="assets/images/officer_images/'.$row['officer_image'].'" alt="image" />&nbsp; &nbsp;'.$row['to_officer'].'</a> 
-                            </td>
-                  
-                            <td>'.$row['firearm_name'].' <code style="color:orange">[ Qty: '.$row['quantity_issued'].']</td>
-                            <td> <strong><code>'.$row['number_of_rounds'].'</code></strong></td>
-                            <td>
-                            <a href="#return-booking-'.$row['bookingID'].'"  
-                            data-toggle="modal" class="badge badge-outline-success" style="padding-top:6px;text-decoration:none;"> '.$row['returns'].' </a>         
-                            </td>
-                            <td> '.$row['duty_type'].' @ '.$row['duty_location'].' </td>
-                            <td> 
-                          <a href="update-booking?firearm-booking-ticket='.$row['bookingID'].'"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                          &nbsp; &nbsp;<a href="#delete-booking-'.$row['bookingID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>  
-                            </td>
-                           
-                          </tr>
-                          ';
-                        }else{
-                          echo
-                          $output .= '
-                          <tr>
+        <?php require_once('includes/sidebar.php'); ?>
+        <div class="container-fluid page-body-wrapper">
+            <?php require_once('includes/navbar.php'); ?>
+            <div class="main-panel">
+                <div class="content-wrapper">
                     
-                          <td> '.$row['issuing_date'].' </td>
-                          <td>
-                          <a href="#booking-details-'.$row['bookingID'].'" data-toggle="modal" style="text-decoration:none;color:#00d25b;">
-                          <img src="assets/images/officer_images/'.$row['officer_image'].'" alt="image" />&nbsp; &nbsp;'.$row['to_officer'].'</a> 
-                           </td>
-                
-                          <td>'.$row['firearm_name'].' <code style="color:orange">[ Qty: '.$row['quantity_issued'].']<code></td>
-                          <td><strong><code> '.$row['number_of_rounds'].'</code></strong></td>
-                          <td>
-                          <a href="#" class="badge badge-outline-success" style="padding-top:6px;text-decoration:none;"> '.$row['returns'].' </a>   
-                          </td>
-                        
-                          <td> '.$row['duty_type'].' @ '.$row['duty_location'].' </td>
-                          <td> 
-                          <a href="update-booking?firearm-booking-ticket='.$row['bookingID'].'"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                          &nbsp; &nbsp;<a href="#delete-booking-'.$row['bookingID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>  
-                          </td>
-                        </tr>
-                          ';
-                
-                        }
-                        include('actions_modals.php');
-                          }?>
-                        </tbody>
-                  </tfoot>
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div></div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
-    </section>
-          <!-- partial:partials/_footer.html -->
-          <?php  require_once('includes/footer.php');?>
-          <!-- partial -->
-          <!-- partial -->
-        </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-      <!-- Custom js for this page -->
-      <script src="plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<!-- <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script> -->
-    <!-- DataTables  & Plugins -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="plugins/jszip/jszip.min.js"></script>
-<script src="plugins/pdfmake/pdfmake.min.js"></script>
-<script src="plugins/pdfmake/vfs_fonts.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<!-- AdminLTE App -->
-<!-- <script src="dist/js/adminlte.min.js"></script> -->
-<!-- AdminLTE for demo purposes -->
+                    <div class="search-vault">
+                        <form id="filterForm" class="row align-items-end">
+                            <div class="col-md-3">
+                                <label class="small text-amber">START_DATE</label>
+                                <input type="date" name="start_date" class="form-control bg-dark text-white border-secondary">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="small text-amber">END_DATE</label>
+                                <input type="date" name="end_date" class="form-control bg-dark text-white border-secondary">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="small text-amber">STATUS_FILTER</label>
+                                <select name="status" class="form-control bg-dark text-white border-secondary">
+                                    <option value="ALL">ALL_DEPLOYMENTS</option>
+                                    <option value="Not-Return">OUTSTANDING</option>
+                                    <option value="Returned">SECURED</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" onclick="applyTacticalFilter()" class="btn btn-tactical w-100">RUN_QUERY</button>
+                            </div>
+                        </form>
+                    </div>
 
-<!-- Page specific script -->
-<script>
-  $(function () {
-    $("#administrators-list").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#administrators-list_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
+                    <div class="table-responsive-tactical">
+                        <div class="d-flex justify-content-between mb-4">
+                            <h3 class="font-orbitron text-cyan"> > DEPLOYMENT_LOG_ARCHIVE</h3>
+                            <div class="btn-group">
+                                <a href="audit_engine.php?type=master" target="_blank" class="btn btn-outline-warning btn-sm">PDF_MASTER_AUDIT</a>
+                                <a href="audit_firearms_overdue.php" target="_blank" class="btn btn-outline-danger btn-sm">PDF_OVERDUE_LOG</a>
+                            </div>
+                        </div>
+
+                        <table id="tactical-history" class="table text-white">
+                            <thead>
+                                <tr>
+                                    <th>TIMESTAMP</th>
+                                    <th>OPERATOR_ID</th>
+                                    <th>ASSET_ID</th>
+                                    <th>MUNITIONS</th>
+                                    <th>STATUS</th>
+                                    <th>LOCATION</th>
+                                    <th>OP_CODE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+                <?php require_once('includes/footer.php'); ?>
+            </div>
+        </div>
+    </div>
+
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+    
+    <script>
+    $(document).ready(function() {
+        var table = $('#tactical-history').DataTable({
+            "responsive": true,
+            "dom": 'Bfrtip',
+            "buttons": ['excel', 'pdf', 'print'],
+            "pageLength": 15,
+            "order": [[0, "desc"]],
+            "language": {
+                "search": "SCAN_DATABASE:",
+                "paginate": { "previous": "[PREV]", "next": "[NEXT]" }
+            }
+        });
+
+        // Advanced Time-Period Filtering
+        $.fn.dataTable.ext.search.push(
+            function(settings, data, dataIndex) {
+                var start = $('#start_date').val();
+                var end = $('#end_date').val();
+                var date = data[0].substring(0, 10); // Extract YYYY-MM-DD from Timestamp
+
+                if (start === "" && end === "") return true;
+                if (start === "" && date <= end) return true;
+                if (end === "" && date >= start) return true;
+                if (date <= end && date >= start) return true;
+                return false;
+            }
+        );
     });
-  });
-</script>
-    <!-- End custom js for this page -->
-  </body>
+
+    function applyTacticalFilter() {
+        $('#tactical-history').DataTable().draw();
+    }
+    </script>
+</body>
 </html>

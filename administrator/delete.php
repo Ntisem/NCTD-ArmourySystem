@@ -151,13 +151,16 @@ if(isset($_GET['officerID']) && isset($_GET['armourer-admin-name']) && isset($_G
 // deleting Weapon
 
 if(isset($_GET['firearmID']) && isset($_GET['armourer-admin-name']) && isset($_GET['user-role']) 
-&& isset($_GET['adminID']) && isset($_GET['firearm'])){
+&& isset($_GET['adminID']) && isset($_GET['firearm']) && isset($_GET['firearm-name'])){
 
       $deleting_firearmID=$_GET['firearmID'];
       $adminID=$_GET['adminID'];
       $armourer_admin_name = $_GET['armourer-admin-name'];
       $user_role = $_GET['user-role'];
       $action_taken = 'Deleted Firearm [ '.$_GET['firearm'].' ]';
+      $firearm_name = $_GET['firearm-name'];
+      $_SESSION['firearm_name'] = $firearm_name;
+      $firearm_name = $_SESSION['firearm_name'];
 
   $sql_admin_activities = "INSERT INTO `daily_activities`(`adminID`, 
   `armourer_admin_name`,  `action_taken`, `user_role`)
@@ -170,10 +173,10 @@ if(isset($_GET['firearmID']) && isset($_GET['armourer-admin-name']) && isset($_G
  if(mysqli_query($connect_db, $sql))
  {
   // unlink("ass".$firearm_serial_no);
-   header('location:assets-weapon?delete_success');
+   header('location:firearm-names?firearm-name='.$firearm_name.'?delete_success');
   }
   else{
-      header('location:assets-weapon?delete_error');
+      header('location:firearm-names?firearm-name='.$firearm_name.'?delete_error');
   }
 
 }
@@ -201,10 +204,10 @@ if(isset($_GET['bookingID']) && isset($_GET['armourer-admin-name']) && isset($_G
  if(mysqli_query($connect_db, $sql))
  {
   // unlink("ass".$firearm_serial_no);
-   header('location:booking-history?delete_success');
+   header('location:booked-firearms?firearm-name='.$_GET['firearm-name'].'&delete_success');
   }
   else{
-      header('location:booking-history?delete_error');
+      header('location:booked-firearms?firearm-name='.$_GET['firearm-name'].'&delete_error');
   }
 
 }

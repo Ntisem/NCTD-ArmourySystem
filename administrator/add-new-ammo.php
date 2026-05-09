@@ -1,195 +1,118 @@
-
-<?php  require_once('connections/connect-db.php');?>
-<?php  
+<?php 
+require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
-?>
 
-<?php
-    // session_start();
-    if(!isset($_SESSION["username"])) {
-        header("location: login");
-        exit();
-    }
-?>
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
 
+// Fetch current admin details to ensure session integrity
+$username = $_SESSION['username']; 
+$stmt = $pdo->prepare("SELECT adminID, fullname FROM admin_lists WHERE username = ?");
+$stmt->execute([$username]);
+$admin_data = $stmt->fetch();
+
+// Re-sync session just in case
+if($admin_data) {
+    $_SESSION['adminID'] = $admin_data['adminID'];
+    $_SESSION['fullname'] = $admin_data['fullname'];
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
+<head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - ADD NEW AMMUNITION</title>
-    <!-- plugins:css -->
+    <title>TERMINAL | AMMO INDUCTION</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="assets/vendors/select2/select2.min.css">
-    <link rel="stylesheet" href="assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- End layout styles -->
     <link rel="shortcut icon" href="assets/images/favicon.png" />
-  </head>
-  <body onload=display_ct();>
+    <style>
+        :root { --neon-cyan: #00f2ff; --panel-dark: #05070a; }
+        body { background-color: var(--panel-dark); font-family: 'JetBrains Mono', monospace; }
+        .tactical-card { background: rgba(13, 17, 23, 0.9); border: 1px solid rgba(0, 242, 255, 0.2); border-radius: 0; }
+        .form-control { background: #0d1117 !important; border: 1px solid #30363d !important; color: var(--neon-cyan) !important; }
+        .btn-tactical { border: 1px solid var(--neon-cyan); color: var(--neon-cyan); text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .btn-tactical:hover { background: var(--neon-cyan); color: #000; }
+        .btn-back { border: 1px solid #6c757d; color: #6c757d; }
+    </style>
+</head>
+<body>
     <div class="container-scroller">
-    <!-- partial:includes/_sidebar.html -->
-    <?php  require_once('includes/sidebar.php');?>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:includes/_navbar.html -->
-        <?php  require_once('includes/navbar.php');?>
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title"> Add New Ammunition </h3>
-              <nav aria-label="breadcrumb">            
-              </nav>
-            </div>
-            <div class="card" style="margin-bottom:30px;">
-             <div class="card-body">
-             <a href="add-new-weapon" type="button" class="btn btn-outline-info btn-fw">[ Firearm ]</a>
-            <a href="add-new-ammo" type="button" class="btn btn-outline-danger btn-fw">[ Ammunition ]</a>
-            <a href="add-new-other-assets" type="button" class="btn btn-outline-info btn-fw">[ Assets ]</a>
-          </div>
-          </div>
-            <div class="row">
-              <div class="col-12 grid-margin">
-                <div class="card">
-                  <div class="card-body">
-                    <form method="POST" action="functions-inventory.php" class="forms-sample" enctype="multipart/form-data">
-                    <?php  
-                      $username=$_SESSION['username']; 
-                      $query = mysqli_query($connect_db,"SELECT * FROM `admin_lists` WHERE `username` ='$username'")
-                      or die( mysqli_error($connect_db));
-                      while ($row = mysqli_fetch_array($query)) {
-                          $profile_image = $row['profile_image'];
-                          $fullname = $row['fullname'];
-                          $_SESSION['fullname'] =  $fullname;
-                          $user_role = $row['user_role'];
-                          $service_no = $row['service_no'];
-                          $_SESSION['service_no']=$service_no;
-                          $admin_rank =$row['rank'];
-                          $_SESSION['rank']=$admin_rank;
-                          $adminID =$row['adminID'];
-                          $_SESSION['adminID']=$adminID;
-                          $_SESSION['user_role'] =  $user_role;    
-                      }?>      
-                        <input type="hidden" name="armourer_admin_name" class="form-control" id="exampleInputName1" value="<?php echo $service_no.' '.$admin_rank.' '.$fullname ?>">
-                        <input type="hidden" name="adminID" class="form-control" id="exampleInputName1" value="<?php echo $adminID; ?>">
-                        <input type="hidden" name="booking_status" class="form-control" id="exampleInputName1" value="Available">
-                        <input type="hidden" name="user_role" class="form-control" id="exampleInputName1" value="<?php echo $user_role; ?>">
-                   
-                    <div class="row">
-                      <div class="col-md-4">                     
-                      <div class="form-group">
-                        <label for="exampleInputName1"><code style="color:#fff">Ammunition Serial No.</code></label>
-                        <input type="text" name="ammo_serial_no" class="form-control" id="exampleInputName1"
-                          placeholder="Ammo Serial Number" required>
-                            </div>                        
-                          </div> 
-                          <div class="col-md-6">                     
-                            <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">Manufacturer</code></label>
-                              <input type="text" name="manufacturer" class="form-control" id="exampleInputName1"
-                               placeholder="Manufacturer" required>
-                            </div>                        
-                          </div>                                                
-                          <div class="form-group">
-                            <label class="col-sm-3 col-form-label"><code style="color:#fff">Ammunition Type</code></label>
-                            <div class="col-sm-9">
-                              <select name="ammo_type" class="form-control" required>
-                                <option style="color:#000" value="None">None</option>
-                                <option style="color:#000" value="Elite-Hunter">Elite Hunter</option>
-                                <option style="color:#000" value="Full-Metal-Jacket">Full-Metal-Jacket(FMJ)</option>
-                                <option style="color:#000" value="Jacketed-Hollow-Point">Jacketed Hollow Point(JHP)</option>
-                                <option style="color:#000" value="Open-Tip-Match">Open Tip Match(OTM)</option>
-                              </select>
-                            </div>
-                          </div>
-                            <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">Ammunition Name</code></label>
-                              <input type="text" name="ammo_name" class="form-control" id="exampleInputName1" placeholder="Ammo Name" required>
-                            </div>
+        <?php include_once('includes/sidebar.php');?>
+        <div class="container-fluid page-body-wrapper">
+            <?php include_once('includes/navbar.php');?>
+            <div class="main-panel">
+                <div class="content-wrapper">
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="card-title text-info mb-0">[ASSET_INDUCTION_PROTOCOL]: AMMUNITION</h4>
+                        <a href="ammunition.php" class="btn btn-sm btn-back">
+                            <i class="mdi mdi-arrow-left"></i> BACK_TO_REGISTRY
+                        </a>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 grid-margin stretch-card">
+                            <div class="card tactical-card">
+                                <div class="card-body">
+                                  
+                                    
+                                    <form class="forms-sample" action="process-ammo-add.php" method="POST">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label>AMMO_NAME (e.g. 9MM, 7.62x39)</label>
+                                                <input type="text" name="ammo_name" class="form-control" placeholder="REQUIRED" required>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label>MANUFACTURER</label>
+                                                <input type="text" name="manufacturer" class="form-control" placeholder="REQUIRED" required>
+                                            </div>
+                                        </div>
 
-                             <div class="row">
-                             <div class="col-md-5"> 
-                            <div class="form-group">
-                            <label class="col-sm-10 col-form-label"><code style="color:#fff">Ammunition Application</code><code>(Purpose)</code></label>
-                            <div class="col-sm-9">
-                              <select name="ammo_application" class="form-control">
-                                <option style="color:#000" value="None">None</option>
-                                <option style="color:#000" value="Defensive">Defensive</option>
-                                <option style="color:#000" value="Hunting">Hunting</option>
-                                <option style="color:#000" value="Match-Grade">Match-Grade</option>
-                                <option style="color:#000" value="Practice">Practice</option>
-                              </select>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <label>INITIAL_ROUNDS</label>
+                                                <input type="number" name="ammo_rounds" class="form-control" placeholder="0" required>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label>APPLICATION</label>
+                                                <select name="ammo_application" class="form-control">
+                                                    <option value="Duty">Duty</option>
+                                                    <option value="Training">Training</option>
+                                                    <option value="Special Ops">Special Ops</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label>BOOKING_STATUS</label>
+                                                <select name="booking_status" class="form-control">
+                                                    <option value="Available">Available</option>
+                                                    <option value="Reserved">Reserved</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-4">
+                                            <label>REMARKS / NOTES</label>
+                                            <textarea name="remarks" class="form-control" rows="3"></textarea>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <button type="reset" class="btn btn-outline-secondary">CLEAR_FORM</button>
+                                            <button type="submit" name="submit_ammo" class="btn btn-tactical">
+                                                <i class="mdi mdi-shield-check"></i> COMMIT_TO_DATABASE
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                          </div>
-                           </div>
-                           <div class="col-md-4"> 
-                             <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">Ammunition Quantity <code>(Boxes) </code></code></label>
-                              <input type="number" name="ammo_boxes" class="form-control" id="exampleInputName1" placeholder="Quantity in Boxes" required>
-                                </div>
-                              </div>
-                           
-                            <div class="col-md-3"> 
-                             <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff"> <code>Number of Rounds </code></code></label>
-                              <input type="number" name="ammo_rounds" class="form-control" id="exampleInputName1" placeholder="Number of Rounds" required>
-                                </div>
-                              </div>
-                       
-                         <div class="form-group">
-                          <label for="exampleFormControlFile1" style="color:#fff;"><code style="color:#fff">Upload Ammunition Image</code></label>
-                          <input type="file" class="form-control" name="ammo_image" id="exampleFormControlFile1">
-                            </div>                          
-                         </div>
                         </div>
-                            <button type="submit" name="add_new_ammo" class="btn btn-inverse-success me-2">Submit</button>
-                            <button class="btn btn-inverse-danger" >Cancel</button>
-                         </form>
-                  </div>
+                    </div>
+
                 </div>
-              </div>
             </div>
-            </div>
-          <!-- content-wrapper ends -->
-            <!-- partial:partials/footer.php-->
-            <?php  require_once('includes/footer.php');?>
-          
-          <!-- partial -->
         </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="assets/vendors/select2/select2.min.js"></script>
-    <script src="assets/vendors/typeahead.js/typeahead.bundle.min.js"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script src="assets/js/file-upload.js"></script>
-    <script src="assets/js/typeahead.js"></script>
-    <script src="assets/js/select2.js"></script>
-    <!-- End custom js for this page -->
-  </body>
+</body>
 </html>

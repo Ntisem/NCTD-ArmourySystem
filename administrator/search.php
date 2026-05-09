@@ -1,127 +1,132 @@
-<?php  require_once('connections/connect-db.php');?>
-<?php  
-require_once('functions.php');
+<?php 
+require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 ?>
-
-<?php
-    // session_start();
-    if(!isset($_SESSION["username"])) {
-        header("location: login");
-        exit();
-    }
-?>
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM </title>
-    <!-- plugins:css -->
+    <title>INTEL_HUB | CROSS_SCAN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="assets/vendors/jvectormap/jquery-jvectormap.css">
-    <link rel="stylesheet" href="assets/vendors/flag-icon-css/css/flag-icon.min.css">
-    <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.carousel.min.css">
-    <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.theme.default.min.css">
-    <!-- End plugin css for this page -->
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>   -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- End layout styles -->
     <link rel="shortcut icon" href="assets/images/favicon.png" />
-    
-  </head>
-  <body onload=display_ct();>
-    <div class="container-scroller">
-      <!-- partial:includes/_sidebar.html -->
-      <?php  require_once('includes/sidebar.php');?>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:includes/_navbar.html -->
-        <?php  require_once('includes/navbar.php');?>
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="row">
-              <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row">
-                    <input type="text" name="firearm_name" id="firearm_name" class="form-control" placeholder="Enter firearm name...." />  
-                    <div id="firearm_name_list"></div>
-                    </div>
-                  </div>
-                </div>
-               <br>
-            </div>
-          </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:includes/_footer.html -->
+    <style>
+        :root {
+            --neon-cyan: #00f2ff;
+            --cmd-bg: #05070a;
+            --panel-alpha: rgba(13, 17, 23, 0.98);
+        }
+        body { background-color: var(--cmd-bg); font-family: 'JetBrains Mono', monospace; }
         
-          <!-- partial -->
-        </div>
-        <?php  require_once('includes/footer.php');?>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
-    </div>
-    
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="assets/vendors/chart.js/Chart.min.js"></script>
-    <script src="assets/vendors/progressbar.js/progressbar.min.js"></script>
-    <script src="assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
-    <script src="assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-    <script src="assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
-    <script src="assets/js/jquery.cookie.js" type="text/javascript"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script src="assets/js/dashboard.js"></script>
-    <!-- End custom js for this page -->
+        .main-panel { background: var(--cmd-bg); }
+        
+        .tactical-card {
+            background: var(--panel-alpha);
+            border: 1px solid rgba(0, 242, 255, 0.15);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+            border-radius: 0;
+            padding: 40px;
+        }
+        
+        .scanner-bar {
+            background: #000 !important;
+            border: 1px solid var(--neon-cyan) !important;
+            color: var(--neon-cyan) !important;
+            height: 70px;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-radius: 0;
+            font-family: 'Orbitron', sans-serif;
+        }
 
-    <script>  
-    $(document).ready(function(){  
-      $('#firearm_name').keyup(function(){  
-           var query = $(this).val();  
-           if(query != '')  
-           {  
-                $.ajax({  
-                     url:"search2.php",  
-                     method:"POST",  
-                     data:{query:query},  
-                     success:function(data)  
-                     {  
-                          $('#firearm_name_list').fadeIn();  
-                          $('#firearm_name_list').html(data);  
-                     }  
-                });  
-           }  
-      });  
-      $(document).on('click', 'li', function(){  
-           $('#firearm_name').val($(this).text());  
-           $('#firearm_name_list').fadeOut();  
-      });  
- });  
- </script>
-<?php  require_once('includes/google-analytics.php');?>
-  </body>
+        .tactical-result-item {
+            background: rgba(255, 255, 255, 0.02) !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tactical-result-item:hover {
+            background: rgba(0, 242, 255, 0.08) !important;
+            border-color: var(--neon-cyan) !important;
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+        }
+
+        .status-available { width: 8px; height: 8px; background: var(--neon-cyan); border-radius: 50%; box-shadow: 0 0 10px var(--neon-cyan); }
+        .status-busy { width: 8px; height: 8px; background: #ff3e3e; border-radius: 50%; box-shadow: 0 0 10px #ff3e3e; }
+        
+        .status-available-badge { border: 1px solid var(--neon-cyan); color: var(--neon-cyan); background: transparent; font-size: 0.65rem; letter-spacing: 1px; }
+        .status-busy-badge { border: 1px solid #ff3e3e; color: #ff3e3e; background: transparent; font-size: 0.65rem; letter-spacing: 1px; }
+        
+        .tracking-wider { letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+    <div class="container-scroller">
+        <?php include('includes/sidebar.php'); ?>
+        <div class="container-fluid page-body-wrapper">
+            <?php include('includes/navbar.php'); ?>
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-11">
+                            <div class="tactical-card">
+                                <div class="d-flex justify-content-between align-items-end mb-4">
+                                    <div>
+                                        <h1 class="mb-1" style="font-family: 'Orbitron'; color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0, 242, 255, 0.3);">INTEL_DATABASE_SCAN</h1>
+                                        <p class="text-muted small mb-0">AUTHORIZED PERSONNEL ONLY // CROSS-LINKING 6 CORE TABLES</p>
+                                    </div>
+                                    <div class="text-right d-none d-md-block">
+                                        <span class="text-info small font-weight-bold tracking-wider">SYSTEM_STATUS: ACTIVE</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group position-relative">
+                                    <input type="text" id="intel_search_input" class="form-control scanner-bar" placeholder="INITIATE COMMAND SEQUENCE..." autocomplete="off">
+                                    <div class="mt-2 text-right">
+                                        <small class="text-muted italic" style="font-size: 0.7rem;">SEARCH_BY: SERIAL, NAME, SERVICE_NO, OR ASSET_CLASS</small>
+                                    </div>
+                                </div>
+
+                                <div id="intel_results_display" class="mt-5" style="display:none;">
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php include('includes/footer.php'); ?>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
+    <script>
+    $(document).ready(function(){
+        $('#intel_search_input').on('keyup', function(){
+            let val = $(this).val();
+            if(val.length > 1) {
+                $.ajax({
+                    url: "search-intel-backend.php",
+                    method: "POST",
+                    data: { query: val },
+                    beforeSend: function() {
+                        // Optional: Add a processing state to the border
+                        $('.scanner-bar').css('border-color', '#f9a602');
+                    },
+                    success: function(response) {
+                        $('.scanner-bar').css('border-color', '#00f2ff');
+                        $('#intel_results_display').fadeIn(200).html(response);
+                    }
+                });
+            } else {
+                $('#intel_results_display').fadeOut(100);
+            }
+        });
+    });
+    </script>
+</body>
 </html>

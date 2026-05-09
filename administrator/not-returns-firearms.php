@@ -1,254 +1,319 @@
-
-<?php  require_once('connections/connect-db.php');?>
-<?php  
+<?php 
+require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
-?>
 
-<?php
-    // session_start();
-    if(!isset($_SESSION["username"])) {
-        header("location: login");
-        exit();
-    }
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
+
+// 1. SEARCH LOGIC
+$startDate = $_GET['start_date'] ?? null;
+$endDate = $_GET['end_date'] ?? null;
+
+$query = "SELECT * FROM bookings WHERE TRIM(returns) = 'Not-Return' AND is_deleted = 0";
+$params = [];
+
+if (!empty($startDate) && !empty($endDate)) {
+    $query .= " AND STR_TO_DATE(booking_time, '%M %e, %Y') BETWEEN ? AND ?";
+    $params = [$startDate, $endDate];
+}
+$query .= " ORDER BY bookingID DESC";
+
+$stmt = $pdo->prepare($query);
+$stmt->execute($params);
+$bookings = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM -RETURNS BOOKING HISTORY</title>
-    <!-- plugins:css -->
+    <title>COMMAND_TERMINAL | OUTSTANDING_FIREARMS</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <!-- <link rel="stylesheet" href="dist/css/theme.css"> -->
-    <link rel="stylesheet" href="dist/css/theme.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
-    <!-- endinject -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-     <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  <!-- Theme style -->
-    <!-- endinject -->
-    <!-- Layout styles -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- End layout styles -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
     <link rel="shortcut icon" href="assets/images/favicon.png" />
-  </head>
-  <body onload=display_ct();>
+    <style>
+        :root { 
+            --neon: #00f2ff; 
+            --bg-deep: #020408; 
+            --card-bg: #0a0d12; 
+            --danger: #ff3333; 
+        }
+        body { background: var(--bg-deep); font-family: 'JetBrains Mono', monospace; color: #e0e0e0; }
+        .card { background: var(--card-bg); border: 1px solid #00f2ff50; }
+        .table { color: #fff; }
+        th { color: var(--neon); }
+        .table td { vertical-align: middle; }
+        .btn-tactical {
+            background: transparent;
+            border: 1px solid var(--neon);
+            color: var(--neon);
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        .btn-tactical:hover {
+            background: var(--neon);
+            color: var(--bg-deep);
+        }
+        .btn-danger-tactical {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        .btn-danger-tactical:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+        .t-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: var(--bg-deep);
+            border: 1px solid var(--neon);
+            border-left: 5px solid var(--neon);
+            color: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+            font-family: 'JetBrains Mono', monospace;
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+        }
+        .modal-content {
+            background: var(--bg-deep);
+            border: 1px solid var(--neon);
+        }
+        .form-control {
+            background-color: var(--card-bg);
+            border: 1px solid #00f2ff50;
+            color: #fff;
+            font-family: inherit;
+        }
+        .form-control:focus {
+            background-color: var(--card-bg);
+            color: #fff;
+            border-color: var(--neon);
+            box-shadow: 0 0 5px var(--neon);
+        }
+    </style>
+</head>
+<body>
     <div class="container-scroller">
-    <!-- partial:includes/_sidebar.html -->
-    <?php  require_once('includes/sidebar.php');?>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:includes/_navbar.html -->
-        <?php  require_once('includes/navbar.php');?>
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-            <h3 class="page-title">Firearm Not Returns History </h3>
-              <h3 class="page-title"><code><a href="returns" class="btn btn-outline-danger btn-fw"> [ Firearm ]</a>
-            </code>&nbsp;&nbsp;<code><a href="returns-ammo" class="btn btn-outline-info btn-fw">[ Ammo ]</a>
-            </code>&nbsp;<code><a href="returns-assets" class="btn btn-outline-info btn-fw">[ Assets ]</a></code></h3> 
-              <nav aria-label="breadcrumb">
+        <div class="container-fluid page-body-wrapper">
+            <div class="main-panel p-4 w-100">
                 
-              </nav>
-            </div>
-          <!-- content-wrapper ends -->
-          <section class="content">
-          <div class="container-fluid">
-           <div class="row">
-          <div class="col-12">
-            
-            <div class="card">
-              <!-- /.card-header -->
-              <div class="card-body">
-              <p class="card-description"><a href="returns"><code><i class="mdi mdi-history f-22 text-green" 
-                    data-toggle="tooltip" data-placement="right" title="Return Firearms Bookings"></i></code></a>
-                    </p>
-                <table id="administrators-list" class="table table-bordered ">
-                  <thead>
-                  
-                      <tr>
-                        <!-- <th> Ticket# </th> -->
-                        <th> Issued Date </th>
-                        <th> Officer</th>
-                        <!-- <th> Product</th> -->
-                        <th> Firearm Name </th>
-                        <th> Ammo Rounds </th>
-                        <th> Returns </th>
-                        <th> Duty & Location </th>
-                        <th>Actions</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                     <?php
-                         $username=$_SESSION['username']; 
-                         $query = mysqli_query($connect_db,"SELECT * FROM `admin_lists` WHERE `username`='$username'")
-                         or die( mysqli_error($connect_db));
-                         while ($row = mysqli_fetch_array($query)) {
-                                 $profile_image = $row['profile_image'];
-                                 $fullname = $row['fullname'];
-                                 $_SESSION['fullname'] =  $fullname;
-                                 $user_role = $row['user_role'];
-                                 $_SESSION['user_role'] =  $user_role; 
-                                 $service_no = $row['service_no'];
-                                 $_SESSION['service_no']=$service_no;
-                                 $admin_rank =$row['rank'];
-                                 $_SESSION['rank']=$admin_rank;
-                                 $adminID =$row['adminID'];
-                                 $_SESSION['adminID']=$adminID;                           
-                                 $armourer_admin_name  =  $service_no.' '.$admin_rank.' '.$fullname;
-                                 $_SESSION['armourer_admin_name'] = $armourer_admin_name;
-                               }
-                          $query = mysqli_query($connect_db,"SELECT * FROM `bookings` WHERE `returns` = 'Not-Return' ORDER BY `bookingID` ASC")
+                <div id="toast-container"></div>
 
-                          or die( mysqli_error($connect_db));
-                          while ($row = mysqli_fetch_array($query)) {
+                <div class="card mb-4">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <h4 class="text-info mb-0">
+                            <i class="mdi mdi-alert-circle text-warning"></i> OUTSTANDING_FIREARMS_LOG
+                        </h4>
+                        <div>
+                            <a href="javascript:history.back();" class="btn btn-tactical">
+                                <i class="mdi mdi-arrow-left"></i> BACK
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
-                              $output = "";
-                              $officer_image = $row['officer_image'];
-                              $_SESSION['officer_image'] = $officer_image;
-                              if($row['returns']=='Not-Return')
-                              {
-                              echo
-                              $output .= '
-                            <tr>  
-                            <td> '.$row['booking_time'].' </td>
-                            <td>
-                            <a href="#booking-details-'.$row['bookingID'].'" data-toggle="modal" style="text-decoration:none;color:#fff;">
-                            <img src="assets/images/officer_images/'.$row['officer_image'].'" alt="image" />&nbsp; &nbsp; 
-                              '.$row['to_officer'].'</a> 
-                            </td>
-                            <td>'.$row['firearm_name'].'</td>
-                            <td> <strong><code>['.$row['number_of_rounds'].']</code></strong></td>
-                            <td>
-                            <a href="#return-booking-'.$row['bookingID'].'&'.$row['officerID'].'"  
-                            data-toggle="modal" class=" btn-outline-warning" style="padding-top:6px;text-decoration:none;">[ '.$row['returns'].' ]</a>         
-                            </td>
-                            <td> '.$row['duty_type'].' @ '.$row['duty_location'].' </td>
-                            <td> 
-                            <a href="#edit-return-firearm-'.$row['officerID'].'&'.$row['bookingID'].'" data-toggle="modal"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                            &nbsp; &nbsp;<a href="#delete-return-firearm-'.$row['officerID'].'&'.$row['bookingID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
-                          </td>
-                          </tr>
-                          ';
-                        }else{
-                          echo
-                          $output .= '
-                          <tr>
-                          <td> '.$row['returned_time'].' </td>
-                          <td>
-                          <a href="#booking-details-'.$row['bookingID'].'" data-toggle="modal" style="text-decoration:none;color:#fff;">
-                          <img src="assets/images/officer_images/'.$row['officer_image'].'" alt="image" />&nbsp; &nbsp;<strong style=color:green> '.$row['to_officer'].'</strong></a> 
-                           </td>
-                          <td>'.$row['firearm_name'].'</td>
-                          <td><strong><code> [BAR: '.$row['number_of_rounds'].']</code>&nbsp;<code style="color:green"> [RAR: '.$row['ammo_returned'].']</code></strong></td>
-                          <td>
-                          <a href="#" 
-                            class=" btn-outline-success" style="padding-top:6px;text-decoration:none;">[ '.$row['returns'].' ]</a>   
-                          </td>
-                          <td> '.$row['duty_type'].' @ '.$row['duty_location'].' </td>
-                          <td> 
-                          <a href="#edit-return-firearm-'.$row['officerID'].'&'.$row['bookingID'].'" data-toggle="modal"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                          &nbsp; &nbsp;<a href="#delete-return-firearm-'.$row['officerID'].'&'.$row['bookingID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
-                        </td>
-                        </tr>
-                          ';
-                        }
-                        include('returning-not-firearm-modal.php');
-                        include('actions_modals.php');
-                        include('actions.php');
-                          }?>
-                        </tbody>
-                  </tfoot>
-                </table>
-              </div>
-              <!-- /.card-body -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form method="GET" class="form-inline mb-4">
+                            <label class="mr-2 text-info">FROM:</label>
+                            <input type="date" name="start_date" class="form-control mr-3" value="<?= htmlspecialchars($startDate ?? '') ?>">
+                            <label class="mr-2 text-info">TO:</label>
+                            <input type="date" name="end_date" class="form-control mr-3" value="<?= htmlspecialchars($endDate ?? '') ?>">
+                            <button type="submit" class="btn btn-tactical"><i class="mdi mdi-filter"></i> FILTER_LOGS</button>
+                            <?php if(!empty($startDate) || !empty($endDate)): ?>
+                                <a href="not-returns-firearms.php" class="btn btn-danger-tactical ml-2">CLEAR</a>
+                            <?php endif; ?>
+                        </form>
+
+                        <div class="table-responsive">
+                            <table id="mainTable" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Time</th>
+                                        <th>Officer</th>
+                                        <th>Firearm</th>
+                                        <th>Armourer</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if(!empty($bookings)): ?>
+                                        <?php foreach ($bookings as $i => $b): ?>
+                                            <tr>
+                                                <td><?= $i + 1 ?></td>
+                                                <td><?= htmlspecialchars($b['booking_time']) ?></td>
+                                                <td><?= htmlspecialchars($b['to_officer']) ?></td>
+                                                <td><?= htmlspecialchars($b['firearm_name'] . ' - ' . $b['firearm_serial_no']) ?></td>
+                                                <td><?= htmlspecialchars($b['armourer_issuer']) ?></td>
+                                                <td><span class="badge badge-warning"><?= htmlspecialchars($b['returns']) ?></span></td>
+                                                <td>
+                                                    <button class="btn btn-tactical btn-sm" onclick="viewDetails(<?= $b['bookingID'] ?>)" title="View Details">
+                                                        <i class="mdi mdi-eye"></i>
+                                                    </button>
+                                                    <a href="officer-details.php?officerID=<?= htmlspecialchars($b['officerID']) ?>" class="btn btn-tactical btn-sm" title="Officer Tracking">
+                                                        <i class="mdi mdi-account-search"></i>
+                                                    </a>
+                                                    <button class="btn btn-tactical btn-sm" onclick="openReturnModal(<?= $b['bookingID'] ?>, 'Returned', <?= htmlspecialchars($b['number_of_rounds'] ?? 0) ?>)" title="Return Asset">
+                                                        <i class="mdi mdi-undo-variant"></i>
+                                                    </button>
+                                                    <button class="btn btn-danger-tactical btn-sm" onclick="confirmArchive(<?= $b['bookingID'] ?>)" title="Archive">
+                                                        <i class="mdi mdi-delete"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <?php require_once('includes/footer.php'); ?>
             </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div></div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
-    </section>
-          <!-- partial:partials/_footer.html -->
-          <?php  require_once('includes/footer.php');?>
-          <!-- partial -->
-          <!-- partial -->
         </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-      <!-- Custom js for this page -->
-      <script src="plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<!-- <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script> -->
-    <!-- DataTables  & Plugins -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="plugins/jszip/jszip.min.js"></script>
-<script src="plugins/pdfmake/pdfmake.min.js"></script>
-<script src="plugins/pdfmake/vfs_fonts.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<!-- AdminLTE App -->
-<!-- <script src="dist/js/adminlte.min.js"></script> -->
-<!-- AdminLTE for demo purposes -->
 
-<!-- Page specific script -->
-<script>
-  $(function () {
-    $("#administrators-list").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#administrators-list_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script>
-    <!-- End custom js for this page -->
-  </body>
+    <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content border-info">
+                <div class="modal-header border-info">
+                    <h5 class="modal-title text-info"><i class="mdi mdi-file-document"></i> BOOKING_DETAILS</h5>
+                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody"></div>
+                <div class="modal-footer border-info">
+                    <button type="button" class="btn btn-danger-tactical" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content border-info">
+                <div class="modal-header border-info">
+                    <h5 class="modal-title text-warning"><i class="mdi mdi-undo-variant"></i> PROCESS_ASSET_RECOVERY</h5>
+                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="process-return.php" method="POST">
+                    <div class="modal-body">
+                        <input type="hidden" name="bookingID" id="ret_bookingID">
+                        <div class="form-group">
+                            <label class="text-info">Update Status</label>
+                            <select name="return_status" id="ret_status_select" class="form-control bg-dark text-light">
+                                <option value="Returned">Returned</option>
+                                <option value="Not-Return">Not-Return</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="text-info">Ammo Returned / Leftover Rounds</label>
+                            <input type="number" name="ammo_returned" id="ammo_returned" class="form-control" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="text-info">Firearm State</label>
+                            <select name="firearm_state" class="form-control bg-dark text-light">
+                                <option value="Not-Faulty">Not-Faulty</option>
+                                <option value="Faulty">Faulty</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="text-info">Remarks/Comments</label>
+                            <textarea name="remarks" class="form-control bg-dark text-light" rows="3" placeholder="State observations..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-info">
+                        <button type="button" class="btn btn-danger-tactical" data-dismiss="modal">CANCEL</button>
+                        <button type="submit" name="update_status" class="btn btn-tactical">COMMIT_CHANGE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content border-danger">
+                <div class="modal-header border-danger">
+                    <h5 class="modal-title text-danger"><i class="mdi mdi-alert-outline"></i> CONFIRM_ARCHIVE</h5>
+                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="process-booking-crud.php" method="POST">
+                    <div class="modal-body text-light">
+                        <p>Are you sure you want to archive this deployment record?</p>
+                        <input type="hidden" name="delete_id" id="delete_id">
+                    </div>
+                    <div class="modal-footer border-danger">
+                        <button type="button" class="btn btn-tactical" data-dismiss="modal">CANCEL</button>
+                        <button type="submit" name="soft_delete" class="btn btn-danger-tactical">ARCHIVE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#mainTable').DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "pageLength": 10
+            });
+
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('status')) {
+                let status = params.get('status');
+                $(`<div class="t-toast">[SIGNAL]: ${status === 'success' ? 'TRANSACTION_COMMITTED' : 'TRANSACTION_FAILED'}</div>`)
+                    .appendTo('#toast-container')
+                    .css('display', 'block')
+                    .css('border-left', status === 'success' ? '5px solid var(--neon)' : '5px solid var(--danger)')
+                    .delay(3500)
+                    .fadeOut(function(){ $(this).remove(); });
+            }
+        });
+
+        function viewDetails(id) {
+            $('#modalBody').html('<div class="text-center p-5"><i class="mdi mdi-loading mdi-spin" style="font-size:30px; color:var(--neon);"></i></div>');
+            $('#modalBody').load('fetch-booking-details.php?id=' + id);
+            $('#detailsModal').modal('show');
+        }
+
+        function openReturnModal(id, status, rounds) {
+            $('#ret_bookingID').val(id);
+            $('#ret_status_select').val(status);
+            $('#ammo_returned').val(rounds);
+            $('#returnModal').modal('show');
+        }
+
+        function confirmArchive(id) {
+            $('#delete_id').val(id);
+            $('#deleteModal').modal('show');
+        }
+    </script>
+</body>
 </html>

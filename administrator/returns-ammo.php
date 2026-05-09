@@ -7,7 +7,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"])) {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
         header("location: login");
         exit();
     }
@@ -59,7 +59,7 @@ require_once('includes/user_auth.php');
             <h3 class="page-title">Ammo Returns History </h3>
               <h3 class="page-title"><code><a href="returns" class="btn btn-outline-info btn-fw"> [ Firearm ]</a>
             </code>&nbsp;&nbsp;<code><a href="returns-ammo" class="btn btn-outline-danger btn-fw">[ Ammo ]</a>
-            </code>&nbsp;<code><a href="returns-assets" class="btn btn-outline-info btn-fw">[ Assets ]</a></code></h3> 
+            </code></h3> 
               <nav aria-label="breadcrumb">
                 
               </nav>
@@ -142,7 +142,7 @@ require_once('includes/user_auth.php');
                             <td> '.$row['duty_type'].' @ '.$row['duty_location'].' </td>
                             <td> 
                             <a href="#edit-return-ammo-'.$row['officerID'].'&'.$row['book_ammoID'].'" data-toggle="modal"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                            &nbsp; &nbsp;<a href="#delete-return-ammo-'.$row['officerID'].'&'.$row['book_ammoID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
+                        
                             </td>
                           </tr>
                           ';
@@ -166,7 +166,7 @@ require_once('includes/user_auth.php');
                           <td> '.$row['duty_type'].' @ '.$row['duty_location'].' </td>
                           <td> 
                           <a href="#edit-return-ammo-'.$row['officerID'].'&'.$row['book_ammoID'].'" data-toggle="modal"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                          &nbsp; &nbsp;<a href="#delete-return-ammo-'.$row['officerID'].'&'.$row['book_ammoID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
+                          
                           </td>
                         </tr>
                           ';

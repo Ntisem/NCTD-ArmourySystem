@@ -105,6 +105,40 @@
 /*-------------------------------------------------------------------*/
 /* === Import template variables === */
 /*-------------------------------------------------------------------*/
+:root {
+    --tactical-bg: #0a0c10;
+    --tactical-accent: #f9a602;
+    --tactical-cyan: #00f2ff;
+    --tactical-dark: #12151e;
+    --tactical-border: 1px solid rgba(249, 166, 2, 0.3);
+}
+
+/* Global Tactical HUD Look */
+body {
+    background-color: var(--tactical-bg) !important;
+    font-family: 'Courier New', Courier, monospace;
+    color: #ffffff;
+}
+
+/* Tactical Card/Module Styling */
+.card, .modal-content {
+    background: var(--tactical-dark) !important;
+    border: var(--tactical-border) !important;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    border-radius: 2px;
+}
+
+/* Glowing Form Elements */
+.form-control, select, textarea {
+    background-color: #1a1f2e !important;
+    border: 1px solid #333 !important;
+    color: var(--tactical-cyan) !important;
+}
+
+.form-control:focus {
+    border-color: var(--tactical-accent) !important;
+    box-shadow: 0 0 8px rgba(249, 166, 2, 0.5);
+}
 /* === SCSS Compass Functions === */
 @-moz-keyframes flash {
   0% {
@@ -141,7 +175,113 @@
     opacity: 0; }
   100% {
     opacity: 1; } }
+/* Tactical Theme Overrides */
+body {
+    background-color: #0b0d17 !important;
+    font-family: 'Roboto Mono', monospace;
+    color: #e0e0e0;
+}
 
+/* HUD-style Cards */
+.card {
+    background: rgba(18, 22, 35, 0.9) !important;
+    border: 1px solid #00f2ff33 !important;
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+    border-radius: 0; /* Sharp military corners */
+}
+
+/* Glowing Form Inputs */
+.form-control {
+    background-color: #1a1f2e !important;
+    border: 1px solid #444 !important;
+    color: #00f2ff !important;
+}
+
+.form-control:focus {
+    border-color: #00f2ff !important;
+    box-shadow: 0 0 8px #00f2ff;
+}
+
+/* Tactical Table Styling */
+.table {
+    border-collapse: separate;
+    border-spacing: 0 5px;
+}
+/* --- TACTICAL OVERRIDE --- */
+:root {
+    --tactical-bg: #05070a;
+    --tactical-panel: #0d1117;
+    --neon-cyan: #00f2ff;
+    --tactical-orange: #f9a602;
+    --hud-green: #39ff14;
+}
+
+body {
+    background-color: var(--tactical-bg) !important;
+    font-family: 'Roboto Mono', monospace !important;
+    color: #e0e0e0;
+}
+
+/* HUD-style Cards and Panels */
+.card, .modal-content {
+    background: var(--tactical-panel) !important;
+    border: 1px solid rgba(0, 242, 255, 0.3) !important;
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.05);
+    border-radius: 0px !important; /* Sharp military edges */
+}
+
+/* Scanning Animation for Tables */
+@keyframes scanline {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100%; }
+}
+.table-responsive {
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
+}
+.footer {
+    border-top: 1px solid #333;
+    background: #0f1116 !important;
+    color: #ffffff;
+    box-shadow: 0px -5px 15px rgba(0,0,0,0.5);
+}
+
+.footer h6 {
+    text-shadow: 0 0 5px rgba(249, 166, 2, 0.4);
+}
+/* SweetAlert Tactical Theme */
+.swal-modal {
+    background-color: #0d1117;
+    border: 1px solid #00f2ff;
+    border-radius: 0;
+}
+.swal-title, .swal-text {
+    color: #00f2ff !important;
+    font-family: 'Orbitron', sans-serif;
+}
+.swal-button {
+    background-color: transparent;
+    border: 1px solid #f9a602;
+    color: #f9a602;
+    border-radius: 0;
+}
+
+.table thead th {
+    background: #1a1f2e;
+    color: #f9a602;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: none;
+}
+@keyframes hudFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.main-panel {
+    animation: hudFade 0.8s ease-out;
+}
 @-ms-keyframes flash {
   0% {
     opacity: 1; }
@@ -8968,7 +9108,7 @@ progress {
   font-weight: 400;
   line-height: 1;
   color: #212529;
-  background-color: #c9c9c9;
+  background-color: #2A3038;
   background-clip: padding-box;
   border: 1px solid #2c2e33;
   appearance: none;
@@ -9008,7 +9148,7 @@ progress {
   .jsgrid .jsgrid-table .jsgrid-filter-row select::placeholder, .jsgrid .jsgrid-table .jsgrid-filter-row input[type=number]::placeholder, .select2-container--default .select2-selection--single::placeholder, .select2-container--default .select2-selection--single .select2-search__field::placeholder, .typeahead::placeholder,
   .tt-query::placeholder,
   .tt-hint::placeholder {
-    color: #242323;
+    color: #4b5564;
     opacity: 1; }
   .form-control:disabled, .asColorPicker-input:disabled, .dataTables_wrapper select:disabled, .jsgrid .jsgrid-table .jsgrid-filter-row input:disabled[type=text],
   .jsgrid .jsgrid-table .jsgrid-filter-row select:disabled, .jsgrid .jsgrid-table .jsgrid-filter-row input:disabled[type=number], .select2-container--default .select2-selection--single:disabled, .select2-container--default .select2-selection--single .select2-search__field:disabled, .typeahead:disabled,
@@ -17291,14 +17431,14 @@ code {
 
 .input-group-append,
 .input-group-prepend {
-  color: #242323;
+  color: #4b5564;
   width: auto;
   border: none; }
   .input-group-append .input-group-text,
   .input-group-prepend .input-group-text {
     border-color: #2c2e33;
     padding: 0.56rem 0.75rem;
-    color: #242323;
+    color: #4b5564;
     background: none; }
 
 .form-control, .asColorPicker-input, .dataTables_wrapper select, .jsgrid .jsgrid-table .jsgrid-filter-row input[type=text],
@@ -17310,7 +17450,7 @@ code {
   font-weight: normal;
   font-size: 0.875rem;
   padding: 0.625rem 0.6875rem;
-  background-color: #c9c9c9;
+  background-color: #2A3038;
   border-radius: 2px;
   color: #ffffff; }
   .form-control:focus, .asColorPicker-input:focus, .dataTables_wrapper select:focus, .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=text],
@@ -17318,7 +17458,7 @@ code {
   .tt-query:focus,
   .tt-hint:focus {
     border: 1px solid rgba(71, 164, 71, 0.5);
-    background-color: #c9c9c9; }
+    background-color: #2A3038; }
   .form-control.form-control-lg, .form-control-lg.asColorPicker-input, .dataTables_wrapper select.form-control-lg, .jsgrid .jsgrid-table .jsgrid-filter-row input.form-control-lg[type=text],
   .jsgrid .jsgrid-table .jsgrid-filter-row select.form-control-lg, .jsgrid .jsgrid-table .jsgrid-filter-row input.form-control-lg[type=number], .select2-container--default .form-control-lg.select2-selection--single, .select2-container--default .select2-selection--single .form-control-lg.select2-search__field, .form-control-lg.typeahead,
   .form-control-lg.tt-query,
@@ -17356,7 +17496,7 @@ select.tt-query,
 select.tt-hint {
   padding: .4375rem .75rem;
   border: 0;
-  color: #242323; }
+  color: #4b5564; }
   select.form-control:focus, select.asColorPicker-input:focus, .dataTables_wrapper select:focus,
   .jsgrid .jsgrid-table .jsgrid-filter-row select:focus, .select2-container--default select.select2-selection--single:focus, .select2-container--default .select2-selection--single select.select2-search__field:focus, select.typeahead:focus,
   select.tt-query:focus,
@@ -19697,7 +19837,7 @@ div.tagsinput {
   max-width: 100%; }
 
 .typeahead {
-  background-color: #c9c9c9; }
+  background-color: #2A3038; }
   .typeahead:focus {
     border-color: #2c2e33; }
 
@@ -19948,7 +20088,7 @@ div.tagsinput {
 .auth .auth-form-light {
   background: #ffffff; }
   .auth .auth-form-light select {
-    color: #242323; }
+    color: #4b5564; }
   .auth .auth-form-light .input-group .form-control:focus, .auth .auth-form-light .asColorPicker-wrap .form-control:focus, .auth .auth-form-light .input-group .asColorPicker-input:focus, .auth .auth-form-light .asColorPicker-wrap .asColorPicker-input:focus, .auth .auth-form-light .input-group .dataTables_wrapper select:focus, .dataTables_wrapper .auth .auth-form-light .input-group select:focus, .auth .auth-form-light .asColorPicker-wrap .dataTables_wrapper select:focus, .dataTables_wrapper .auth .auth-form-light .asColorPicker-wrap select:focus, .auth .auth-form-light .input-group .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=text], .jsgrid .jsgrid-table .jsgrid-filter-row .auth .auth-form-light .input-group input:focus[type=text], .auth .auth-form-light .asColorPicker-wrap .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=text], .jsgrid .jsgrid-table .jsgrid-filter-row .auth .auth-form-light .asColorPicker-wrap input:focus[type=text],
   .auth .auth-form-light .input-group .jsgrid .jsgrid-table .jsgrid-filter-row select:focus, .jsgrid .jsgrid-table .jsgrid-filter-row .auth .auth-form-light .input-group select:focus,
   .auth .auth-form-light .asColorPicker-wrap .jsgrid .jsgrid-table .jsgrid-filter-row select:focus, .jsgrid .jsgrid-table .jsgrid-filter-row .auth .auth-form-light .asColorPicker-wrap select:focus, .auth .auth-form-light .input-group .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=number], .jsgrid .jsgrid-table .jsgrid-filter-row .auth .auth-form-light .input-group input:focus[type=number], .auth .auth-form-light .asColorPicker-wrap .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=number], .jsgrid .jsgrid-table .jsgrid-filter-row .auth .auth-form-light .asColorPicker-wrap input:focus[type=number], .auth .auth-form-light .input-group .select2-container--default .select2-selection--single:focus, .select2-container--default .auth .auth-form-light .input-group .select2-selection--single:focus, .auth .auth-form-light .asColorPicker-wrap .select2-container--default .select2-selection--single:focus, .select2-container--default .auth .auth-form-light .asColorPicker-wrap .select2-selection--single:focus, .auth .auth-form-light .input-group .select2-container--default .select2-selection--single .select2-search__field:focus, .select2-container--default .select2-selection--single .auth .auth-form-light .input-group .select2-search__field:focus, .auth .auth-form-light .asColorPicker-wrap .select2-container--default .select2-selection--single .select2-search__field:focus, .select2-container--default .select2-selection--single .auth .auth-form-light .asColorPicker-wrap .select2-search__field:focus, .auth .auth-form-light .input-group .typeahead:focus, .auth .auth-form-light .asColorPicker-wrap .typeahead:focus,

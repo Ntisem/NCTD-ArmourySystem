@@ -1,258 +1,269 @@
-
-<?php  require_once('connections/connect-db.php');?>
-<?php  
+<?php 
+require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
-?>
 
-<?php
-    // session_start();
-    if(!isset($_SESSION["username"])) {
-        header("location: login");
-        exit();
-    }
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
+
+$username = $_SESSION['username']; 
+$user_stmt = $pdo->prepare("SELECT adminID, fullname, service_no, rank FROM admin_lists WHERE username = ?");
+$user_stmt->execute([$username]);
+$admin_data = $user_stmt->fetch();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
+<head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - AMMUNITION</title>
-    <!-- plugins:css -->
+    <title>HQ COMMAND | AMMO_INVENTORY</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <!-- <link rel="stylesheet" href="dist/css/theme.css"> -->
-    <link rel="stylesheet" href="dist/css/theme.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
-    <!-- endinject -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- End layout styles -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
     <link rel="shortcut icon" href="assets/images/favicon.png" />
-  </head>
-  <body onload=display_ct();>
+    <style>
+        :root { --neon-cyan: #00f2ff; --panel-dark: #05070a; --neon-red: #ff4b2b; }
+        body { background-color: var(--panel-dark); font-family: 'JetBrains Mono', monospace; color: #e0e0e0; }
+        .table-tactical { background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(0, 242, 255, 0.1); }
+        .btn-tactical { border: 1px solid rgba(0, 242, 255, 0.3); text-transform: uppercase; font-size: 0.7rem; color: var(--neon-cyan); }
+        .t-toast { position: fixed; top: 20px; right: 20px; padding: 15px 25px; z-index: 9999; display: none; border-left: 4px solid; background: #05070a; clip-path: polygon(0 0, 100% 0, 100% 70%, 90% 100%, 0 100%); }
+        .t-success { color: var(--neon-cyan); border-color: var(--neon-cyan); }
+        .t-error { color: var(--neon-red); border-color: var(--neon-red); }
+        /* Tactical Export Buttons Style */
+        .dt-buttons .btn-tactical-export {
+            background: rgba(0, 242, 255, 0.05) !important;
+            border: 1px solid rgba(0, 242, 255, 0.4) !important;
+            color: #00f2ff !important;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem !important;
+            letter-spacing: 1px;
+            padding: 5px 15px !important;
+            transition: all 0.3s ease;
+            margin-right: 5px;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        }
+
+        .dt-buttons .btn-tactical-export:hover {
+            background: rgba(0, 242, 255, 0.2) !important;
+            border-color: #00f2ff !important;
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div id="toast-container"></div>
+
     <div class="container-scroller">
-    <!-- partial:includes/_sidebar.html -->
-    <?php  require_once('includes/sidebar.php');?>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:includes/_navbar.html -->
-        <?php  require_once('includes/navbar.php');?>
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-            <h3 class="page-title"> <i class="mdi mdi-bomb f-22 text-green"></i> Ammunition </h3>
-            <a href="all" type="button" class="btn btn-outline-info btn-fw">[ All ]</a>
-            <a href="assets-weapon" type="button" class="btn btn-outline-info btn-fw"> [ Firearm ]</a>
-            <a href="ammunition" type="button" class="btn btn-outline-danger btn-fw"> [ Ammunition ]</a>
-            <a href="assets-other" type="button" class="btn btn-outline-info btn-fw"> [ Assets ]</a>
-              <nav aria-label="breadcrumb">
-              </nav>
+        <?php include_once('includes/sidebar.php');?>
+        <div class="container-fluid page-body-wrapper">
+            <?php include_once('includes/navbar.php');?>
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="page-header d-flex justify-content-between">
+                        <h3 class="page-title text-info"><i class="mdi mdi-bullet"></i> AMMUNITION_REGISTRY</h3>
+                        <a href="add-new-ammo.php" class="btn btn-tactical"><i class="mdi mdi-plus"></i> NEW_ENTRY</a>
+                    </div>
+
+                    <div class="card table-tactical">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="ammo_table" class="table table-dark table-hover table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>AMMO_NAME</th>
+                                            <th>MANUFACTURER</th>
+                                            <th>ROUNDS</th>
+                                            <th>APPLICATION</th>
+                                            <th>STATUS</th>
+                                            <th>OPERATIONS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        // CRITICAL FIX: Added 'WHERE is_deleted = 0'
+                                        $sql = "SELECT * FROM ammunitions WHERE is_deleted = 0 ORDER BY ammoID DESC";
+                                        $stmt = $pdo->query($sql);
+                                        $i = 1;
+                                        while($row = $stmt->fetch()):
+                                            $jsData = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
+                                        ?>
+                                        <tr>
+                                            <td><?= $i++ ?></td>
+                                            <td><?= htmlspecialchars($row['ammo_name']) ?></td>
+                                            <td><?= htmlspecialchars($row['manufacturer']) ?></td>
+                                            <td class="text-warning"><?= number_format($row['ammo_rounds']) ?></td>
+                                            <td><?= htmlspecialchars($row['ammo_application']) ?></td>
+                                            <td><span class="badge btn-outline-info"><?= $row['booking_status'] ?></span></td>
+                                            <td>
+                                                <button class="btn btn-xs btn-outline-success" onclick='viewDetails(<?= $jsData ?>)' title="View"><i class="mdi mdi-eye"></i></button>
+                                                <button class="btn btn-xs btn-outline-info" onclick='openEditModal(<?= $jsData ?>)' title="Edit"><i class="mdi mdi-pencil"></i></button>
+                                                <button class="btn btn-xs btn-outline-danger" onclick='openDeleteModal(<?= $row['ammoID'] ?>, "<?= htmlspecialchars($row['ammo_name']) ?>")' title="Delete"><i class="mdi mdi-trash-can"></i></button>
+                                            </td>
+                                        </tr>
+                                        <?php endwhile; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <section class="content">
-          <div class="container-fluid">
-           <div class="row">
-          <div class="col-12">
-            
-            <div class="card">
-              <!-- /.card-header -->
-              <div class="card-body">
-              <p class="card-description"><a href="add-new-ammo"><code><i class="mdi mdi-plus f-22 text-green"></i><i class="mdi mdi-ammunition f-22 text-green" 
-               data-toggle="tooltip" data-placement="right" title="Click to Add New Ammunition"></i></code></a>
-              </p>
-                <table id="assets_weapon" class="table table-bordered ">
-                  <thead>
-                  <tr>
-                  <tr>
-                    <!-- <th> # </th> -->
-                    <th> Ammo</th>
-                    <th> Serial No. </th>
-                    <th> Ammo Type </th>
-                    <th> Ammo Name </th>
-                    <th> Ammo in Boxes</th>
-                    <th> Rounds</th>
-                    <th> Application </th>
-                    <th> Date/Time </th>
-                     <th>Actions</th>
-                     </tr>
-                      </thead>
-                      <tbody>    
-               
-                      <?php
-                        $username=$_SESSION['username']; 
-                        $query = mysqli_query($connect_db,"SELECT * FROM `admin_lists` WHERE `username`='$username'")
-                        or die( mysqli_error($connect_db));
-                        while ($row = mysqli_fetch_array($query)) {
-                                $profile_image = $row['profile_image'];
-                                $fullname = $row['fullname'];
-                                $_SESSION['fullname'] =  $fullname;
-                                 $user_role = $row['user_role'];
-                                $_SESSION['user_role'] =  $user_role; 
-                                $service_no = $row['service_no'];
-                                $_SESSION['service_no']=$service_no;
-                                $admin_rank =$row['rank'];
-                                $_SESSION['rank']=$admin_rank;
-                                $adminID =$row['adminID'];
-                                $_SESSION['adminID']=$adminID;                           
-                                $armourer_admin_name  =  $service_no.' '.$admin_rank.' '.$fullname;
-                                $_SESSION['armourer_admin_name'] = $armourer_admin_name;
-                              }
-                          $query = mysqli_query($connect_db,"SELECT *  FROM `ammunitions` ORDER BY `ammoID` ASC")
-                          or die( mysqli_error($connect_db));
-                          while ($row = mysqli_fetch_array($query)) {
-                              $output = "";
-                              $ammo_image = $row['ammo_image'];
-                              $_SESSION['ammo_image'] = $ammo_image;
-                              if(empty($ammo_image))
-                              {
-                              echo
-                              $output .= '
-                           <tr>                 
-                            <td class="py-1">
-                              <img src="assets/images/ammo_images/icon-pic.jpg" alt="image" />
-                            </td>
-                            <td>'.$row['ammo_serial_no'].'</td>
-                            <td><a style="text-decoration:none;color:#fff;" href="ammo-details.php?ammo_serial_no='.$row['ammo_serial_no'].'&ammoID='.$row['ammoID'].'">'.$row['ammo_type'].'</a></td>
-                            <td><a style="text-decoration:none;color:#fff;" href="ammo-details.php?ammo_serial_no='.$row['ammo_serial_no'].'&ammoID='.$row['ammoID'].'">'.$row['ammo_name'].'</a></td>
-                            <td> '.$row['ammo_boxes'].'</td>
-                            <td>
-                            <div class="progress-bar badge badge-dark" role="progressbar" style="width: 100%"
-                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">['.$row['ammo_rounds'].']</div>
-                           </div>                           
-                            </td>
-                            <td> '.$row['ammo_application'].'</td>
-                            
-                            <td> '.$row['datetime'].'</td>
-                            <td> 
-                            <a href="#edit-ammo-'.$row['ammoID'].'" data-toggle="modal"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                            &nbsp; &nbsp;
-                            <a href="#delete-ammo-'.$row['ammoID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
-                            </td>
-                          </tr>
-                          ';
-                        }else{
-                          echo
-                          $output .= '
-                          <tr>
-                      
-                            <td class="py-1">
-                              <img src="assets/images/ammo_images/'.$row['ammo_image'].'" alt="image" />
-                            </td>
-                            <td>'.$row['ammo_serial_no'].'</td>
-                            <td><a style="text-decoration:none;color:#fff;" href="ammo-details.php?ammo_serial_no='.$row['ammo_serial_no'].'&ammoID='.$row['ammoID'].'">'.$row['ammo_type'].'</a></td>
-                            <td><a style="text-decoration:none;color:#fff;"  href="ammo-details.php?ammo_serial_no='.$row['ammo_serial_no'].'&ammoID='.$row['ammoID'].'">'.$row['ammo_name'].'</a> </td>
-
-                            <td> '.$row['ammo_boxes'].'</td>
-                            <td> 
-                            <div class="progress-bar badge badge-warning" role="progressbar" style="width: 100%"
-                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">['.$row['ammo_rounds'].']</div>
-                           </div>
-                            </td>
-                            <td> '.$row['ammo_application'].'</td>
-                            
-                            <td> '.$row['datetime'].'</td>
-                            <td> 
-                            <a href="#edit-ammo-'.$row['ammoID'].'" data-toggle="modal"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                            &nbsp; &nbsp;
-                            <a href="#delete-ammo-'.$row['ammoID'].'"data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
-                            </td>
-                            </tr>
-                          
-                          ';
-                          // include('actions_modals.php');
-                        }
-                        include('actions_modals.php');
-                          }?>
-                                       
-                        </tbody>
-                  </tfoot>
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div></div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
         </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
-    </section>
-
-          <!-- content-wrapper ends -->
-          <!-- partial:partials/_footer.html -->
-          <?php  require_once('includes/footer.php');?>
-          <!-- partial -->
-          <!-- partial -->
-        </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
+
+    <div class="modal fade" id="viewModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark border-success text-white">
+                <div class="modal-header border-success">
+                    <h5 class="modal-title">ASSET_DETAILS_DECRYPTED</h5>
+                </div>
+                <div id="view_content" class="modal-body">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editAmmoModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark border-info text-white">
+                <form action="process-ammo-update.php" method="POST">
+                    <div class="modal-header border-info">
+                        <h5 class="modal-title">MOD_AMMO_DATA</h5>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="ammo_id" id="edit_ammo_id">
+                        <div class="row">
+                            <div class="col-md-6 mb-3"><label>AMMO_NAME</label><input type="text" name="ammo_name" id="edit_ammo_name" class="form-control bg-dark text-white"></div>
+                            <div class="col-md-6 mb-3"><label>MANUFACTURER</label><input type="text" name="manufacturer" id="edit_manufacturer" class="form-control bg-dark text-white"></div>
+                            <div class="col-md-4 mb-3"><label>ROUNDS</label><input type="number" name="ammo_rounds" id="edit_rounds" class="form-control bg-dark text-white"></div>
+                            <div class="col-md-4 mb-3"><label>APPLICATION</label><input type="text" name="ammo_application" id="edit_application" class="form-control bg-dark text-white"></div>
+                            <div class="col-md-4 mb-3">
+                                <label>STATUS</label>
+                                <select name="booking_status" id="edit_booking" class="form-control bg-dark text-white">
+                                    <option value="Available">Available</option>
+                                    <option value="Reserved">Reserved</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12"><label>REMARKS</label><textarea name="remarks" id="edit_remarks" class="form-control bg-dark text-white" rows="3"></textarea></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="submit" name="update_ammo" class="btn btn-info w-100">COMMIT_CHANGES</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark border-danger text-white">
+                <form action="process-ammo-delete.php" method="POST">
+                    <div class="modal-header border-danger">
+                        <h5 class="modal-title">CONFIRM_DELETION</h5>
+                    </div>
+                    <div class="modal-body text-center">
+                        <i class="mdi mdi-alert-octagon text-danger" style="font-size: 3rem;"></i>
+                        <p>ARE YOU SURE YOU WANT TO ARCHIVE <br><b id="del_name" class="text-danger h4"></b>?</p>
+                        <input type="hidden" name="delete_id" id="del_id">
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="submit" name="confirm_delete" class="btn btn-danger w-100">EXECUTE_ARCHIVE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
-    <!-- endinject -->
-       <!-- DataTables  & Plugins -->
-<script src="plugins/jquery/jquery.min.js"></script>
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="plugins/jszip/jszip.min.js"></script>
-<script src="plugins/pdfmake/pdfmake.min.js"></script>
-<script src="plugins/pdfmake/vfs_fonts.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
-
-<!-- Page specific script -->
-<script>
-  $(function () {
-    $("#assets_weapon").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#assets_weapon_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
+    <script>
+       $(document).ready(function() {
+    $('#ammo_table').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            { 
+                extend: 'excel', 
+                text: '<i class="mdi mdi-file-excel"></i> EXCEL_EXPORT', 
+                className: 'btn-tactical-export' 
+            },
+            { 
+                extend: 'pdf', 
+                text: '<i class="mdi mdi-file-pdf"></i> PDF_GENERATE', 
+                className: 'btn-tactical-export' 
+            },
+            { 
+                extend: 'print', 
+                text: '<i class="mdi mdi-printer"></i> PRINT_HARDCOPY', 
+                className: 'btn-tactical-export' 
+            }
+        ],
+        "language": { 
+            "search": "[SCANNING_DATABASE]:",
+            "searchPlaceholder": "ENTER_CRITERIA..."
+        },
+        "responsive": true
     });
-  });
-</script>
-    <!-- End custom js for this page -->
-  </body>
+
+    // Toast logic remains the same...
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.has('status')) {
+        const isSuccess = urlParams.get('status') === 'success';
+        const msg = isSuccess ? 'OPERATION_COMPLETE' : 'CRITICAL_ERROR: ' + (urlParams.get('msg') || '');
+        showToast(msg, isSuccess ? 't-success' : 't-error');
+    }
+});
+        function showToast(msg, css) {
+            const t = $(`<div class="t-toast ${css}">[SIGNAL]: ${msg}</div>`);
+            $('#toast-container').append(t);
+            t.fadeIn().delay(4000).fadeOut();
+        }
+
+        function viewDetails(data) {
+            let html = `
+                <table class="table table-sm text-white">
+                    <tr><td>ID:</td><td class="text-info">${data.ammoID}</td></tr>
+                    <tr><td>NAME:</td><td class="text-info">${data.ammo_name}</td></tr>
+                    <tr><td>ROUNDS:</td><td class="text-warning">${data.ammo_rounds}</td></tr>
+                    <tr><td>APPLICATION:</td><td>${data.ammo_application}</td></tr>
+                    <tr><td>REGISTRAR:</td><td>${data.armourer_admin_name}</td></tr>
+                    <tr><td>REMARKS:</td><td>${data.remarks || 'N/A'}</td></tr>
+                </table>`;
+            $('#view_content').html(html);
+            $('#viewModal').modal('show');
+        }
+
+        function openEditModal(data) {
+            $('#edit_ammo_id').val(data.ammoID);
+            $('#edit_ammo_name').val(data.ammo_name);
+            $('#edit_manufacturer').val(data.manufacturer);
+            $('#edit_rounds').val(data.ammo_rounds);
+            $('#edit_application').val(data.ammo_application);
+            $('#edit_booking').val(data.booking_status);
+            $('#edit_remarks').val(data.remarks || '');
+            $('#editAmmoModal').modal('show');
+        }
+
+        function openDeleteModal(id, name) {
+            $('#del_id').val(id);
+            $('#del_name').text(name);
+            $('#deleteModal').modal('show');
+        }
+    </script>
+</body>
 </html>

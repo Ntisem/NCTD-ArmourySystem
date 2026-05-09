@@ -1,985 +1,278 @@
-<!-- register edit admin -->
-<style>
-    .modal-header {
-        border:1px solid #ffffff;
-        background-color: #040080;   
+<?php  
+require_once('connections/connect-db.php'); // Assuming this sets up $pdo
+require_once('functions.php');
+require_once('includes/user_auth.php');
+
+// Security check
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
+
+$u_name = $_SESSION['fullname'] ?? 'SYSTEM_USER';
+$a_id   = $_SESSION['adminID'] ?? 0;
+
+// Handle Firearm Name Selection via PDO
+if (isset($_GET['firearm-name']) && $_GET['firearm-name'] != '') {
+    $get_firearm_name = $_GET['firearm-name'];
+    $stmt = $pdo->prepare("SELECT firearm_name FROM firearm_name WHERE firearm_name = ?");
+    $stmt->execute([$get_firearm_name]);
+    $firearm_row = $stmt->fetch();
+    
+    if ($firearm_row) {
+        $_SESSION['firearm_name'] = $firearm_row['firearm_name'];
     }
-    .modal-body {
-        border-bottom:1px solid #ffffff;
-        background-color:#02021a;
-    }
+}
 
-</style>
+$current_firearm = $_SESSION['firearm_name'] ?? 'UNDEFINED_ASSET';
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>HQ COMMAND | ASSET: <?= $current_firearm ?></title>
+    
+    <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
 
-<div class="modal fade" id="edit-admin-<?php echo $row['adminID'];?>" data-backdrop="static" data-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel" style="color: #fff;">Edit Administrator <code class="success3">[<?php echo ucwords($row['username']); ?>]</code>'s Profile</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" style="color: #fff;">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="functions.php" class="forms-sample" enctype="multipart/form-data">
-                <input type="hidden" class="form-control" name="adminID" value="<?php echo $row['adminID']; ?>">
-                <input type="hidden" class="form-control" name="adminID_armourerID" value="<?php echo  $_SESSION['adminID']=$adminID; ?>">
-                <input type="hidden" class="form-control" name="armourer_admin_name" value="<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name; ?>">
-                <input type="hidden" class="form-control" name="admin_armourer_user_role" value="<?php echo  $_SESSION['admin_armourer_user_role'] =  $admin_armourer_user_role; ?>">  
-                    <div class="form-group">
-                        <label for="service_no"><code style="color:#fff;">Service Number</code></label>
-                        <input type="text" class="form-control" name="service_no" id="service_no"
-                            value="<?php echo $row['service_no']; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="User_role"><code style="color:#fff;">User Role</code></label>
-                      <div class="col-sm-9">
-                            <select class="form-control" name="user_role">
-                            <option value="<?php echo $row['user_role']; ?>"><?php echo $row['user_role']; ?></option>
-                            <option value="Administrator">Administrator</option>
-                            <option value="Armourer">Armourer</option>
-                            </select>
-                        </div> 
-                    </div>
-                    <div class="form-group">
-                        <label for="unit_dept"><code style="color:#fff;">Gender</code></label>
-                      <div class="col-sm-9">
-                            <select class="form-control" name="gender">
-                            <option value="<?php echo $row['gender']; ?>"><?php echo $row['gender']; ?></option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            </select>
-                        </div> 
-                    </div>
-                    <div class="form-group">
-                        <label for="unit_dept"><code style="color:#fff;">Rank</code></label>
-                      <div class="col-sm-9">
-                            <select class="form-control" name="rank">
-                            <option value="<?php echo $row['rank']; ?>"><?php echo $row['rank']; ?></option>
-                            <option value="CONST">Constable</option>
-                            <option value="L/CPL">Lance Corporal</option>
-                            <option value="CPL">Corporal</option>
-                            <option value="SGT">Sergeant</option>
-                            <option value="INSPR">Inspector</option>
-                            <option value="C/INSPR">Chief Inspector</option>
-                            </select>
-                        </div> 
-                    </div>
-                    <div class="form-group">
-                        <label for="fullname"><code style="color:#fff;">Fullname</code></label>
-                        <input type="text" class="form-control" name="fullname" id="fullname"
-                            value="<?php echo $row['fullname']; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="username"><code style="color:#fff;">Username</code></label>
-                        <input type="text" class="form-control" name="username" id="username"
-                            value="<?php echo $row['username']; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="email"><code style="color:#fff;">Phone Number</code></label>
-                        <input type="text" class="form-control" name="phone_number" id="phone_number"
-                            value="<?php echo $row['phone_number']; ?>" pattern="^(\d{3}[-]?){1,2}(\d{4})$" placeholder="eg: 024-500-7000"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="email"><code style="color:#fff;">Email address</code></label>
-                        <input type="email" class="form-control" name="admin_email" id="email"
-                            value="<?php echo $row['admin_email']; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="unit_dept"><code style="color:#fff;">Unit/Dept</code></label>
-                            <div class="col-sm-9">
-                            <select class="form-control" name="unit_dept">
-                            <option value="<?php echo $row['unit_dept']; ?>"><?php echo $row['unit_dept']; ?></option>
-                            <option value="NVU">National Visibility Unit (NVU)</option>
-                            <option value="CTD">Counter Terrorism Dept (CTD)</option>
-                            <option value="SWAT">Special Weapon and Tactics (SWAT)</option>
-                            <option value="FPU">Formed Police Unit (FPU)</option>
-                            </select>
-                        </div> 
-                    </div>
-                    <div class="form-group">
-                        <label><code style="color:#fff;">Profile Image upload</code></label>
-                        <input type="file" class="form-control" name="profile_image" id="exampleFormControlFile1" value="<?php echo $row['profile_image']; ?>">
-                        </div>
-                    </div>
-                    <!-- </div> -->
-                    <div class="modal-footer">
-                     <button type="submit" class="btn btn-inverse-success btn-fw" name="update-admin">Update</button>
-                      <button type="button" class="btn btn-inverse-danger  btn-fw" data-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- edit administrator-->
+    <style>
+        :root {
+            --neon-cyan: #00f2ff;
+            --neon-amber: #f9a602;
+            --neon-red: #ff4b2b;
+            --panel-dark: #05070a;
+        }
 
-<!-- Update Armourer  -->
-<div class="modal fade" id="edit-armourer-<?php echo $row['adminID'];?>" data-backdrop="static" data-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" style="">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel" style="color: #fff;">Edit Armourer <code class="success3">[<?php echo ucwords($row['username']); ?>]</code>'s Profile</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" style="color: #fff;">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="functions.php" class="forms-sample" enctype="multipart/form-data">
-                <input type="hidden" class="form-control" name="adminID" value="<?php echo $row['adminID']; ?>">
-                <input type="hidden" class="form-control" name="adminID_armourerID" value="<?php echo  $_SESSION['adminID']=$adminID; ?>">
-                <input type="hidden" class="form-control" name="armourer_admin_name" value="<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name; ?>">
-                <input type="hidden" class="form-control" name="admin_armourer_user_role" value="<?php echo  $_SESSION['admin_armourer_user_role'] =  $admin_armourer_user_role; ?>">  
-                    <div class="form-group">
-                        <label for="service_no"><code style="color:#fff;">Service Number</code></label>
-                        <input type="text" class="form-control" name="service_no" id="service_no"
-                            value="<?php echo $row['service_no']; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="User_role"><code style="color:#fff;">User Role</code></label>
-                      <div class="col-sm-9">
-                            <select class="form-control" name="user_role">
-                            <option value="<?php echo $row['user_role']; ?>"><?php echo $row['user_role']; ?></option>
-                            <option value="Administrator">Administrator</option>
-                            <option value="Armourer">Armourer</option>
-                            </select>
-                        </div> 
-                    </div>
-                    <div class="form-group">
-                        <label for="unit_dept"><code style="color:#fff;">Gender</code></label>
-                      <div class="col-sm-9">
-                            <select class="form-control" name="gender">
-                            <option value="<?php echo $row['gender']; ?>"><?php echo $row['gender']; ?></option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            </select>
-                        </div> 
-                    </div>
-                    <div class="form-group">
-                        <label for="unit_dept"><code style="color:#fff;">Rank</code></label>
-                      <div class="col-sm-9">
-                            <select class="form-control" name="rank">
-                            <option value="<?php echo $row['rank']; ?>"><?php echo $row['rank']; ?></option>
-                            <option value="CONST">Constable</option>
-                            <option value="L/CPL">Lance Corporal</option>
-                            <option value="CPL">Corporal</option>
-                            <option value="SGT">Sergeant</option>
-                            <option value="INSPR">Inspector</option>
-                            <option value="C/INSPR">Chief Inspector</option>
-                            </select>
-                        </div> 
-                    </div>
-                    <div class="form-group">
-                        <label for="fullname"><code style="color:#fff;">Fullname</code></label>
-                        <input type="text" class="form-control" name="fullname" id="fullname"
-                            value="<?php echo $row['fullname']; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="username"><code style="color:#fff;">Username</code></label>
-                        <input type="text" class="form-control" name="username" id="username"
-                            value="<?php echo $row['username']; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="email"><code style="color:#fff;">Phone Number</code></label>
-                        <input type="text" class="form-control" name="phone_number" id="phone_number"
-                            value="<?php echo $row['phone_number']; ?>" pattern="^(\d{3}[-]?){1,2}(\d{4})$" placeholder="eg: 024-500-7000"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="email"><code style="color:#fff;">Email address</code></label>
-                        <input type="email" class="form-control" name="admin_email" id="email"
-                            value="<?php echo $row['admin_email']; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="unit_dept"><code style="color:#fff;">Unit/Dept</code></label>
-                            <div class="col-sm-9">
-                            <select class="form-control" name="unit_dept">
-                            <option value="<?php echo $row['unit_dept']; ?>"><?php echo $row['unit_dept']; ?></option>
-                            <option value="NVU">National Visibility Unit (NVU)</option>
-                            <option value="CTD">Counter Terrorism Dept (CTD)</option>
-                            <option value="SWAT">Special Weapon and Tactics (SWAT)</option>
-                            <option value="FPU">Formed Police Unit (FPU)</option>
-                            </select>
-                        </div> 
-                    </div>
-                    <div class="form-group">
-                        <label><code style="color:#fff;">Profile Image upload</code></label>
-                        <input type="file" class="form-control" name="profile_image" id="exampleFormControlFile1" value="<?php echo $row['profile_image']; ?>">
-                        </div>
-                    </div>
-                    <!-- </div> -->
-                    <div class="modal-footer">
-                     <button type="submit" class="btn btn-inverse-success btn-fw" name="update-armourer">Update</button>
-                      <button type="button" class="btn btn-inverse-danger  btn-fw" data-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Ends of Editing Armourer -->
+        body { background-color: var(--panel-dark); font-family: 'JetBrains Mono', monospace; color: #e0e0e0; }
 
+        /* Tactical Toast */
+        .t-toast { position: fixed; top: 20px; right: 20px; padding: 15px 25px; z-index: 10000; border-left: 5px solid; background: #1a1f2b; color: #fff; display: none; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .t-success { border-color: #00ffa3; }
+        .t-error { border-color: var(--neon-red); }
 
-<!-- deleting admin -->
-<div class="modal fade" id="delete-admin-<?php echo $row['adminID'];?>" data-backdrop="static" data-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content"  >
-            <div class="modal-header" style="background-color:#EB1616 ;">
-                <h4 class="modal-title" id="staticBackdropLabel">Delete Administrator Account</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="text-center">Are you sure you want to delete this Account ?</p>
-                <h6 class="text-center">
-                    
-                    <div class="badge badge-outline-warning" role="progressbar" style="width: 100%"
-                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><?php echo  $row['rank']; ?>&#160;<?php echo  $row['fullname']; ?></div>
-                   </div>
-                </h6>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="feather icon-x"></i>
-                        NO</button>
-                    <a href="delete?adminID=<?php echo $row['adminID']; ?>&adminID-armourerID=<?php echo  $_SESSION['adminID_armourerID']=$adminID_armourerID; ?>&armourer-admin-name=<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name; ?>&user-role=<?php echo $_SESSION['admin_armourer_user_role']; ?>&admin-name=<?php echo $row['user_role'].' '.$row['rank'].'  '.$row['fullname'].' ('.$row['username'].')'; ?>"
-                     class="btn btn-danger"><i class="feather icon-trash-2"></i>YES</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- deleting admin -->
+        /* Table & UI Enhancements */
+        .table-tactical { background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(0, 242, 255, 0.1); }
+        .btn-tactical { 
+            background: transparent; color: var(--neon-cyan); border: 1px solid rgba(0, 242, 255, 0.3); 
+            text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        }
+        .btn-tactical:hover { background: rgba(0, 242, 255, 0.1); box-shadow: 0 0 10px var(--neon-cyan); color: #fff; }
 
-<!-- deleting armourer -->
-<div class="modal fade" id="delete-armourer-<?php echo $row['adminID'];?>" data-backdrop="static" data-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content"  >
-            <div class="modal-header" style="background-color:#EB1616 ;">
-                <h4 class="modal-title" id="staticBackdropLabel">Delete Armourer Account</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="text-center">Are you sure you want to delete this Account ?</p>
-                <h6 class="text-center">
-                    
-                    <div class="badge badge-outline-warning" role="progressbar" style="width: 100%"
-                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><?php echo  $row['rank'];?>&#160;<?php echo  $row['fullname']; ?></div>
-                   </div>
-                </h6>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="feather icon-x"></i>
-                        NO</button>
-                    <a href="delete?armourerID=<?php echo $row['adminID']; ?>&adminID-armourerID=<?php echo  $_SESSION['adminID_armourerID']=$adminID_armourerID; ?>&armourer-admin-name=<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name; ?>&user-role=<?php echo $_SESSION['admin_armourer_user_role']; ?>&armourer-name=<?php echo $row['user_role'].' '.$row['rank'].'  '.$row['fullname'].' ('.$row['username'].')'; ?>"
-                     class="btn btn-danger"><i class="feather icon-trash-2"></i>YES</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- deleting armourer -->
-<!-- edit officer's profile -->
-<div class="modal fade" id="edit-officer-<?php echo $row['officerID'];?>" data-backdrop="static" data-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" style="">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel" style="color: #fff;">Edit <code class="success3">[<?php echo $row['rank'].' '.ucwords($row['full_name']); ?>]</code>'s Profile</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" style="color: #fff;">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="functions.php" class="forms-sample" enctype="multipart/form-data">
-                <input type="hidden" class="form-control" name="adminID" value="<?php echo  $_SESSION['adminID']=$adminID; ?>">
-                <input type="hidden" class="form-control" name="armourer_admin_name" value="<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name; ?>">
-                <input type="hidden" class="form-control" name="user_role" value="<?php echo  $_SESSION['user_role'] =  $user_role; ?>">  
-                <input type="hidden" class="form-control" name="officerID" value="<?php echo $row['officerID']; ?>">
-                    <div class="form-group">
-                        <label for="service_no"><code style="color:#fff;">Service Number</code></label>
-                        <input type="text" class="form-control" name="officer_service_no" id="officer_service_no"
-                            value="<?php echo $row['officer_service_no']; ?>">
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" name="officer_status" class="form-control" id="exampleInputName1" value="<?php echo $row['officer_status']; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="unit_dept"><code style="color:#fff;">Gender</code></label>
-                      <div class="col-sm-9">
-                            <select class="form-control" name="gender">
-                            <option value="<?php echo $row['gender']; ?>"><?php echo $row['gender']; ?></option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            </select>
-                        </div> 
-                    </div>
-                    <div class="form-group">
-                        <label for="unit_dept"><code style="color:#fff;">Rank</code></label>
-                      <div class="col-sm-9">
-                            <select class="form-control" name="rank">
-                            <option value="<?php echo $row['rank']; ?>"><?php echo $row['rank']; ?></option>
-                            <option value="CONST">Constable</option>
-                            <option value="L/CPL">Lance Corporal</option>
-                            <option value="CPL">Corporal</option>
-                            <option value="SGT">Sergeant</option>
-                            <option value="INSPR">Inspector</option>
-                            <option value="C/INSPR">Chief Inspector</option>
-                            <option value="ASP">Assistant Superintendent</option>
-                            <option value="DSP">Deputy Superintendent</option>
-                            <option value="SUP">Superintendent</option>
-                            <option value="C/SUP">Chief Superintendent</option>
-                            <option value="ACP">Assistant Commissioner</option>
-                            <option value="DCOP">Deputy Commissioner</option>
-                            </select>
-                        </div> 
-                    </div>
-                    <div class="form-group">
-                        <label for="fullname"><code style="color:#fff;">Full last_name</code></label>
-                        <input type="text" class="form-control" name="full_name" id="full_name"
-                            value="<?php echo $row['full_name']; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="email"><code style="color:#fff;">Phone Number</code></label>
-                        <input type="text" class="form-control" name="phone_no" id="phone_no"
-                            value="<?php echo $row['phone_no']; ?>" pattern="^(\d{3}[-]?){1,2}(\d{4})$" placeholder="eg: 024-500-7000"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="email"><code style="color:#fff;">Email address</code></label>
-                        <input type="email" class="form-control" name="officer_email" id="officer_email"
-                            value="<?php echo $row['officer_email']; ?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="unit_dept"><code style="color:#fff;">Unit/Dept</code></label>
-                            <div class="col-sm-9">
-                            <select class="form-control" name="dept_unit">
-                            <option value="<?php echo $row['dept_unit']; ?>"><?php echo $row['dept_unit']; ?></option>
-                            <option value="NVU">National Visibility Unit (NVU)</option>
-                            <option value="CTD">Counter Terrorism Dept (CTD)</option>
-                            <option value="SWAT">Special Weapon and Tactics (SWAT)</option>
-                            <option value="FPU">Formed Police Unit (FPU)</option>
-                            </select>
-                        </div> 
-                    </div>
-                    <div class="form-group">
-                        <label><code style="color:#fff;">Profile Image upload</code></label>
-                        <input type="file" class="form-control" name="officer_image" id="exampleFormControlFile1">
-                        </div>
-                    </div>
-                    <!-- </div> -->
-                    <div class="modal-footer">
-                     <button type="submit" class="btn btn-inverse-success btn-fw" name="update-officer">Update</button>
-                      <button type="button" class="btn btn-inverse-danger  btn-fw" data-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- edit administrator-->
-<!-- deleting Officer -->
-<div class="modal fade" id="delete-officer-<?php echo $row['officerID'];?>" data-backdrop="static" data-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content"  >
-            <div class="modal-header" style="background-color:#EB1616 ;">
-                <h4 class="modal-title" id="staticBackdropLabel">Delete Officer's Account</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="text-center">Are you sure you want to delete this Officer Account ?</p>
-                <h6 class="text-center">
-                    
-                    <div class="badge badge-outline-warning" role="progressbar" style="width: 100%"
-                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><?php echo  $row['rank']; ?>&#160;<?php echo  $row['full_name']; ?></div>
-                   </div>
-                </h6>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="feather icon-x"></i>
-                        NO</button>
-                    
-                    <a href="delete?officerID=<?php echo $row['officerID'];?>&adminID=<?php echo  $_SESSION['adminID']=$adminID; ?>
-                    &armourer-admin-name=<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name; ?>
-                    &user-role=<?php echo  $_SESSION['user_role'] =  $user_role; ?>&officer-name=<?php echo $row['rank'].' ( '.$row['full_name'].' )'; ?>"
-                     class="btn btn-danger"><i class="feather icon-trash-2"></i>YES</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- deleting admin -->
+        /* Landscape Dropdown */
+        .landscape-panel { width: 700px !important; max-width: 90vw; background: var(--panel-dark) !important; border: 1px solid var(--neon-cyan) !important; }
+        .tactical-grid-item { flex: 0 0 31%; margin: 1%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 242, 255, 0.1); padding: 10px; color: #8a8d93; text-decoration: none; font-size: 0.75rem; }
+        .tactical-grid-item:hover { color: var(--neon-cyan); border-color: var(--neon-cyan); background: rgba(0, 242, 255, 0.05); }
 
+        /* DataTables Custom Overrides */
+        .dataTables_filter input { background: #12151e; border: 1px solid #1a1f2b; color: white; }
+        .dt-buttons .btn { background: #12151e !important; border: 1px solid var(--neon-cyan) !important; color: var(--neon-cyan) !important; font-size: 0.7rem; }
+    </style>
+</head>
+<body>
+    <div id="toast-container"></div>
 
-
-<!-- Updating Ammunition  -->
-<div class="modal fade" id="edit-asset-<?php echo $row['assetID'];?>" data-backdrop="static" data-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" style="">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel" style="color: #fff;">Edit Asset <code class="success3">[<?php echo $row['asset_serial_no'].''.ucwords($row['asset_name']); ?>]</code></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" style="color: #fff;">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="functions.php" class="forms-sample" enctype="multipart/form-data">
-                <input type="hidden" class="form-control" name="adminID" value="<?php echo  $_SESSION['adminID']=$adminID; ?>">
-                <input type="hidden" class="form-control" name="armourer_admin_name" value="<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name; ?>">
-                <input type="hidden" class="form-control" name="user_role" value="<?php echo  $_SESSION['user_role'] =  $user_role; ?>">  
-                    <input type="hidden" class="form-control" name="assetID" value="<?php echo $row['assetID']; ?>">
-                    <div class="form-group">
-                        <label for="service_no"><code style="color:#fff;">Asset Serial No.</code></label>
-                        <input type="text" class="form-control" name="asset_serial_no" id="asset_serial_no"
-                            value="<?php echo $row['asset_serial_no']; ?>">
-                            <input type="hidden" class="form-control" name="assetID" id="assetID"
-                            value="<?php echo $row['assetID']; ?>">
-                        </div>                  
-                    <div class="form-group">
-                        <label for="asset_name"><code style="color:#fff;">Asset Name</code></label>
-                        <input type="text" class="form-control" name="asset_name" id="asset_name"
-                            value="<?php echo $row['asset_name']; ?>" placeholder="Asset Name"/>
-                    </div>    
-                    <div class="form-group">
-                        <label><code style="color:#fff;">Asset Quantity</code></label>
-                        <input type="number" class="form-control" name="asset_quantity" id="quantity" 
-                         value="<?php echo $row['asset_quantity']; ?>">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label><code style="color:#fff;"> Asset Image</code></label>
-                        <input type="file" class="form-control" name="asset_image" id="asset_image" 
-                         value="<?php echo $row['asset_image']; ?>">
-                        </div>
-                    <!-- </div> -->
-                    <!-- </div> -->
-                    <div class="modal-footer">
-                     <button type="submit" class="btn btn-inverse-success btn-fw" name="update-asset">Update</button>
-                      <button type="button" class="btn btn-inverse-danger  btn-fw" data-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- edit Ammunition-->
-
-<!-- Updating Assets  -->
-<div class="modal fade" id="edit-ammo-<?php echo $row['ammoID'];?>" data-backdrop="static" data-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel" style="color: orange;">Update Ammunition <code class="success3">[<?php echo $row['ammo_serial_no'].''.ucwords($row['ammo_name']); ?>]</code></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" style="color: #fff;">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="functions.php" class="forms-sample" enctype="multipart/form-data"> 
-                <input type="hidden" class="form-control" name="adminID" value="<?php echo  $_SESSION['adminID']=$adminID; ?>">
-                <input type="hidden" class="form-control" name="armourer_admin_name" value="<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name; ?>">
-                <input type="hidden" class="form-control" name="user_role" value="<?php echo  $_SESSION['user_role'] =  $user_role; ?>">  
-                <input type="hidden" class="form-control" name="ammoID" value="<?php echo $row['ammoID']; ?>">
-                    <div class="form-group">
-                        <label for="service_no"><code style="color:#fff;">Ammo Serial No.</code></label>
-                        <input type="text" class="form-control" name="ammo_serial_no" id="ammo_serial_no"
-                            value="<?php echo $row['ammo_serial_no']; ?>">
-                    </div>
-                    <!-- <div class="form-group">
-                        <input type="hidden" name="ammo_status" class="form-control" id="exampleInputName1" value="<?php echo $row['ammo_status']; ?>">
-                    </div> -->
-                    <div class="form-group">
-                    <label class="col-sm-6 col-form-label"><code style="color:#fff;">Ammunition Type</code></label>
-                    <div class="col-sm-9">
-                        <select name="ammo_type" class="form-control">
-                        <option value="<?php echo $row['ammo_type']; ?>"><?php echo $row['ammo_type']; ?></option>
-                        <option value="Elite-Hunter">Elite Hunter</option>
-                        <option value="Full-Metal-Jacket">Full-Metal-Jacket(FMJ)</option>
-                        <option value="Jacketed-Hollow-Point">Jacketed Hollow Point(JHP)</option>
-                        <option value="Open-Tip-Match">Open Tip Match(OTM)</option>
-                        </select>
-                    </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="ammo_name"><code style="color:#fff;">Ammo Name</code></label>
-                        <input type="text" class="form-control" name="ammo_name" id="ammo_name"
-                            value="<?php echo $row['ammo_name']; ?>" />
-                            <input type="hidden" class="form-control" name="ammoID" id="ammoID"
-                            value="<?php echo $row['ammoID']; ?>"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-6 col-form-label"><code style="color:#fff;">Ammunition Application</code></label>
-                        <div class="col-sm-9">
-                            <select name="ammo_application" class="form-control">
-                            <option value="<?php echo $row['ammo_application']; ?>"> <?php echo $row['ammo_application']; ?></option>
-                            <option value="Defensive">Defensive</option>
-                            <option value="Hunting">Hunting</option>
-                            <option value="Match-Grade">Match-Grade</option>
-                            <option value="Practice">Practice</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                                <label class="col-sm-6 col-form-label"><code style="color:#fff;">Grain Weight </code></label>
-                                <div class="col-sm-9">
-                                  <select name="grain_weight" class="form-control">
-                                    <option value="<?php echo $row['grain_weight']; ?>"><?php echo $row['grain_weight']; ?></option>
-                                    <option value="40-Grain">40-Grain</option>
-                                    <option value="55-Grain">55-Grain</option>
-                                    <option value="60-Grain">60-Grain</option>
-                                    <option value="70-Grain">70-Grain</option>        
-                                    <option value="80-Grain">80-Grain</option>
-                                    <option value="90-Grain">90-Grain</option>
-                                    <option value="100-Grain">100-Grain</option>
-                                    <option value="107-Grain">107-Grain</option>
-                                    <option value="115-Grain">115-Grain</option>
-                                    <option value="120-Grain">120-Grain</option>
-                                    <option value="124-Grain">124-Grain</option>
-                                    <option value="125-Grain">125-Grain</option>
-                                    <option value="168-Grain">168-Grain</option>
-                                    <option value="175-Grain">175-Grain</option>
-                                    <option value="180-Grain">180-Grain</option>
-                                    <option value="185-Grain">185-Grain</option>
-                                    <option value="190-Grain">190-Grain</option>
-                                    <option value="200-Grain">200-Grain</option>
-                                    <option value="220-Grain">220-Grain</option>
-                                    <option value="230-Grain">230-Grain</option>                          
-                                  </select>
+    <div class="container-scroller">
+        <?php include_once('includes/sidebar.php');?>
+        <div class="container-fluid page-body-wrapper">
+            <?php include_once('includes/navbar.php');?>
+            
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="page-header">
+                        <h3 class="page-title text-cyan">
+                            <i class="mdi mdi-pistol"></i> FIREARMS // <span class="text-amber"><?= $current_firearm ?></span>
+                        </h3>
+                        
+                        <nav>
+                            <div class="dropdown">
+                                <button class="btn btn-tactical dropdown-toggle" id="weaponDropdown" data-bs-toggle="dropdown">
+                                    SELECT::WEAPON_TYPE
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right landscape-panel p-3">
+                                    <h6 class="text-cyan mb-3 px-2">[SYS_REGISTRY_QUERY]</h6>
+                                    <div class="d-flex flex-wrap">
+                                        <?php
+                                        $nav_stmt = $pdo->query("SELECT firearm_name FROM firearm_name ORDER BY firearm_name ASC");
+                                        while($nav_row = $nav_stmt->fetch()) {
+                                            echo '<a href="?firearm-name='.urlencode($nav_row['firearm_name']).'" class="tactical-grid-item text-uppercase">> '.$nav_row['firearm_name'].'</a>';
+                                        }
+                                        ?>
+                                    </div>
                                 </div>
-                              </div>
-                    <div class="form-group">
-                        <label><code style="color:#fff;">Quantity</code></label>
-                        <input type="number" class="form-control" name="ammo_rounds" id="quantity" 
-                         value="<?php echo $row['ammo_rounds']; ?>">
+                            </div>
+                        </nav>
+                    </div>
+
+                    <div class="card table-tactical mt-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="card-title text-cyan mb-0">[ASSET_INVENTORY_LOG]</h4>
+                                <a href="add-new-weapon" class="btn btn-outline-success btn-sm">
+                                    <i class="mdi mdi-plus"></i> NEW_ENTRY
+                                </a>
+                            </div>
+
+                            <table id="assets_weapon" class="table table-dark table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>SERIAL_NO</th>
+                                        <th>ASSET_NAME</th>
+                                        <th>TYPE</th>
+                                        <th>CALIBER/CAP</th>
+                                        <th>REGISTRY_DATE</th>
+                                        <th class="text-center">OPERATIONS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sql = "SELECT * FROM firearms WHERE firearm_name = ? AND (firearm_state = 'Not Faulty' OR firearm_state = 'Not-Faulty') ORDER BY firearmID ASC";
+                                    $data_stmt = $pdo->prepare($sql);
+                                    $data_stmt->execute([$current_firearm]);
+                                    
+                                    while($row = $data_stmt->fetch()):
+                                    ?>
+                                    <tr>
+                                        <td class="text-amber font-weight-bold"><?= $row['firearm_serial_no'] ?></td>
+                                        <td><?= $row['firearm_name'] ?></td>
+                                        <td><?= $row['firearm_type'] ?></td>
+                                        <td>
+                                            <span class="badge border border-info text-info">
+                                                [<?= $row['firearm_caliber'] ?>] / [<?= $row['firearm_capacity'] ?>]
+                                            </span>
+                                        </td>
+                                        <td class="small"><?= $row['datetime'] ?></td>
+                                        <td class="text-center">
+                                            <button class="btn btn-xs btn-outline-info mr-2" 
+                                                onclick="openEditModal('<?= $row['firearmID'] ?>', '<?= $row['firearm_serial_no'] ?>', '<?= $row['firearm_type'] ?>')">
+                                                <i class="mdi mdi-playlist-edit"></i>
+                                            </button>
+                                            <button class="btn btn-xs btn-outline-danger" 
+                                                onclick="openDeleteModal('<?= $row['firearmID'] ?>', '<?= $row['firearm_serial_no'] ?>')">
+                                                <i class="mdi mdi-delete-forever"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label><code style="color:#fff;"> Ammo Image</code></label>
-                        <input type="file" class="form-control" name="ammo_image" id="ammo_image" 
-                         value="<?php echo $row['ammo_image']; ?>">
+                </div>
+                <?php include_once('includes/footer.php');?>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark border border-info">
+                <form action="process-weapon-update.php" method="POST">
+                    <div class="modal-header border-info">
+                        <h5 class="modal-title text-cyan">[COMMAND]: UPDATE_ASSET_DATA</h5>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="f_id" id="edit_id">
+                        <div class="form-group mb-3">
+                            <label class="text-muted small">SERIAL_IDENTIFIER</label>
+                            <input type="text" name="f_serial" id="edit_serial" class="form-control bg-black text-white border-secondary" required>
                         </div>
-                    <!-- </div> -->
-                    <!-- </div> -->
-                    <div class="modal-footer">
-                     <button type="submit" class="btn btn-inverse-success btn-fw" name="update-ammo">Update</button>
-                      <button type="button" class="btn btn-inverse-danger  btn-fw" data-dismiss="modal">Cancel</button>
+                        <div class="form-group mb-3">
+                            <label class="text-muted small">CLASSIFICATION_TYPE</label>
+                            <input type="text" name="f_type" id="edit_type" class="form-control bg-black text-white border-secondary" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">ABORT</button>
+                        <button type="submit" name="update_weapon" class="btn btn-info btn-sm">COMMIT_CHANGES</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</div>
-<!-- edit Asset/Weapon-->
 
-<!-- Delete Weapon From Inventory -->
-<div class="modal fade" id="delete-firearm-<?php echo $row['firearmID'];?>" data-backdrop="static" data-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content"  >
-            <div class="modal-header" style="background-color:#EB1616 ;">
-                <h4 class="modal-title" id="staticBackdropLabel">Delete Firearm</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="text-center">Are you sure you want to delete this Firearm ?</p>
-                <h6 class="text-center">
-                    
-                    <div class="badge badge-outline-warning" role="progressbar" style="width: 100%"
-                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                     <?php echo  $row['firearm_serial_no']; ?>&#160;<?php echo  $row['firearm_name'].' ('. $row['firearm_type'].')'; ?></div>
-                   </div>
-                </h6>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="feather icon-x"></i>
-                        NO</button>
-                  
-                    <a href="delete?firearmID=<?php echo $row['firearmID']; ?>&adminID=<?php echo  $_SESSION['adminID']=$adminID; ?>
-                    &armourer-admin-name=<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name; ?>
-                    &user-role=<?php echo  $_SESSION['user_role'] =  $user_role; ?>&firearm=<?php echo $row['firearm_serial_no'].' '.$row['firearm_name'].' ( '.$row['firearm_type'].' )'; ?>"
-                     class="btn btn-danger"><i class="feather icon-trash-2"></i>YES</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- deleting weapon-->
-
-<!-- Delete   BOOKING Ticket -->
-<div class="modal fade" id="delete-booking-<?php echo $row['bookingID'];?>" data-backdrop="static" data-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content"  >
-            <div class="modal-header" style="background-color:#EB1616 ;">
-                <h4 class="modal-title" id="staticBackdropLabel">Delete Booking Ticket <?php echo $row['bookingCode'];?> </h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="text-center">Are you sure you want to delete this Booking Ticket ?</p>
-                <h6 class="text-center">
-                    
-                    <div class="badge badge-outline-warning" role="progressbar" style="width: 100%"
-                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                     <?php echo 'Ticket '.$row['bookingCode'];?>
-                     <br>
-                     <br>
-                     &#160;<?php echo  $row['firearm_name']; ?>
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content bg-dark border border-danger">
+                <form action="process-weapon-delete.php" method="POST">
+                    <div class="modal-header border-danger">
+                        <h5 class="modal-title text-danger">[WARNING]: DATA_PURGE</h5>
                     </div>
-                   </div>
-                </h6>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="feather icon-x"></i>
-                        NO</button>
-                    <a href="delete?bookingID=<?php echo $row['bookingID'];?>&adminID=<?php echo  $_SESSION['adminID']=$adminID; ?>
-                    &armourer-admin-name=<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name; ?>
-                    &user-role=<?php echo  $_SESSION['user_role'] =  $user_role; ?>&booking-ticket=<?php echo $row['bookingID'].''.$row['officerID'].' ( '.$row['firearm_name'].' )'; ?>"
-                     class="btn btn-danger"><i class="feather icon-trash-2"></i>YES</a>        
-                </div>
+                    <div class="modal-body text-center">
+                        <p>Are you sure you want to remove asset?</p>
+                        <h4 id="del_label" class="text-amber"></h4>
+                        <input type="hidden" name="del_id" id="del_id">
+                    </div>
+                    <div class="modal-footer border-0 justify-content-center">
+                        <button type="button" class="btn btn-outline-light btn-xs" data-bs-dismiss="modal">CANCEL</button>
+                        <button type="submit" name="confirm_delete" class="btn btn-danger btn-xs">CONFIRM_PURGE</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
-<!-- deleting booking ticket weapon -->
 
+    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
-<!-- Modal  Returns -->
-<div class="modal fade" id="returns-details-<?php echo $row['bookingID'];?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Ticket# <code><?php echo $row['bookingCode'];?></code></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <label><code style="color:#fff;"> Return:</code><code> <?php echo $row['returns'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Issued Date: <?php echo $row['booking_time'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Armourer / Issuing Officer: <?php echo $row['armourer_issuer'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> To Officer: <?php echo $row['to_officer'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;">Firearm Image</code></label>:
-       <img src="assets/images/firearm_images/<?php echo $row['firearm_image'];?>" alt="">
-      <hr>
-      <label><code style="color:#fff;">Firearm Serial No.:<?php echo $row['firearm_serial_no'];?></code></label>
-      <hr>
-      <hr>
-      <label><code style="color:#fff;">Firearm Name: <?php echo $row['firearm_name'];?></code></label> 
-      <hr>   
-      <label><code style="color:#fff;"> Quantity: <?php echo $row['quantity_issued'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;">Firearm Class: <?php echo $row['firearm_class'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;">Firearm State: <?php echo $row['firearm_state'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Duty Type: <?php echo $row['duty_type'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;">DutyLocation: <?php echo $row['duty_location'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Exact Time/Date: <?php echo $row['datetime'];?></code></label>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- the end of returns  -->
+    <script>
+        $(document).ready(function() {
+            var table = $('#assets_weapon').DataTable({
+                "responsive": true,
+                "dom": 'Bfrtip',
+                "buttons": [
+                    { extend: 'excel', text: '<i class="mdi mdi-file-excel"></i> EXCEL', className: 'btn-sm' },
+                    { extend: 'pdf', text: '<i class="mdi mdi-file-pdf"></i> PDF', className: 'btn-sm' },
+                    { extend: 'print', text: '<i class="mdi mdi-printer"></i> PRINT', className: 'btn-sm' }
+                ],
+                "language": {
+                    "search": "[SCAN_DATABASE]:",
+                    "paginate": { "next": ">>", "previous": "<<" }
+                }
+            });
 
+            // Toast Notifications
+            const urlParams = new URLSearchParams(window.location.search);
+            if(urlParams.has('status')) {
+                let status = urlParams.get('status');
+                let msg = status === 'success' ? '[SIGNAL]: OPERATION_COMPLETE' : '[SIGNAL]: ERROR_DETECTED';
+                let css = status === 'success' ? 't-success' : 't-error';
+                showToast(msg, css);
+            }
+        });
 
-<!-- Modal  Booking Details -->
-<div class="modal fade" id="booking-details-<?php echo $row['bookingID'];?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Booking Ticket# <code><?php echo $row['bookingCode'];?></code></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <label><code style="color:#fff;"> Return:</code><code> <?php echo $row['returns'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Booking Date/Time: <?php echo $row['booking_time'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Returned Date/Time: <?php echo $row['returned_time'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Armourer / Issuing Officer: <?php echo $row['armourer_issuer'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> To Officer: <?php echo $row['to_officer'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Firearm Name: <?php echo $row['firearm_name'];?></code></label>
-      <hr>   
-      <label><code style="color:#fff;"> Quantity: <?php echo $row['quantity_issued'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Firearm Class: <?php echo $row['firearm_class'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Firearm State: <?php echo $row['firearm_state'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> No. Faulty Ammo(s): <?php echo $row['ammo_state'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Duty Type: <?php echo $row['duty_type'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Duty Location: <?php echo $row['duty_location'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Duty Duration: <?php echo $row['duty_duration'];?></code></label>
-      <hr>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+        function showToast(msg, cssClass) {
+            const t = $(`<div class="t-toast ${cssClass}">${msg}</div>`);
+            $('#toast-container').append(t);
+            t.fadeIn().delay(3000).fadeOut();
+        }
 
+        function openEditModal(id, serial, type) {
+            $('#edit_id').val(id);
+            $('#edit_serial').val(serial);
+            $('#edit_type').val(type);
+            $('#editModal').modal('show');
+        }
 
-<!-- Modal  Booking Details -->
-<div class="modal fade" id="ammo-booking-details-<?php echo $row['book_ammoID'];?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Booking Ticket# <code><?php echo $row['bookingCode'];?></code></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <label><code style="color:#fff;"> Return:</code><code> <?php echo $row['ammo_returns'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Booking Date/Time: <?php echo $row['booking_time'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Returned Date/Time: <?php echo $row['returned_time'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Armourer / Issuing Officer: <?php echo $row['armourer_issuer'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> To Officer: <?php echo $row['to_officer'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Ammo Name: <?php echo $row['ammo_name'];?></code></label>  
-      <hr>   
-      <label><code style="color:#fff;"> Ammo Rounds: <?php echo $row['ammo_rounds'];?></code></label>
-      <hr>   
-      <label><code style="color:#fff;"> Returned Rounds: <?php echo $row['ammo_returned'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Ammo State:  <?php echo $row['ammo_state'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> No. Faulty Ammo(s): <?php echo $row['no_faulty_ammo'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Duty Type: <?php echo $row['duty_type'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Duty Location: <?php echo $row['duty_location'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Duty Duration: <?php echo $row['duty_duration'];?></code></label>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- Modal  Asset Booking Details -->
-<div class="modal fade" id="asset-booking-details-<?php echo $row['bookAssetID'];?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Booking Ticket# <code><?php echo $row['bookingCode'];?></code></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <label><code style="color:#fff;"> Return:</code><code> <?php echo $row['asset_returns'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Booking Date/Time: <?php echo $row['booking_time'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Returned Date/Time: <?php echo $row['returned_time'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Armourer / Issuing Officer: <?php echo $row['armourer_issuer'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> To Officer: <?php echo $row['to_officer'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Asset Name: <?php echo $row['asset_name'];?></code></label>
-      <hr>   
-      <label><code style="color:#fff;"> Asset Quantity: <?php echo $row['asset_quantity'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Asset State:  <?php echo $row['asset_state'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Duty Type: <?php echo $row['duty_type'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Duty Location: <?php echo $row['duty_location'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Duty Duration: <?php echo $row['duty_duration'];?></code></label>
-     
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Delete Ammunition From Inventory -->
-<div class="modal fade" id="delete-ammo-<?php echo $row['ammoID'];?>" data-backdrop="static" data-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content"  >
-            <div class="modal-header" style="background-color:#EB1616 ;">
-                <h4 class="modal-title" id="staticBackdropLabel">Delete Asset/Weapon</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="text-center">Are you sure you want to delete this Ammunition ?</p>
-                <h6 class="text-center">
-                    
-                    <div class="badge badge-outline-warning" role="progressbar" style="width: 100%"
-                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                     <?php echo  $row['ammo_serial_no']; ?>&#160;<?php echo  $row['ammo_name'].' ('. $row['ammo_type'].')'; ?></div>
-                   </div>
-                </h6>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="feather icon-x"></i>
-                        NO</button>
-                    <a href="delete?ammoID=<?php echo $row['ammoID']; ?>&adminID=<?php echo  $_SESSION['adminID']=$adminID; ?>
-                    &armourer-admin-name=<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name; ?>
-                    &user-role=<?php echo  $_SESSION['user_role'] =  $user_role; ?>&name-ammo=<?php echo $row['ammo_name'].'-'.$row['ammo_rounds'].' ( '.$row['ammo_type'].' )'; ?>"
-                     class="btn btn-danger"><i class="feather icon-trash-2"></i>YES</a>  
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- deleting weapon-->
-
-<!-- Delete Other Asset From Inventory -->
-<div class="modal fade" id="delete-asset-<?php echo $row['assetID'];?>" data-backdrop="static" data-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content"  >
-            <div class="modal-header" style="background-color:#EB1616 ;">
-                <h4 class="modal-title" id="staticBackdropLabel">Delete Asset/Weapon</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="text-center">Are you sure you want to delete this Asset ?</p>
-                <h6 class="text-center">
-                    
-                    <div class="badge badge-outline-warning" role="progressbar" style="width: 100%"
-                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                     <?php echo  $row['asset_serial_no']; ?>&#160;<?php echo  $row['asset_name']; ?></div>
-                   </div>
-                </h6>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="feather icon-x"></i>
-                        NO</button>
-                    <a href="delete?assetID=<?php echo $row['assetID']; ?>&adminID=<?php echo  $_SESSION['adminID']=$adminID; ?>
-                    &armourer-admin-name=<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name; ?>
-                    &user-role=<?php echo  $_SESSION['user_role'] =  $user_role; ?>&name-asset=<?php echo $row['asset_name'].' ( '.$row['asset_quantity'].' )'; ?>"
-                     class="btn btn-danger"><i class="feather icon-trash-2"></i>YES</a> 
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- deleting weapon-->
-
-
-<!-- Modal  Booking Ammo Details -->
-<div class="modal fade" id="booking-ammo-details-<?php echo $row['book_ammoID'];?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Booking Ticket# <code><?php echo $row['bookingCode'];?></code></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <label><code style="color:#fff;"> Return:</code><code> <?php echo $row['ammo_returns'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Issued Date: <?php echo $row['booking_time'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Armourer / Issuing Officer: <?php echo $row['armourer_issuer'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> To Officer: <?php echo $row['to_officer'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Ammunition Name: <?php echo $row['ammo_name'];?></code></label>
-    
-      <hr>   
-      <label><code style="color:#fff;"> Quantity(Rounds): <?php echo $row['ammo_rounds'];?></code></label>
-
-      <hr>
-      <label><code style="color:#fff;"> Duty Type: <?php echo $row['duty_type'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Duty Location: <?php echo $row['duty_location'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Exact Time/Date: <?php echo $row['datetime'];?></code></label>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- Modal  Booking Asset Details -->
-<div class="modal fade" id="booking-asset-details-<?php echo $row['bookAssetID'];?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Booking Ticket# <code><?php echo $row['bookingCode'];?></code></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <label><code style="color:#fff;"> Return:</code><code> <?php echo $row['asset_returns'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Issued Date: <?php echo $row['booking_time'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Armourer / Issuing Officer: <?php echo $row['armourer_issuer'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> To Officer: <?php echo $row['to_officer'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Asset Name: <?php echo $row['asset_name'];?></code></label>
-    
-      <hr>   
-      <label><code style="color:#fff;"> Quantity: <?php echo $row['asset_quantity'];?></code></label>
-
-      <hr>
-      <label><code style="color:#fff;"> Duty Type: <?php echo $row['duty_type'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Duty Location: <?php echo $row['duty_location'];?></code></label>
-      <hr>
-      <label><code style="color:#fff;"> Exact Time/Date: <?php echo $row['datetime'];?></code></label>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
-
-
+        function openDeleteModal(id, serial) {
+            $('#del_id').val(id);
+            $('#del_label').text(serial);
+            $('#deleteModal').modal('show');
+        }
+    </script>
+</body>
+</html>

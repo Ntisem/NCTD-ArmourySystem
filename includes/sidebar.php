@@ -133,12 +133,13 @@ try {
                         $stmt->execute([$session_user]);
                         
                         while ($row = $stmt->fetch()) {
-                            $img = !empty($row['profile_image']) ? $row['profile_image'] : 'avatar_placeholder.png';
+                            $img = !empty($row['profile_image']) ? $row['profile_image'] : 'default.png';
                             $disp_username = $row['username'];
+                            $profile_image = $row['profile_image'];
                             $user_role = $row['user_role'];
                             ?>
                             <div class="count-indicator">
-                                <img class="img-xs rounded-circle" src="./administrator/assets/images/profile_images/<?= $img ?>" alt="">
+                                <img class="img-xs rounded-circle" src="assets/images/armourer_images/<?= $img ?>" alt="">
                                 <span class="count bg-success"></span>
                             </div>
                             <div class="profile-name">

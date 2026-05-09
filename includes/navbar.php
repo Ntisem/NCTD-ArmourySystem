@@ -195,9 +195,10 @@ body {
                 <a class="nav-link" id="profileDropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     <?php  
                         $username = $_SESSION['username'] ?? 'OPERATOR';
+                        $profile_image = $_SESSION['profile_image'] ?? 'avatar_placeholder.png';
                         echo '
                         <div class="navbar-profile">
-                            <img class="img-xs rounded-circle border border-info" src="./administrator/assets/images/profile_images/avatar_placeholder.png" alt="" style="width:30px; height:30px;">
+                            <img class="img-xs rounded-circle border border-info" src="assets/images/armourer_images/'. $profile_image .'" alt="" style="width:30px; height:30px;">
                             <p class="mb-0 d-none d-sm-block navbar-profile-name ml-2">'.strtoupper($username).'</p>
                             <i class="mdi mdi-menu-down d-none d-sm-block text-cyan ml-1"></i>
                         </div>';

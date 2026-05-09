@@ -7,7 +7,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"])) {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
         header("location: login");
         exit();
     }
@@ -57,7 +57,7 @@ require_once('includes/user_auth.php');
             <div class="page-header">
             <h3 class="page-title"> <i class="mdi mdi-keg f-22 text-green"></i> Other Assets </h3>
             <a href="all" type="button" class="btn btn-outline-info btn-fw">[ All ]</a>
-              <a href="assets-weapon" type="button" class="btn btn-outline-info btn-fw">[ Firearm ]</a>
+              <a href="firearms-ak47" type="button" class="btn btn-outline-info btn-fw">[ Firearm ]</a>
             <a href="ammunition" type="button" class="btn btn-outline-info btn-fw">[ Ammunition ]</a>
             <a href="assets-other" type="button" class="btn btn-outline-danger btn-fw">[ Assets ]</a>
               <nav aria-label="breadcrumb">
@@ -79,7 +79,7 @@ require_once('includes/user_auth.php');
                   <tr>
                   <tr>
                     <!-- <th> # </th> -->
-                    <th>Asset</th>
+                    <th> Asset</th>
                     <th> Serial No. </th>
                     <th> Asset Name </th>
                     <th> Quantity</th>
@@ -132,7 +132,7 @@ require_once('includes/user_auth.php');
                             <td> '.$row['datetime'].'</td>
                             <td> 
                             <a href="#edit-asset-'.$row['assetID'].'" data-toggle="modal"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                            &nbsp; &nbsp;<a href="#delete-asset-'.$row['assetID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
+                           
                             </td>
                           </tr>
                           ';
@@ -155,8 +155,7 @@ require_once('includes/user_auth.php');
                             <td> '.$row['datetime'].'</td>
                             <td> 
                             <a href="#edit-asset-'.$row['assetID'].'" data-toggle="modal"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                            &nbsp; &nbsp;
-                            <a href="#delete-asset-'.$row['assetID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
+                           
                             </td>
                             </tr>
                           

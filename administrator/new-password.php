@@ -109,6 +109,12 @@ require_once "controllerUserData.php";
                                 <i class="ik ik-lock"></i>
                                 <img src="assets/images/password_images/eye-close.png" alt="" id="c_eye_icon">
                             </div>
+                          
+                            <div class="row">
+                                <div class="col text-right">
+                                    <a href="forgot-password">Forgot Password ?</a>
+                                </div>
+                            </div>
                             <div class="sign-btn text-center">
                                 <button class="btn" style="background-color: #ffa600; color:#fff;" name="change-password" type="submit">Submit</button>
                             </div>

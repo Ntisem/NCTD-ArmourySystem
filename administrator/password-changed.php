@@ -10,7 +10,7 @@ require_once "controllerUserData.php";
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Password Changed | GPS ARMORY SYSTEM</title>
+    <title>Create New Password | GPS ARMORY SYSTEM</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">

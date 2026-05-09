@@ -1,302 +1,339 @@
-
-<?php  require_once('connections/connect-db.php');?>
-<?php  
+<?php 
+require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
-?>
 
-<?php
-    // session_start();
-    if(!isset($_SESSION["username"])) {
-        header("location: login");
-        exit();
-    }
-?>
+// 1. Authorization & Session Check
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
 
+// 2. Fetch Admin Data using PDO
+$username = $_SESSION['username']; 
+$stmt = $pdo->prepare("SELECT adminID, fullname, service_no, rank FROM admin_lists WHERE username = ?");
+$stmt->execute([$username]);
+$admin_data = $stmt->fetch(PDO::FETCH_ASSOC);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - ADD NEW FIREARM</title>
-    <!-- plugins:css -->
+    <title>TERMINAL | ASSET INDUCTION</title>
+    
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="assets/vendors/select2/select2.min.css">
-    <link rel="stylesheet" href="assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- End layout styles -->
     <link rel="shortcut icon" href="assets/images/favicon.png" />
-  </head>
-  <body onload=display_ct();>
+    <style>
+        :root {
+            --neon-cyan: #00f2ff;
+            --neon-amber: #f9a602;
+            --tactical-bg: #05070a;
+            --panel-bg: #0d1117;
+            --border-dim: #30363d;
+            --danger-red: #ff3e3e;
+        }
+
+        body { 
+            font-family: 'JetBrains Mono', monospace; 
+            background-color: var(--tactical-bg) !important; 
+            color: #c9d1d9;
+            letter-spacing: -0.5px;
+        }
+
+        .content-wrapper { background: var(--tactical-bg); }
+
+        .card { 
+            background: var(--panel-bg) !important; 
+            border: 1px solid var(--border-dim) !important; 
+            border-radius: 0;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .card::before {
+            content: "SYSTEM_ACTIVE";
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            font-size: 8px;
+            color: var(--neon-cyan);
+            background: var(--tactical-bg);
+            padding: 0 5px;
+        }
+
+        .page-title { 
+            color: var(--neon-cyan); 
+            text-transform: uppercase; 
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        label { 
+            font-size: 10px; 
+            text-transform: uppercase; 
+            color: #8b949e; 
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control { 
+            background: #161b22 !important; 
+            border: 1px solid var(--border-dim) !important; 
+            border-radius: 0;
+            color: #fff !important;
+            font-size: 13px;
+            padding: 12px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus { 
+            border-color: var(--neon-cyan) !important; 
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.1); 
+        }
+
+        .btn-tactical {
+            border-radius: 0;
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 11px;
+            padding: 15px 25px;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .btn-commit {
+            background: transparent;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+
+        .btn-commit:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .btn-abort {
+            background: transparent;
+            border: 1px solid var(--danger-red);
+            color: var(--danger-red);
+        }
+
+        .btn-abort:hover {
+            background: var(--danger-red);
+            color: #fff;
+            box-shadow: 0 0 15px var(--danger-red);
+        }
+
+        .status-msg { font-size: 10px; margin-top: 5px; display: block; height: 15px; }
+
+        .module-link {
+            border: 1px solid var(--border-dim);
+            padding: 8px 15px;
+            color: #8b949e;
+            text-decoration: none;
+            font-size: 11px;
+            margin-right: 10px;
+        }
+
+        .module-link.active {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+
+        hr { border-top: 1px solid var(--border-dim); opacity: 0.5; }
+    </style>
+</head>
+
+<body>
     <div class="container-scroller">
-    <!-- partial:includes/_sidebar.html -->
-    <?php  require_once('includes/sidebar.php');?>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:includes/_navbar.html -->
-        <?php  require_once('includes/navbar.php');?>
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title"> Add New Firearm </h3>
-              <nav aria-label="breadcrumb">
-              </nav>
-            </div>
-            <div class="card" style="margin-bottom:30px;">
-             <div class="card-body">
-            <a href="add-new-weapon" type="button" class="btn btn-outline-danger btn-fw">[ Firearm ]</a>
-            <a href="add-new-ammo" type="button" class="btn btn-outline-info btn-fw">[ Ammunition ]</a>
-            <a href="add-new-other-assets" type="button" class="btn btn-outline-info btn-fw">[ Assets ]</a>
-          </div>
-          </div>
-            <div class="row">
-              <div class="col-12 grid-margin">
-                <div class="card">
-                  <div class="card-body">
-                    <form method="POST" action="functions-inventory.php" class="forms-sample" enctype="multipart/form-data">
-                      <?php  
-                        $username=$_SESSION['username']; 
-                        $query = mysqli_query($connect_db,"SELECT * FROM `admin_lists` WHERE `username` ='$username'")
-                        or die( mysqli_error($connect_db));
-                        while ($row = mysqli_fetch_array($query)) {
-                            $profile_image = $row['profile_image'];
-                            $fullname = $row['fullname'];
-                            $_SESSION['fullname'] =  $fullname;
-                            $user_role = $row['user_role'];
-                            $service_no = $row['service_no'];
-                            $_SESSION['service_no']=$service_no;
-                            $admin_rank =$row['rank'];
-                            $_SESSION['rank']=$admin_rank;
-                            $adminID =$row['adminID'];
-                            $_SESSION['adminID']=$adminID;
-                            $_SESSION['user_role'] =  $user_role;    
-                        }?>      
-                              <input type="hidden" name="armourer_admin_name" class="form-control" id="exampleInputName1" value="<?php echo $service_no.' '.$admin_rank.' '.$fullname ?>">
-                              <input type="hidden" name="adminID" class="form-control" id="exampleInputName1" value="<?php echo $adminID; ?>">
-                              <input type="hidden" name="user_role" class="form-control" id="exampleInputName1" value="<?php echo $user_role; ?>">
-                              <input type="hidden" name="booking_status" class="form-control" id="exampleInputName1" value="Available">
-                              <div class="row">
-                            <div class="col-md-6">                     
-                              <div class="form-group">
-                                <label for="exampleInputName1"><code style="color:#fff">Firearm Serial No.</code></label>
-                                <input type="text" name="firearm_serial_no" class="form-control" id="exampleInputName1"
-                                placeholder="firearm/Serial Number" required>
-                              </div>                        
-                            </div>        
-                          <!-- <div class="col-md-6">                     
-                            <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">Weapon No.</code></label>
-                              <input type="text" name="weapon_number" class="form-control" id="exampleInputName1"
-                               placeholder="Weapon Number" required>
-                            </div>                        
-                          </div>    -->
-                          <div class="col-md-6">                    
-                          <div class="form-group">
-                            <label class="col-sm-3 col-form-label"><code style="color:#fff">Firearms Type</code></label>
-                            <div class="col-sm-12">
-                              <select name="firearm_type" class="form-control" style="color:#000">
-                              <option style="color:#000" value="">~ Firearm Type ~</option>
-                                <option value="Pump-Action" style="color:#000">Pump Action</option>
-                                <option value="Revolver" style="color:#000">Revolver</option>
-                                <option value="Rifle" style="color:#000">Rifle</option>
-                                <option value="ShortGun" style="color:#000">Short Gun</option>
-                                <option value="Carbine" style="color:#000">Carbine</option>
-                              </select>
-                            </div>
-                          </div>
-                          </div>
-                          <div class="col-md-6">                     
-                            <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">Manufacturer</code></label>
-                              <input type="text" name="manufacturer" class="form-control" id="exampleInputName1"
-                               placeholder="Manufacturer" required>
-                            </div>                        
-                          </div> 
-                            <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">Firearm Name</code></label>
-                              <input type="text" name="firearm_name" class="form-control" id="exampleInputName1" placeholder="Firearm Name" required >
-                            </div>
+        <?php include_once('includes/sidebar.php');?>
+        <div class="container-fluid page-body-wrapper">
+            <?php include_once('includes/navbar.php');?>
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="page-title">[ ASSET_INDUCTION_SEQUENCE ]</h3>
+                        <div>
+                            <a href="add-new-weapon" class="module-link active">WEAPON_ENTRY</a>
+                            <a href="add-new-ammo" class="module-link">AMMO_ENTRY</a>
+                        </div>
+                    </div>
 
-                             <div class="row">
-                             <div class="col-md-6"> 
-                            <div class="form-group">
-                            <label class="col-sm-3 col-form-label"><code style="color:#fff">Caliber</code></label>
-                            <div class="col-sm-9">
-                              <select name="firearm_caliber" class="form-control">
-                               <option style="color:#000" value="">~ Select Caliber ~</option>
-                                <option style="color:#000" value="9x19mm">9x19mm</option>
-                                <option style="color:#000" value="7.62x39mm">7.62x39mm</option>
-                                <option style="color:#000" value="5.56x45mm">5.56x45mm</option>
-                                <option style="color:#000" value="357-Magnum">357 Magnum</option>
-                                <option style="color:#000" value="44-Magnum">44 Magnum</option>
-                                <option style="color:#000" value="22-LR">22 LR</option>
-                                <option style="color:#000" value="45-Colt">45 Colt</option>
-                                <option style="color:#000" value="12-Gauge">12 Gauge</option>
-                              </select>
-                            </div>
-                          </div>
-                           </div>
-                           <div class="col-md-6"> 
-                             <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">firearm Capacity <code>(Rounds) </code></code></label>
-                              <input type="number" name="firearm_capacity" class="form-control" id="exampleInputName1" placeholder="Number of Rounds">
-                            </div>
-                            </div>
-                            </div>
-                            <div class="row">
-                            <div class="col-md-4"> 
-                            <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">firearm Weight <code>(inches")</code></code></label>
-                              <input type="text" name="firearm_weight" class="form-control" id="exampleInputName1" placeholder="Weight">
-                            </div>
-                            </div>
-                            <div class="col-md-4"> 
-                            <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">firearm Length <code>(inches")</code></code></label>
-                              <input type="text" name="firearm_length" class="form-control" id="exampleInputName1" placeholder="Length">
-                            </div>
-                            </div>
-                            <div class="col-md-4"> 
-                            <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">firearm Height <code>(inches")</code></code></label>
-                              <input type="text" name="firearm_height" class="form-control" id="exampleInputName1" placeholder="Height">
-                            </div>
-                            </div>
-                            </div>
-                            <div class="row">
-                            <div class="col-md-6"> 
-                            <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">firearm Width <code>(inches")</code></code></label>
-                              <input type="text" name="firearm_width" class="form-control" id="exampleInputName1" placeholder="Width">
-                            </div>
-                            </div>
-                            <div class="col-md-6"> 
-                            <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">Barrel Size <code>(inches")</code></code></label>
-                              <input type="text" name="firearm_barrel" class="form-control" id="exampleInputName1" placeholder="Barrel">
-                            </div>
-                            </div>
-                            </div>
-                            <div class="row">
-                            
-                            <div class="col-md-6"> 
-                            <div class="form-group">
-                            <label class="col-sm-3 col-form-label"><code style="color:#fff">Trigger Type </code></label>
-                            <div class="col-sm-9">
-                              <select name="firearm_trigger_type" class="form-control">
-                                <option style="color:#000" value="None">None</option>
-                                <option style="color:#000" value="Standard">Standard</option>
-                                <option style="color:#000" value="Single-Action">Single-Action (SA)</option>
-                                <option style="color:#000" value="Double-Action">Double-Action (DA)</option>
-                                <option style="color:#000" value="Double-Action-Only">Double-Action Only (DAO)</option>
-                                <option style="color:#000" value="Double-Action-or-Single-Action">Double-Action/Single-Action (DA/SA) Trigger</option>        
-                                <option style="color:#000" value="Striker-Fired">Striker-Fired Trigger</option>
-                              </select>
-                            </div>
-                          </div>
-                            </div>
-                            <div class="col-md-6"> 
-                            <div class="form-group">
-                            <label class="col-sm-5 col-form-label"><code style="color:#fff">Trigger Actions </code></label>
-                            <div class="col-sm-9">
-                              <select name="firearm_trigger_action" class="form-control">
-                                <option style="color:#000" value="None">None</option>
-                                <option style="color:#000" value="Pump-Action">Pump-Action</option>
-                                <option style="color:#000" value="Bolt-Action">Bolt-Action</option>
-                                <option style="color:#000" value="Lever-Action">Lever-Action</option>
-                                <option style="color:#000" value="Break-action">Break-action</option>        
-                                <option style="color:#000" value="Semi-Automatic-or-Automatic">Semi-Automatic or Automatic</option>
-                              </select>
-                            </div>
-                            </div>
-                            </div>
+                    <div class="row">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body p-5">
+                                    <form method="POST" action="functions-inventory.php" class="forms-sample" id="inductionForm">
+                                        
+                                        <div class="row mb-4">
+                                            <div class="col-md-12 mb-3">
+                                                <small style="color:var(--neon-amber)">01_IDENTIFICATION_WEAPON</small>
+                                                <hr>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Serial_Identity (S/N)</label>
+                                                    <input type="text" name="firearm_serial_no" id="firearm_serial_no" class="form-control" placeholder="SCAN OR TYPE SERIAL..." onInput="checkSerial()" required>
+                                                    <span id="serial-status" class="status-msg"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Manufacturer/Origin</label>
+                                                    <select name="manufacturer" class="form-control" required>
+                                                        <option value="">~ SELECT ORIGIN ~</option>
+                                                        <?php
+                                                        // PDO implementation for manufacturer dropdown
+                                                        $stmtM = $pdo->query("SELECT DISTINCT firearm_manufacturer FROM firearm_categories ORDER BY firearm_manufacturer ASC");
+                                                        while($row = $stmtM->fetch(PDO::FETCH_ASSOC)) {
+                                                            echo "<option value='".$row['firearm_manufacturer']."'>".$row['firearm_manufacturer']."</option>";
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                            <!-- <div class="form-group">
-                              <label for="exampleInputName1">firearm Description</code></label>
-                              <textarea class="form-control"  name="firearm_description" id="exampleTextarea1" rows="10" col="150"></textarea>
-                            </div> -->
-                            <div class="form-group">
-                            <label class="col-sm-3 col-form-label"><code style="color:#fff">firearm Class</code></label>
-                            <div class="col-sm-9">
-                              <select name="firearm_class" class="form-control">
-                                <option style="color:#000" value="Duty-Weapon">Duty Weapon</option>
-                                <option style="color:#000" value="Spare-Weapon">Spare Weapon</option>
-                                <option style="color:#000" value="Training-Weapon">Training Weapon</option>
-                              </select>
-                            </div>
-                          </div>
-                        
-                          <div class="form-group">
-                            <label class="col-sm-3 col-form-label"><code style="color:#fff">firearm State</code></label>
-                            <div class="col-sm-9">
-                              <select name="firearm_state" class="form-control">
-                                <option value="None">None</option>
-                                <option value="Not Faulty">Not Faulty Weapon</option>
-                                <option value="Faulty">Faulty Weapon </option>
-                                </select>
-                            </div>
-                          </div>
-                            <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="exampleInputEmail3"><code style="color:#fff">Quantity</code></label>
-                              <input type="number" class="form-control" name="quantity" id="quantity" placeholder="Quantity">
-                            </div>     
-                            </div>                            
-                        <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="exampleFormControlFile1" style="color:#fff;"><code style="color:#fff">Upload firearm Image</code></label>
-                          <input type="file" class="form-control" name="firearm_image" id="exampleFormControlFile1">
-                            </div>
-                            </div>
+                                        <div class="row mb-4">
+                                            <div class="col-md-12 mb-3">
+                                                <small style="color:var(--neon-amber)">02_TECHNICAL_SPECIFICATIONS</small>
+                                                <hr>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>FIREARM NAME (Model Name)</label>
+                                                    <select name="firearm_name" class="form-control" required>
+                                                        <option value="">~ SELECT FIREARM NAME ~</option>
+                                                        <?php
+                                                        // PDO implementation for firearm name
+                                                        $stmtN = $pdo->query("SELECT DISTINCT firearm_name FROM firearm_name ORDER BY firearm_name ASC");
+                                                        while($row = $stmtN->fetch(PDO::FETCH_ASSOC)) {
+                                                            echo "<option value='".$row['firearm_name']."'>".$row['firearm_name']."</option>";
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Classification (Firearam Type)</label>
+                                                    <select name="firearm_type" class="form-control" required>
+                                                        <option value="">~ SELECT TYPE ~</option>
+                                                        <?php
+                                                        // PDO implementation for categories
+                                                        $stmtC = $pdo->query("SELECT DISTINCT firearm_category FROM firearm_categories ORDER BY firearm_category ASC");
+                                                        while($row = $stmtC->fetch(PDO::FETCH_ASSOC)) {
+                                                            echo "<option value='".$row['firearm_category']."'>".$row['firearm_category']."</option>";
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Caliber_Spec</label>
+                                                    <select name="firearm_caliber" class="form-control" required>
+                                                        <option value="">~ SELECT CALIBER ~</option>
+                                                        <?php
+                                                        // PDO implementation for caliber
+                                                        $stmtCal = $pdo->query("SELECT DISTINCT firearm_caliber FROM firearm_categories ORDER BY firearm_caliber ASC");
+                                                        while($row = $stmtCal->fetch(PDO::FETCH_ASSOC)) {
+                                                            echo "<option value='".$row['firearm_caliber']."'>".$row['firearm_caliber']."</option>";
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Mag Capacity (RNDS)</label>
+                                                    <input type="number" name="firearm_capacity" class="form-control" placeholder="00">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Operational Class</label>
+                                                    <select name="firearm_class" class="form-control">
+                                                        <option value="Duty-Weapon">DUTY ASSET</option>
+                                                        <option value="Spare-Weapon">RESERVE</option>
+                                                        <option value="Training-Weapon">TRAINING ONLY</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label>Serviceability Status</label>
+                                                    <select name="firearm_state" class="form-control">
+                                                        <option value="Not-Faulty">FULLY OPERATIONAL</option>
+                                                        <option value="Faulty">MAINTENANCE REQUIRED</option>
+                                                        <option value="None">PENDING INSPECTION</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label>ASSET REMARKS / HISTORY</label>
+                                                    <textarea name="remarks" class="form-control" rows="5" placeholder="Enter service history or specific notes..."></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <input type="hidden" name="adminID" value="<?php echo htmlspecialchars($admin_data['adminID']); ?>">
+                                        <input type="hidden" name="recorded_by" value="<?php echo htmlspecialchars($admin_data['service_no'].' '.$admin_data['rank'].' '.$admin_data['fullname']); ?>">
+                                        <input type="hidden" name="booking_status" value="Available">
+
+                                        <div class="row mt-5">
+                                            <div class="col-md-12 d-flex gap-3">
+                                                <button type="submit" name="add_new_weapon" id="submit-btn" class="btn btn-tactical btn-commit me-3">
+                                                    <i class="mdi mdi-shield-check"></i> COMMIT_TO_REGISTRY
+                                                </button>
+                                                <button type="reset" class="btn btn-tactical btn-abort">
+                                                    <i class="mdi mdi-close-octagon"></i> ABORT_ENTRY
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                            <button type="submit" name="add_new_weapon" class="btn btn-inverse-success me-2">Submit</button>
-                            <button class="btn btn-inverse-danger" >Cancel</button>
-                         </form>
-                  </div>
+                    </div>
                 </div>
-              </div>
+                <?php include_once('includes/footer.php');?>
             </div>
-         
-          <!-- content-wrapper ends -->
-            <!-- partial:partials/footer.php-->
-            <?php  require_once('includes/footer.php');?>
-          
-          <!-- partial -->
         </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
+
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="assets/vendors/select2/select2.min.js"></script>
-    <script src="assets/vendors/typeahead.js/typeahead.bundle.min.js"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script src="assets/js/file-upload.js"></script>
-    <script src="assets/js/typeahead.js"></script>
-    <script src="assets/js/select2.js"></script>
-    <!-- End custom js for this page -->
-  </body>
+    <script>
+    function checkSerial() {
+        let sn = $("#firearm_serial_no").val();
+        if(sn.length < 3) { 
+            $("#serial-status").html(""); 
+            $("#submit-btn").prop('disabled', false).css('opacity', '1');
+            return; 
+        }
+        // AJAX still works with your backend checkAvailability.php
+        $.post("checkAvailability.php", { firearm_serial_no: sn }, function(data) {
+            $("#serial-status").html(data);
+        });
+    }
+
+    $('button[type="reset"]').on('click', function() {
+        $("#serial-status").html("");
+        $("#submit-btn").prop('disabled', false).css('opacity', '1');
+    });
+    </script>
+</body>
 </html>

@@ -8,7 +8,7 @@ require_once('includes/user_auth.php');
       $output = '';  
       $query = mysqli_real_escape_string($connect_db,$_POST['query']);
       $query = "SELECT * FROM `firearms` WHERE firearm_serial_no like '%$query%' or 
-     firearm_type like '%$query%' or  firearm_name like '%$query%'
+     firearm_type like '%$query%' or weapon_number like'%$query%'  or firearm_name like '%$query%'
      or firearm_class like '%$query%' or firearm_trigger_action like '%$query%' or 
      firearm_trigger_type like '%$query%' or booking_status  like 
      '%$query%' or firearm_caliber like '%$query%' or 	firearm_capacity
@@ -21,12 +21,12 @@ require_once('includes/user_auth.php');
       {  
            while($row = mysqli_fetch_array($result))  
            {  
-                $output .= '<li>'.$row["firearm_serial_no"].' '.$row["firearm_name"].'</li>';  
+                $output .= '<li>'.$row["weapon_number"].' '.$row["firearm_name"].'</li>';  
            }  
       }  
       else  
       {  
-           $output .= '<li>No Firearm Found</li>';  
+           $output .= '<li></li>';  
       }  
       $output .= '</ul>';  
       echo $output;  

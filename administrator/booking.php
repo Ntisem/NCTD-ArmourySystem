@@ -1,405 +1,243 @@
-
-<?php  require_once('connections/connect-db.php');?>
-<?php  
+<?php 
+require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
-?>
 
-<?php
-    // session_start();
-    if(!isset($_SESSION["username"])) {
-        header("location: login");
-        exit();
-    }
-?>
+if(!isset($_SESSION["username"])) {
+    header("location: login");
+    exit();
+}
 
-<!doctype html>
-<html>
+$stmt = $pdo->prepare("SELECT adminID, fullname FROM admin_lists WHERE username = ?");
+$stmt->execute([$_SESSION['username']]);
+$admin = $stmt->fetch();
+?>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-   <!-- Required meta tags -->
-   <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - FIREARMS BOOKING</title>
-    <!-- plugins:css -->
+    <meta charset="utf-8">
+    <title>COMMAND_TERMINAL | ASSET_BOOKING</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="assets/vendors/select2/select2.min.css">
-    <link rel="stylesheet" href="assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-      <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <!-- endinject -->
-    <!-- Layout styles -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css"> -->
-    <!-- End layout styles -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="shortcut icon" href="assets/images/favicon.png" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>    
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <!-- <script src="jquery/"></script> -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+    <style>
+        :root { --neon: #00f2ff; --bg-deep: #020408; --card-bg: #0a0d12; --input-border: #00f2ff; --danger: #ff3333; }
+        body { background: var(--bg-deep); font-family: 'JetBrains Mono', monospace; color: #e0e0e0; }
+        .tactical-card { background: var(--card-bg) !important; border: 1px solid rgba(0, 242, 255, 0.2) !important; border-radius: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .tactical-section { border: 1px solid rgba(0, 242, 255, 0.1); padding: 25px; margin-bottom: 30px; background: rgba(0, 242, 255, 0.02); position: relative; }
+        .section-header { position: absolute; top: -12px; left: 15px; background: var(--card-bg); padding: 0 10px; color: var(--neon); font-size: 11px; letter-spacing: 2px; font-weight: bold; }
+        .form-control { background: #000 !important; border: 1px solid var(--input-border) !important; color: var(--neon) !important; border-radius: 0 !important; }
+        .form-control:focus { box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); }
+        label { color: #8b949e; text-transform: uppercase; font-size: 10px; margin-bottom: 8px; display: block; }
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; }
+        .t-toast { background: #000; border: 1px solid var(--neon); color: #fff; padding: 15px 25px; margin-bottom: 10px; min-width: 280px; display:none; }
+        .t-success { border-left: 5px solid #00ff88; }
+        .t-error { border-left: 5px solid var(--danger); }
+        .low-stock { color: var(--danger); font-weight: bold; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        .ui-autocomplete { background: #000 !important; border: 1px solid var(--neon) !important; color: var(--neon) !important; z-index: 10001; }
+    </style>
 </head>
 <body>
-<body onload=display_ct();>
+    <div id="toast-container"></div>
     <div class="container-scroller">
-    <!-- partial:includes/_sidebar.html -->
-    <?php  require_once('includes/sidebar_book.php');?>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:includes/_navbar.html -->
-        <?php  require_once('includes/navbar_book.php');?>
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-            <h3 class="page-title"> Firearm Booking </h3>
-              <nav aria-label="breadcrumb">     
-              <a href="index"><button type="button" class="btn btn-outline-primary btn-fw"> <i class="mdi mdi-reply"></i>Back</button></a>          
-              </nav>
-            </div>
-            <div class="card" style="margin-bottom:30px;">
-             <div class="card-body">
-            <a href="booking" type="button" class="btn btn-outline-danger btn-fw">[ Firearm ]</a>
-            <a href="booking-ammo" type="button" class="btn btn-outline-info btn-fw">[ Ammunition ]</a>
-            <a href="booking-other-assets" type="button" class="btn btn-outline-info btn-fw">[ Assets ]</a>
-          </div>
-          </div>
-          <!-- Forms starting  -->
-          <div class="col-12 grid-margin">
-            <div class="card">
-              <div class="card-body">
-                <form class="form-sample" method="POST" action="functions.php" enctype="multipart/form-data" id="add_form">
-                  <p class="card-description">  </p>
-                  <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group row">
-                    <?php  
-                         $username=$_SESSION['username']; 
-                         $query = mysqli_query($connect_db,"SELECT * FROM `admin_lists` WHERE `username`='$username'")
-                         or die( mysqli_error($connect_db));
-                         while ($row = mysqli_fetch_array($query)) {
-                                 $profile_image = $row['profile_image'];
-                                 $fullname = $row['fullname'];
-                                 $_SESSION['fullname'] =  $fullname;
-                                 $user_role = $row['user_role'];
-                                 $_SESSION['user_role'] =  $user_role; 
-                                 $service_no = $row['service_no'];
-                                 $_SESSION['service_no']=$service_no;
-                                 $admin_rank =$row['rank'];
-                                 $_SESSION['rank']=$admin_rank;
-                                 $adminID =$row['adminID'];
-                                 $_SESSION['adminID']=$adminID;                           
-                                 $armourer_admin_name  =  $service_no.' '.$admin_rank.' '.$fullname;
-                                 $_SESSION['armourer_admin_name'] = $armourer_admin_name;
-                               }?>      
-                              <input type="hidden" name="armourer_admin_name" class="form-control" id="exampleInputName1" value="<?php echo $service_no.' '.$admin_rank.' '.$fullname ?>">
-                              <input type="hidden" name="adminID" class="form-control" id="exampleInputName1" value="<?php echo $adminID; ?>">
-                              <input type="hidden" name="user_role" class="form-control" id="exampleInputName1" value="<?php echo $user_role; ?>">
-                             
-                              <label style="margin-bottom:10px;" for="exampleInputName1"><code style="color:#fff">Issuing Officer:</code></label>   
-                              <label class="badge badge-dark col-sm-8 col-form-label"><code style="color:#fff"><?php echo $service_no.' '.$admin_rank.' '.$fullname ?></code></label> 
-                              <input type="hidden" name="armourer_issuer" class="form-control" id="exampleInputName1" 
-                              value="<?php echo $service_no.' '.$admin_rank.' '.$fullname ?>">
+        <?php include_once('includes/sidebar.php');?>
+        <div class="container-fluid page-body-wrapper">
+            <?php include_once('includes/navbar.php');?>
+            <div class="main-panel">
+                <div class="content-wrapper">
+                     <div class="card" style="margin-bottom:30px;">
+                         <div class="card-body">
+                            <a href="booking" type="button" class="btn btn-outline-info btn-fw">[ Firearm ]</a>
+                            <a href="booking-ammo" type="button" class="btn btn-outline-danger btn-fw">[ Ammunition ]</a>
+                           </div>
                         </div>
+                    <div class="tactical-card card">
+                        <div class="card-body">
+                            <h3 class="mb-5 text-info text-center">[ FIREARM_DEPLOYMENT_ORDER ]</h3>
+                            <form id="bookingForm" action="process-booking.php" method="POST">
+                                <div class="tactical-section">
+                                    <span class="section-header">01_PERSONNEL_DATA</span>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>TO_OFFICER (Name/Service No)</label>
+                                            <input type="text" id="to_officer" name="to_officer" class="form-control" placeholder="SEARCH..." required>
+                                            <input type="hidden" name="officerID" id="officerID">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>ISSUING_ARMOURER</label>
+                                            <input type="text" class="form-control" value="<?php echo $admin['fullname']; ?>" readonly>
+                                            <input type="hidden" name="armourer_issuer" value="<?php echo $admin['fullname']; ?>">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tactical-section">
+                                    <span class="section-header">02_ASSET_ALLOCATION</span>
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label>FIREARM_SERIAL_NO</label>
+                                            <input type="text" id="firearm_serial_no" name="firearm_serial_no" class="form-control" placeholder="SCAN_SERIAL..." required>
+                                            <input type="hidden" name="firearmID" id="firearmID">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>FIREARM_NAME (AUTOFILL)</label>
+                                            <input type="text" id="firearm_name" name="firearm_name" class="form-control" readonly>
+                                        </div>
+                                         <div class="col-md-6 p-2">
+                                            <label>FIREARM_CLASS</label>
+                                            <select name="firearm_class" class="form-control">
+                                                <!-- <option value="None">~Select~</option> -->
+                                                <option value="Duty-Weapon">Duty Weapon</option>                              
+                                                <option value="Training-Weapon">Training Weapon</option>  
+                                                <option value="Spare-Weapon">Spare Weapon</option> 
+                                            </select>
+                                        </div>
+                                          <div class="col-md-6 p-2">
+                                            <label>FIREARM_STATE</label>
+                                            <select name="firearm_state" class="form-control">
+                                              <option value="Not-Faulty">Not Faulty</option>                              
+                                            <option value="Faulty">Faulty</option>    
+                                            <option value="None">None</option>
+                                           </select>
+                                        </div>
+                                        <div class="col-md-6 p-2">
+                                            <label>AMMUNITION_TYPE</label>
+                                            <input type="text" id="ammunition_name" name="ammunition_name" class="form-control" placeholder="SEARCH_AMMO...">
+                                            <input type="hidden" name="ammoID" id="ammoID">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>AVAILABLE_STOCK (AUTOFILL)</label>
+                                            <input type="text" id="ammo_total_rounds" class="form-control" readonly>
+                                            <span id="stock-status" style="font-size: 10px;"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>QUANTITY_ISSUED</label>
+                                            <input type="number" name="number_of_rounds" class="form-control" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tactical-section">
+                                    <span class="section-header">03_MISSION_LOGISTICS</span>
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label>TYPE_OF_DUTY</label>
+                                            <select name="duty_type" class="form-control">
+                                                <option value="General Duty">General Duty</option>
+                                                <option value="Escort">Escort</option>
+                                                <option value="Special Operation">Special Operation</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>LOCATION</label>
+                                            <input type="text" name="duty_location" class="form-control" placeholder="Eg: Interior, Kwabenya" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>DURATION</label>
+                                        <div id="duration-container">
+                                            <select id="duration_select" name="duty_duration" class="form-control" onchange="checkCustomDuration(this)">
+                                            <option value="8 Hours">8 Hours</option>
+                                            <option value="12 Hours">12 Hours</option>
+                                            <option value="24 Hours">24 Hours</option>
+                                            <option value="7 Days">7 Days</option>
+                                            <option value="custom">[ CUSTOM_TIMEFRAME ]</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>COMMAND_REMARKS</label>
+                                            <textarea name="comment" class="form-control" rows="6" placeholder="ENTER_POST_ORDERS..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" name="booking_firearm" class="btn btn-block btn-outline-info btn-lg">EXECUTE_DEPLOYMENT</button>
+                            </form>
                         </div>
-                        </div>
-                        <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group row">
-                            <label class="badge badge-dark col-sm-3 col-form-label"><code style="color:#fff">To Officer</code></label>
-                            <div class="col-sm-9">
-                            <input type="text" name="to_officer" id="to_officer" class="form-control" placeholder="Enter  Officer Name " required/>
-                            <input type="hidden" name="officerID" id="officerID" class="form-control" placeholder="officerID" />    
-                            <input type="hidden" name="officer_image" id="officer_image" class="form-control" placeholder="officer Image"  />
-                          </div>
-                          </div>
-                        </div>
-                        </div>
-                        <input  type="hidden"  name="returns" class="form-control" value="Not-Return" />
-                        <input  type="hidden"  name="officer_email" class="form-control" value="<?php echo $officer_email; ?>" />
-                        <input  type="hidden"  name="gps_armoury_email" class="form-control" value="williamntisem123@gmail.com" />                        <div class="row">                      
-                  
-                      </div>
-                      <hr>
-                      <br>
-                      <!-- Weapon Details -->
-                      <p class="card-description" style="color:#fff"> Firearm Details</p>
-                      <div class="row">
-                      <div class="col-md-12">
-                          <div class="form-group">
-                            <label class="col-sm-6 col-form-label"><code style="color:#fff">Select Firearm</code></label>
-                            <div class="col-sm-9">
-                            <input type="text" name="firearm_name" id="firearm_name" class="form-control" placeholder="Enter Firearm Name " />
-                            <input type="hidden" name="firearmID" id="firearmID" class="form-control" placeholder="firearmID" />    
-                            <!-- <div id="firearm_name_list"></div>   -->
-                          </div>
-                        </div>
-                      </div>   
-                      </div>    
-                    <div class="row">            
-                        <div class="col-md-12">
-                          <div class="form-group ">
-                            <label class="col-sm-3 col-form-label"><code style="color:#fff">Firearm Class</code></label>
-                            <div class="col-sm-9">
-                            <input type="text" name="firearm_class" id="firearm_class" class="form-control" placeholder="Firearm Class" />    
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group ">
-                            <label class="col-sm-3 col-form-label"><code style="color:#fff">Quantity</code></label>
-                            <div class="col-sm-9">
-                              <input type="text" name="quantity_issued" id="quantity_issued" class="form-control" />
-                              <input type="hidden" name="firearm_image" class="form-control" value="<?php  echo $firearm_image ?>"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                        <div class="form-group">
-                        <label for="exampleTextarea1"><code style="color:#fff">Firearm State</code></label>
-                           <select name="firearm_state" class="form-control">
-                                <option value="None">None</option>
-                                <option value="Not-Faulty">Not Faulty</option>                              
-                                <option value="Faulty">Faulty</option>  
-                             </select>
-                         </div>
-                       </div>
-                       <hr>
-                      <br>
-                      <p class="card-description">Ammunition Details</p>
-                       <div class="row">
-                        <div class="col-md-7">
-                          <div class="form-group ">
-                            <label class="col-sm-5 col-form-label"><code style="color:#fff">Select Ammunition</code></label>
-                            <input type="text" name="ammunition_name" id="ammunition_name" class="form-control" placeholder="Enter Ammo name " />
-                            <input type="hidden" name="ammoID" id="ammoID" class="form-control" placeholder="AmmoID"  required/>    
-                          </div>
-                          </div>
-                          <div class="col-md-5">
-                          <div class="form-group ">
-                            <label class="col-sm-6 col-form-label"><code style="color: red;">Ammunition Left</code></label>
-                            <input type="text" name="ammo_total_rounds" id="ammo_total_rounds" class="form-control" placeholder="Ammunition Left" />
-                          </div>
-                          </div>
-                        <div class="col-md-12">
-                        <div class="form-group">
-                        <label for="exampleTextarea1"><code style="color:#fff">Number of Rounds</code></label>
-                        <input type="number" name="number_of_rounds" class="form-control" placeholder="Number of Rounds" required/>
-                         </div>
-                       </div>
-                      </div>
-                       <hr>
-                      <br>
-                       <p class="card-description"> Duty Details</p>
-                       <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group ">
-                            <label class="col-sm-3 col-form-label"><code style="color:#fff">Duty Type</code></label>
-                            <div class="col-sm-9">
-                              <input type="text" name="duty_type" class="form-control" required/>
-                            </div>
-                          </div>
-                        </div>
-                        <p class="card-description"></p>  
-                        <div class="col-md-6">
-                        <div class="form-group">
-                        <label for="exampleTextarea1"><code style="color:#fff">Duty Location</code></label>
-                        <input type="text" name="duty_location" class="form-control" required/>
-                         </div>
-                       </div>
-                       <div class="col-md-6">
-                          <div class="form-group row">
-                            <label class="col-sm-6 col-form-label"><code style="color:#fff">Duty Duration <i style="color:red">(Hours)</i></code></label>
-                            <div class="col-sm-9">
-                              <input name="duty_duration" type="text" class="form-control" placeholder="Eg: 8, 12, 24..." required/>
-                            </div>
-                          </div>
-                        </div>
-                      </div> 
-                      <div class="col-xl-10">
-                        <div class="form-group">
-                          <label for="exampleTextarea1"><code style="color:#fff">Comment</code></label>
-                          <textarea style="height:150px; background:#e1e4e8" name="comment" id="comment" class="form-control" id="exampleTextarea1" rows="40"></textarea>
-                        </div>
-                      </div>
-                    
-                      </div>
-                      <hr>
-                      <button type="submit" name="booking_firearm" class="btn btn-inverse-success btn-fw f-20 me-2">Submit</button>
-                      <a href="assets-weapon" class="btn btn-inverse-danger f-20 btn-fw">Cancel</a>
-                    </form>
-                  </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          <!-- partial -->
-          <?php  require_once('includes/footer_booking.php');?>
         </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-   
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="assets/vendors/select2/select2.min.js"></script>
-    <script src="assets/vendors/typeahead.js/typeahead.bundle.min.js"></script>
-     <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script src="assets/js/file-upload.js"></script>
-    <script src="assets/js/typeahead.js"></script>
-    <script src="assets/js/select2.js"></script>
-    <!-- <script src="plugins/jquery/jquery.min.js"></script> -->
-        <!-- DataTables  & Plugins -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="plugins/jszip/jszip.min.js"></script>
-<script src="plugins/pdfmake/pdfmake.min.js"></script>
-<script src="plugins/pdfmake/vfs_fonts.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<!-- <script src="assets/vendors/js/vendor.bundle.base.js"></script> -->
-        <!-- Script -->
-        <script type='text/javascript' >
-        jQuery( function() {
-      // Firearm autocomplete 
-            jQuery( "#firearm_name" ).autocomplete({
-                source: function( request, response ) {
-                    
-                    $.ajax({
-                        url: "fetchData.php",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            search: request.term
-                        },
-                        success: function( data ) {
-                            response( data );
-                        }
-                    });
-                },
-                select: function (event, ui) {
-                    jQuery('#firearm_name').val(ui.item.label); // display the selected text
-                    jQuery('#firearmID').val(ui.item.value); // save selected firearmID to input
-                    jQuery('#quantity_issued').val(ui.item.value2); // save selected quantity to input
-                    jQuery('#firearm_class').val(ui.item.value3); // save selected firearm class to input
-                    return false;
-                },
-                focus: function(event, ui){
-                    jQuery( "#firearm_name" ).val( ui.item.label );
-                    jQuery( "#firearmID" ).val( ui.item.value );
-                    jQuery( "#quantity_issued" ).val( ui.item.value2 );
-                    jQuery( "#firearm_class" ).val( ui.item.value3 );
-                    return false;
-                },
-            });
-    //  Officer's name autocomplete
-            jQuery( "#to_officer" ).autocomplete({
-                source: function( request, response ) {
-                    
-                    $.ajax({
-                        url: "fetchData_officer.php",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            search: request.term
-                        },
-                        success: function( data ) {
-                            response( data );
-                        }
-                    });
-                },
-                select: function (event, ui) {
-                    jQuery('#to_officer').val(ui.item.label); // display the Officer's name selected text
-                    jQuery('#officerID').val(ui.item.value); // save selected officerID to input
-                    jQuery('#officer_image').val(ui.item.value2); // save selected officer Image to input
-                    return false;
-                },
-                focus: function(event, ui){
-                    jQuery("#to_officer" ).val( ui.item.label);
-                    jQuery("#officerID" ).val( ui.item.value);
-                    jQuery("#officer_image" ).val( ui.item.value2);
 
-                    return false;
-                },
-            });
-
-      //  Ammunition autocomplete
-            jQuery( "#ammunition_name" ).autocomplete({
-                source: function( request, response ) {
-                    
-                    $.ajax({
-                        url: "fetchData_ammo.php",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            search: request.term
-                        },
-                        success: function( data ) {
-                            response( data );
-                        }
-                    });
-                },
-                select: function (event, ui) {
-                    jQuery('#ammunition_name').val(ui.item.label); // display the Ammunition name selected text
-                    jQuery('#ammoID').val(ui.item.value); // save selected ammoID to input
-                    jQuery('#ammo_total_rounds').val(ui.item.value2); // save selected total ammo rounds
-                    return false;
-                },
-                focus: function(event, ui){
-                    jQuery("#ammunition_name" ).val( ui.item.label);
-                    jQuery("#ammoID" ).val( ui.item.value);
-                    jQuery("#ammo_total_rounds" ).val( ui.item.value2);
-                    return false;
-                },
-            });
-    });
- 
-    </script>
-  
+    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
-  $(function () {
-    $("#administrators-list").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#administrators-list_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
+    $(document).ready(function() {
+        function showToast(msg, type) {
+            const toast = $(`<div class="t-toast ${type}">[SIGNAL]: ${msg}</div>`);
+            $("#toast-container").append(toast);
+            toast.fadeIn().delay(4000).fadeOut(function() { $(this).remove(); });
+        }
+
+        // Firearm Autocomplete
+        $("#firearm_serial_no").autocomplete({
+            source: function(req, res) {
+                $.post("fetchData.php", { search: req.term }, res, "json");
+            },
+            select: function(event, ui) {
+                $("#firearm_serial_no").val(ui.item.serial); 
+                $("#firearm_name").val(ui.item.name);
+                $("#firearmID").val(ui.item.value); 
+                return false;
+            }
+        });
+
+        // Officer Autocomplete
+        $("#to_officer").autocomplete({
+            source: function(req, res) {
+                $.post("fetchData_officer.php", { search: req.term }, res, "json");
+            },
+            select: function(event, ui) {
+                $("#to_officer").val(ui.item.label);
+                $("#officerID").val(ui.item.value);
+                return false;
+            }
+        });
+
+        // Ammo Autocomplete + Stock Autofill
+        $("#ammunition_name").autocomplete({
+            source: function(req, res) {
+                $.post("fetchData_ammo.php", { search: req.term }, res, "json");
+            },
+            select: function(event, ui) {
+                $("#ammunition_name").val(ui.item.label);
+                $("#ammoID").val(ui.item.value);
+                $("#ammo_total_rounds").val(ui.item.stock);
+                
+                if(parseInt(ui.item.stock) < 50) {
+                    $("#stock-status").html("[!] CRITICAL_LOW_STOCK").addClass("low-stock");
+                } else {
+                    $("#stock-status").html("STOCK_STABLE").removeClass("low-stock");
+                }
+                return false;
+            }
+        });
+
+        // URL Status Toast Trigger
+        const urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.get('status') === 'success') showToast('DEPLOYMENT_RECORDED_SUCCESSFULLY', 't-success');
+        if(urlParams.get('status') === 'error') showToast('CRITICAL_TRANSACTION_FAILURE', 't-error');
     });
-  });
-</script>
+
+      function checkCustomDuration(select) {
+        if (select.value === 'custom') {
+            document.getElementById('duration-container').innerHTML = `
+                <div class="input-group">
+                    <input type="text" name="duty_duration" class="form-control" placeholder="e.g. 30 Days" autofocus required>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-info" type="button" onclick="location.reload()"><i class="mdi mdi-refresh"></i></button>
+                    </div>
+                </div>`;
+        }
+    }
+    </script>
 </body>
 </html>

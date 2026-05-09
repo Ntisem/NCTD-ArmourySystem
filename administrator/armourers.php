@@ -1,259 +1,281 @@
-
-<?php  require_once('connections/connect-db.php');?>
-<?php  
+<?php
+require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
-?>
 
-<?php
-    // session_start();
-    if(!isset($_SESSION["username"])) {
-        header("location: login");
-        exit();
-    }
+if(!isset($_SESSION["username"])) {
+    header("location: login");
+    exit();
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>GPS ARMOURY SYSTEM - ARMOURERS</title>
-    <!-- plugins:css -->
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <!-- <link rel="stylesheet" href="dist/css/theme.css"> -->
     <link rel="stylesheet" href="dist/css/theme.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
-    <!-- endinject -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  <!-- Theme style -->
-  <!-- <link rel="stylesheet" href="dist/css/adminlte.min.css"> -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- End layout styles -->
     <link rel="shortcut icon" href="assets/images/favicon.png" />
+    <style>
+      body, .main-panel, .card, .table {
+        background-color: #05070a !important;
+        color: #adc4b2 !important;
+      }
+      .card {
+        border: 1px solid #00f2ff;
+        background: #0f131a !important;
+      }
+      .table th, .table td {
+        border-color: #1a2333;
+        color: #fff;
+      }
+      .btn-tactical {
+        background: #00f2ff;
+        color: #000;
+        font-weight: bold;
+        border: none;
+      }
+      .btn-tactical:hover {
+        background: #00ffcc;
+      }
+      .modal-content {
+        background: #0f131a;
+        border: 1px solid #00f2ff;
+        color: #fff;
+      }
+      .modal-header, .modal-footer {
+        border-color: #1a2333;
+      }
+      .form-control {
+        background: #05070a;
+        border: 1px solid #00f2ff;
+        color: #fff;
+      }
+    </style>
   </head>
-  <body onload=display_ct();>
+  <body>
     <div class="container-scroller">
-    <!-- partial:includes/_sidebar.html -->
-    <?php  require_once('includes/sidebar.php');?>
-      <!-- partial -->
+      <?php require_once('includes/sidebar.php');?>
       <div class="container-fluid page-body-wrapper">
-        <!-- partial:includes/_navbar.html -->
-        <?php  require_once('includes/navbar.php');?>
-        <!-- partial -->
+        <?php require_once('includes/navbar.php');?>
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title"> Armourers List </h3>
-              <nav aria-label="breadcrumb">
-               
-              </nav>
+              <h3 class="page-title" style="color:#00f2ff">Armourers Directory</h3>
             </div>
-            <section class="content">
-          <div class="container-fluid">
-           <div class="row">
-          <div class="col-12">
             
-            <div class="card">
-              <!-- /.card-header -->
-              <div class="card-body">
-                 <p class="card-description"><a href="add-new-armourer"><code><i class="mdi mdi-account-plus f-22 text-green" 
-                    data-toggle="tooltip" data-placement="right" title="Click to Add New Administrator"></i></code></a>
-                    </p>
-                <table id="administrators-list" class="table table-bordered ">
-                  <thead>
-                  <tr>
-                  <tr>
-                    <th> # </th>
-                    <th> User </th>
-                    <th> Serv. No. </th>
-                    <th> Rank </th>
-                    <th> Name </th>
-                    <th> Phone Number </th>
-                    <th> Email </th>
-                    <th>Unit/Dept</th>
-                    <th>Date/Time</th>
-                    <th>Actions</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                        <?php
-                        $username=$_SESSION['username']; 
-                        $query = mysqli_query($connect_db,"SELECT * FROM `admin_lists` WHERE `username`='$username'")
-                        or die( mysqli_error($connect_db));
-                        while ($row = mysqli_fetch_array($query)) {
-                          $profile_image = $row['profile_image'];
-                          $fullname = $row['fullname'];
-                          $_SESSION['fullname'] =  $fullname;
-                        
-                          $user_status= $row['user_role'];
-                          $_SESSION['user_status'] =  $user_status; 
-                          $service_no = $row['service_no'];
-                          $_SESSION['service_no']=$service_no;
-                          $admin_rank =$row['rank'];
-                          $_SESSION['rank']=$admin_rank;
-                          $adminID_armourerID =$row['adminID'];
-                          $_SESSION['adminID']=$adminID_armourerID;    
-                          $_SESSION['adminID_armourerID']=$adminID_armourerID; 
-                          $admin_armourer_user_role = $row['user_role'];
-                          $_SESSION['user_role'] =  $admin_armourer_user_role;   
-                          $_SESSION['admin_armourer_user_role'] =  $admin_armourer_user_role;                
-                          $armourer_admin_name  =  $service_no.' '.$admin_rank.' '.$fullname;
-                          $_SESSION['armourer_admin_name'] = $armourer_admin_name;
-                              }
-                          $query = mysqli_query($connect_db,"SELECT * FROM `admin_lists` WHERE user_role = 'Armourer' ORDER BY `adminID` ASC")
-                          or die( mysqli_error($connect_db));
-                          while ($row = mysqli_fetch_array($query)) {
-                              $output = "";
-                              $profile_image = $row['profile_image'];
-                              $_SESSION['profile_image'] = $profile_image;
-                              if(empty($profile_image))
-                              {
-                              echo
-                              $output .= '
-                          <tr>
-                            <td> '.$row['adminID'].' </td>
-                            <td class="py-1">
-                              <img src="assets/images/profile_images/avatar_placeholder.png" alt="image" />
-                            </td>
-                            <td> '.$row['service_no'].' </td>
-                            <td> '.$row['rank'].'</td>
-                            <td> '.$row['fullname'].' </td>
-                            <td> '.$row['phone_number'].' </td>
-                            <td> '.$row['admin_email'].' </td>
-                            <td>
-                              <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'.$row['unit_dept'].'</div>
-                              </div>
-                            </td>
-                            <td> '.$row['datetime'].' </td>
-                            <td> 
-                            <a href="#edit-armourer-'.$row['adminID'].'" data-toggle="modal"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                            &nbsp; &nbsp;<a href="#delete-armourer-'.$row['adminID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
-                            </td>
-                          </tr>
-                          ';
-                        }else{
-                          echo
-                          $output .= '
-                          <tr>
-                            <td> '.$row['adminID'].' </td>
-                            <td class="py-1">
-                              <img src="assets/images/profile_images/'.$row['profile_image'].'" alt="image" />
-                            </td>
-                            <td> '.$row['service_no'].' </td>
-                            <td> '.$row['rank'].'</td>
-                            <td> '.$row['fullname'].' </td>
-                            <td> '.$row['phone_number'].' </td>
-                            <td> '.$row['admin_email'].' </td>
-                            <td>
-                              <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'.$row['unit_dept'].'</div>
-                              </div>
-                            </td>
-                            <td> '.$row['datetime'].' </td>
-                            <td> 
-                            <a href="#edit-armourer-'.$row['adminID'].'" data-toggle="modal"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                            &nbsp; &nbsp;<a href="#delete-armourer-'.$row['adminID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
-                            </td>
-                            </tr>
-                          
-                          ';
-                        }
-                        include('actions_modals.php');
-                          }?>
-                        </tbody>
-                  </tfoot>
-                </table>
+            <?php if(isset($_SESSION['success'])): ?>
+              <div class="alert alert-success" style="background:#0a1a0f; border:1px solid #00ffaa; color:#5effa4">
+                <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
               </div>
-              <!-- /.card-body -->
-            </div></div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
-    </section>
- 
-          <!-- content-wrapper ends -->
-          <!-- partial:partials/_footer.html -->
-          <?php  require_once('includes/footer.php');?>
-          <!-- partial -->
-          <!-- partial -->
-        </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script src="plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<!-- <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script> -->
-    <!-- DataTables  & Plugins -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="plugins/jszip/jszip.min.js"></script>
-<script src="plugins/pdfmake/pdfmake.min.js"></script>
-<script src="plugins/pdfmake/vfs_fonts.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+            <?php endif; ?>
+            <?php if(isset($_SESSION['error'])): ?>
+              <div class="alert alert-danger" style="background:#1a0a0a; border:1px solid #ff0055; color:#ff6b8b">
+                <?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
+              </div>
+            <?php endif; ?>
 
-<script>
-  $(function () {
-    $("#administrators-list").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#administrators-list_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script>
-    <!-- End custom js for this page -->
+            <section class="content">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-body">
+                        <p class="card-description">
+                          <a href="add-new-armourer.php">
+                            <i class="mdi mdi-account-plus f-22 text-green" style="color:#00f2ff;" title="Click to Add New Armourer"></i>
+                          </a>
+                        </p>
+                        <table id="armourers-list" class="table table-bordered table-hover">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Service Number</th>
+                              <th>Rank</th>
+                              <th>Full Name</th>
+                              <th>Email</th>
+                              <th>Role</th>
+                              <th>Action Controls</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <?php
+                            $stmt = $pdo->query("SELECT * FROM admin_lists WHERE user_role = 'Armourer' ORDER BY adminID DESC");
+                            $i = 1;
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            ?>
+                              <tr>
+                                <td><?php echo $i++; ?></td>
+                                <td><?php echo htmlspecialchars($row['service_no']); ?></td>
+                                <td><?php echo htmlspecialchars($row['rank']); ?></td>
+                                <td><?php echo htmlspecialchars($row['fullname']); ?></td>
+                                <td><?php echo htmlspecialchars($row['admin_email']); ?></td>
+                                <td><?php echo htmlspecialchars($row['user_role']); ?></td>
+                                <td>
+                                  <button type="button" class="btn btn-sm btn-tactical" data-toggle="modal" data-target="#viewModalArmourer<?php echo $row['adminID']; ?>">View</button>
+                                  <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#editModalArmourer<?php echo $row['adminID']; ?>">Edit</button>
+                                  <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModalArmourer<?php echo $row['adminID']; ?>">Delete</button>
+                                </td>
+                              </tr>
+
+                              <div class="modal fade" id="viewModalArmourer<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" style="color:#00f2ff"><i class="mdi mdi-account-card-details"></i> Profile details: <?php echo htmlspecialchars($row['fullname']); ?></h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#fff">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <div class="row">
+                                        <div class="col-md-4 text-center">
+                                          <img src="assets/images/users/<?php echo $row['profile_image']; ?>" alt="Profile" style="width:140px; height:140px; border-radius:50%; border:2px solid #00f2ff;">
+                                        </div>
+                                        <div class="col-md-8">
+                                          <p><strong>Service No:</strong> <?php echo htmlspecialchars($row['service_no']); ?></p>
+                                          <p><strong>Rank:</strong> <?php echo htmlspecialchars($row['rank']); ?></p>
+                                          <p><strong>Full Name:</strong> <?php echo htmlspecialchars($row['fullname']); ?></p>
+                                          <p><strong>Email Address:</strong> <?php echo htmlspecialchars($row['admin_email']); ?></p>
+                                          <p><strong>Phone:</strong> <?php echo htmlspecialchars($row['phone_number']); ?></p>
+                                          <p><strong>Username:</strong> <?php echo htmlspecialchars($row['username']); ?></p>
+                                          <p><strong>Gender:</strong> <?php echo htmlspecialchars($row['gender']); ?></p>
+                                          <p><strong>Unit/Department:</strong> <?php echo htmlspecialchars($row['unit_dept']); ?></p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="modal fade" id="editModalArmourer<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" style="color:#00f2ff">Edit Armourer Record</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#fff">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <form action="process-armourer.php" method="POST" enctype="multipart/form-data">
+                                      <div class="modal-body">
+                                        <input type="hidden" name="action" value="edit">
+                                        <input type="hidden" name="adminID" value="<?php echo $row['adminID']; ?>">
+                                        <input type="hidden" name="current_image" value="<?php echo $row['profile_image']; ?>">
+                                        <input type="hidden" name="user_role" value="Armourer">
+
+                                        <div class="form-group">
+                                          <label>Service Number</label>
+                                          <input type="text" name="service_no" class="form-control" value="<?php echo htmlspecialchars($row['service_no']); ?>" required>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Rank</label>
+                                          <input type="text" name="rank" class="form-control" value="<?php echo htmlspecialchars($row['rank']); ?>" required>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Gender</label>
+                                          <select name="gender" class="form-control" required>
+                                            <option value="Male" <?php if($row['gender'] == 'Male') echo 'selected';?>>Male</option>
+                                            <option value="Female" <?php if($row['gender'] == 'Female') echo 'selected';?>>Female</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Full Name</label>
+                                          <input type="text" name="fullname" class="form-control" value="<?php echo htmlspecialchars($row['fullname']); ?>" required>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Email Address</label>
+                                          <input type="email" name="admin_email" class="form-control" value="<?php echo htmlspecialchars($row['admin_email']); ?>" required>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Phone Number</label>
+                                          <input type="text" name="phone_number" class="form-control" value="<?php echo htmlspecialchars($row['phone_number']); ?>" required>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Username</label>
+                                          <input type="text" name="username" class="form-control" value="<?php echo htmlspecialchars($row['username']); ?>" required>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Unit/Dept</label>
+                                          <input type="text" name="unit_dept" class="form-control" value="<?php echo htmlspecialchars($row['unit_dept']); ?>" required>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Update Profile Image</label>
+                                          <input type="file" name="profile_image" class="form-control">
+                                        </div>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Commit Changes</button>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="modal fade" id="deleteModalArmourer<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" style="color:#ff0055">Delete Confirmation</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#fff">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <form action="process-armourer.php" method="POST">
+                                      <div class="modal-body">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="adminID" value="<?php echo $row['adminID']; ?>">
+                                        <p>Warning: This action is irreversible. Are you sure you want to delete this profile?</p>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            <?php } ?>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script>
+      $(function () {
+        $("#armourers-list").DataTable({
+          "responsive": true, 
+          "lengthChange": true, 
+          "autoWidth": false,
+          "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#armourers-list_wrapper .col-md-6:eq(0)');
+      });
+    </script>
   </body>
 </html>

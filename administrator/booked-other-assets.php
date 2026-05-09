@@ -7,7 +7,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"])) {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
         header("location: login");
         exit();
     }
@@ -81,7 +81,6 @@ require_once('includes/user_auth.php');
                 <thead>               
                       <tr>
                         <th> Date/Time </th>
-                        <th>BookingCode</th>
                         <th> Officer</th>
                         <th> Asset Name </th>
                         <th> Asset Quantity </th>
@@ -91,8 +90,8 @@ require_once('includes/user_auth.php');
                         <th> Actions </th>
                       </tr>
                       </thead>
-                        <tbody>
-                          <?php
+                      <tbody>
+                      <?php
                                $username=$_SESSION['username']; 
                                $query = mysqli_query($connect_db,"SELECT * FROM `admin_lists` WHERE `username`='$username'")
                                or die( mysqli_error($connect_db));
@@ -126,7 +125,6 @@ require_once('includes/user_auth.php');
                     
                             <tr>                
                             <td>BT: '.$row['booking_time'].' </td>
-                             <td>'.$row['bookingCode'].' </td>
                             <td>
                             <a style="text-decoration:none;color:#fff;" href="#asset-booking-details-'.$row['bookAssetID'].'" data-toggle="modal">
                             <img src="assets/images/officer_images/'.$row['officer_image'].'" alt="image" /> &nbsp; &nbsp;
@@ -143,9 +141,7 @@ require_once('includes/user_auth.php');
                             <td> '.$row['duty_type'].' @ '.$row['duty_location'].' </td>
                             <td> 
                           <a href="update-asset-booking?asset-booking-ticket='.$row['bookAssetID'].'" ><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                          &nbsp; &nbsp;
-                          <a href="#delete-booking-asset-'.$row['bookAssetID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
-                          </td>
+                           </td>
                           </tr>
                           ';
                         }else{
@@ -155,7 +151,6 @@ require_once('includes/user_auth.php');
                           <tr>
                     
                           <td> [RT: '.$row['returned_time'].' ] </td>
-                           <td>'.$row['bookingCode'].' </td>
                           <td>
                           <a style="text-decoration:none;color:#00d25b;" href="#asset-booking-details-'.$row['bookAssetID'].'" data-toggle="modal">
                           <img src="assets/images/officer_images/'.$row['officer_image'].'" alt="image" /> &nbsp; &nbsp; '.$row['to_officer'].'</a> 
@@ -169,9 +164,7 @@ require_once('includes/user_auth.php');
                           <td> '.$row['asset_comment'].'</td>
                           <td> 
                           <a href="update-asset-booking?asset-booking-ticket='.$row['bookAssetID'].'"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                          &nbsp;&nbsp;
-                          <a href="#delete-booking-asset-'.$row['bookAssetID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
-                          </td>
+                           </td>
                         </tr>
                           ';
                         }

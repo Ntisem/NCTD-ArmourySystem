@@ -104,11 +104,7 @@
                 <input type="hidden" class="form-control" name="user_role" value="<?php echo  $_SESSION['user_role'] =  $user_role; ?>">  
     
                 <input type="hidden" class="form-control" name="faulty_ammoID" value="<?php echo $row['faulty_ammoID']; ?>">
-                    <div class="form-group">
-                        <label for="service_no"><code style="color:#fff;">Faulty Ammo Serial No.</code></label>
-                        <input type="text" class="form-control" name="faulty_ammo_serial_no" id="faulty_ammo_serial_no"
-                            value="<?php echo $row['faulty_ammo_serial_no']; ?>">
-                    </div>
+                    
                    
                     <div class="form-group">
                         <label for="fullname"><code style="color:#fff;">Faulty Ammo Type</code></label>
@@ -274,7 +270,7 @@
                     
                     <div class="badge badge-outline-warning" role="progressbar" style="width: 100%"
                      aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                     <?php echo  $row['faulty_ammo_serial_no']; ?> &#160;<?php echo  $row['faulty_ammo_name']; ?>&#160;<?php echo  $row['faulty_ammo_quantity']; ?></div>
+                 <?php echo  $row['faulty_ammo_name']; ?>&#160;<?php echo  $row['faulty_ammo_quantity']; ?></div>
                    </div>
                 </h6>
                 <div class="modal-footer">
@@ -283,7 +279,7 @@
                    
                     <a href="delete?faulty-ammoID=<?php echo $row['faulty_ammoID']; ?>&adminID=<?php echo  $_SESSION['adminID']=$adminID; ?>
                     &armourer-admin-name=<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name; ?>
-                    &user-role=<?php echo  $_SESSION['user_role'] =  $user_role; ?>&faulty-ammo=<?php echo $row['faulty_ammo_serial_no'].' '.$row['faulty_ammo_name'].' '.$row['faulty_ammo_type'].' [ '.$row['faulty_ammo_quantity'].' ]'; ?>"
+                    &user-role=<?php echo  $_SESSION['user_role'] =  $user_role; ?>&faulty-ammo=<?php echo $row['faulty_ammo_name'].' '.$row['faulty_ammo_type'].' [ '.$row['faulty_ammo_quantity'].' ]'; ?>"
                      class="btn btn-danger"><i class="feather icon-trash-2"></i>YES</a>
                 </div>
             </div>
@@ -345,7 +341,7 @@
                     
                     <div class="badge badge-outline-warning" role="progressbar" style="width: 100%"
                      aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                     <?php echo 'Ticket' .$row['bookingCode'];?>
+                     <?php echo 'Ticket-GPS-BookA'.$row['bookAssetID'].''. $row['officerID'].' '.$row['to_officer']; ?>
                      <br>
                      <br>
                      &#160;<?php echo  $row['asset_name'].' ( '.$row['asset_quantity'].' )' ?>
@@ -355,7 +351,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="feather icon-x"></i>
                         NO</button>
-                    <?php $ticket = $row['bookingCode'];?>
+                    <?php $ticket = $row['to_officer'].' '.$row['asset_name'].' ( '.$row['asset_quantity'].' )'; ?>
                     <a href="delete?booked-assetID=<?php echo $row['bookAssetID'];?>&adminID=<?php echo  $_SESSION['adminID']=$adminID; ?>
                     &armourer-admin-name=<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name;?>
                     &user-role=<?php echo  $_SESSION['user_role'] = $user_role; ?>&booked-asset-ticket=<?php echo $ticket;?>"
@@ -385,7 +381,7 @@
                     
                     <div class="badge badge-outline-warning" role="progressbar" style="width: 100%"
                      aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                     <?php echo 'Ticket '.$row['bookingCode'];?>
+                     <?php echo 'Ticket-GPS-BookA'.$row['book_ammoID'].''. $row['officerID'].' '.$row['to_officer']; ?>
                      <br>
                      <br>
                      &#160;<?php echo  $row['ammo_name'].' ( '.$row['ammo_rounds'].' )' ?>
@@ -395,7 +391,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="feather icon-x"></i>
                         NO</button>
-                    <?php $booking_ticket = $row['bookingCode'];?>
+                    <?php $booking_ticket = $row['to_officer'].' '.$row['ammo_name'].' ( '.$row['ammo_rounds'].' )'; ?>
                     <a href="delete?booked-ammoID=<?php echo $row['book_ammoID'];?>&adminID=<?php echo  $_SESSION['adminID']=$adminID; ?>&armourer-admin-name=<?php echo $_SESSION['armourer_admin_name'] = $armourer_admin_name;?>&user-role=<?php echo  $_SESSION['user_role'] = $user_role; ?>&booked-ammo-ticket=<?php echo $booking_ticket;?>"
                      class="btn btn-danger"><i class="feather icon-trash-2"></i>YES</a>     
                 </div>
@@ -412,7 +408,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header" style="background:orange;" >
-        <h5 class="modal-title" id="exampleModalLabel" style="color:#000;">Booking Ticket-[<?php echo $row['bookingCode'];?>]</h5>     
+        <h5 class="modal-title" id="exampleModalLabel" style="color:#000;">Booking Ticket-[GPSAMB<?php echo $row['book_ammoID']; ?><?php echo $row['officerID']; ?>]</h5>     
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

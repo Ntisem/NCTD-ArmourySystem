@@ -1,202 +1,269 @@
-
-<?php  require_once('connections/connect-db.php');?>
-<?php  
-require_once('functions.php');
+<?php 
+require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
-?>
 
-<?php
-    // session_start();
-    if(!isset($_SESSION["username"])) {
-        header("location: login");
-        exit();
-    }
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
 ?>
-<!-- <style>
-  code{
-    color: #fff;
-  }
-</style> -->
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>GPS ARMOURY SYSTEM - ADD FAULTY ASSET/ WEAPON</title>
-    <!-- plugins:css -->
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="assets/vendors/select2/select2.min.css">
-    <link rel="stylesheet" href="assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- End layout styles -->
     <link rel="shortcut icon" href="assets/images/favicon.png" />
+    <style>
+      :root {
+        --bg-tactical: #0d0f12;
+        --panel-bg: #15181f;
+        --neon: #00f2ff;
+        --danger: #ff4d4d;
+        --text-tactical: #e0e0e0;
+      }
+      body {
+        background-color: var(--bg-tactical);
+        color: var(--text-tactical);
+        font-family: 'Courier New', Courier, monospace;
+      }
+      .card, .navbar, footer {
+        background-color: var(--panel-bg) !important;
+        border: 1px solid rgba(0, 242, 255, 0.2);
+      }
+      .form-control, .select2-container--bootstrap .select2-selection {
+        background-color: #0a0d12 !important;
+        color: var(--neon) !important;
+        border: 1px solid rgba(0, 242, 255, 0.3);
+      }
+      .form-control:focus {
+        border-color: var(--neon);
+        box-shadow: 0 0 5px rgba(0, 242, 255, 0.5);
+      }
+      .btn-tactical {
+        background: transparent;
+        color: var(--neon);
+        border: 1px solid var(--neon);
+        transition: 0.3s;
+      }
+      .btn-tactical:hover {
+        background: var(--neon);
+        color: #000;
+        box-shadow: 0 0 8px var(--neon);
+      }
+      .btn-abort {
+        background: transparent;
+        color: var(--danger);
+        border: 1px solid var(--danger);
+      }
+      .btn-abort:hover {
+        background: var(--danger);
+        color: #fff;
+      }
+      #toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+      }
+      .t-toast {
+        display: none;
+        padding: 12px 20px;
+        background: #15181f;
+        color: var(--text-tactical);
+        margin-bottom: 10px;
+        border-left: 5px solid var(--neon);
+        font-size: 14px;
+        border-radius: 4px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        font-family: monospace;
+      }
+    </style>
   </head>
-  <body onload=display_ct();>
+  <body>
+    <div id="toast-container"></div>
     <div class="container-scroller">
-    <!-- partial:includes/_sidebar.html -->
-    <?php  require_once('includes/sidebar.php');?>
-      <!-- partial -->
+      <?php require_once('includes/sidebar.php'); ?>
       <div class="container-fluid page-body-wrapper">
-        <!-- partial:includes/_navbar.html -->
-        <?php  require_once('includes/navbar.php');?>
-        <!-- partial -->
+        <?php require_once('includes/navbar.php'); ?>
         <div class="main-panel">
           <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title"> Add Faulty Firearm </h3>
-              <a href="add-faulty-weapon" type="button" class="btn btn-outline-danger btn-fw">[ Firearm ]</a>
-            <a href="add-faulty-ammo" type="button" class="btn btn-outline-info btn-fw">[ Ammunition ]</a>
-            <a href="add-faulty-assets" type="button" class="btn btn-outline-info btn-fw">[ Assets ]</a>
-              <nav aria-label="breadcrumb">
-                
-              </nav>
-            </div>
             <div class="row">
-              <div class="col-12 grid-margin">
+              <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                          <form method="POST" action="functions.php" class="forms-sample" enctype="multipart/form-data">
-                          <?php  
-                            $username=$_SESSION['username']; 
-                            $query = mysqli_query($connect_db,"SELECT * FROM `admin_lists` WHERE `username` ='$username'")
-                            or die( mysqli_error($connect_db));
-                            while ($row = mysqli_fetch_array($query)) {
-                                $profile_image = $row['profile_image'];
-                                $fullname = $row['fullname'];
-                                $_SESSION['fullname'] =  $fullname;
-                                $user_role = $row['user_role'];
-                                $service_no = $row['service_no'];
-                                $_SESSION['service_no']=$service_no;
-                                $admin_rank =$row['rank'];
-                                $_SESSION['rank']=$admin_rank;
-                                $adminID =$row['adminID'];
-                                $_SESSION['adminID']=$adminID;
-                                $_SESSION['user_role'] =  $user_role;    
-                            }?>      
-                              <input type="hidden" name="armourer_admin_name" class="form-control" id="exampleInputName1" value="<?php echo $service_no.' '.$admin_rank.' '.$fullname ?>">
-                              <input type="hidden" name="adminID" class="form-control" id="exampleInputName1" value="<?php echo $adminID; ?>">
-                              <input type="hidden" name="action_taken" class="form-control" id="exampleInputName1" value="added new faulty Firearm">
-                              <input type="hidden" name="user_role" class="form-control" id="exampleInputName1" value="<?php echo $user_role; ?>">
-                         
-                          <div class="row">
-                            <div class="col-md-4">                     
-                            <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">Faulty Firearm Serial No.</code></label>
-                              <input type="text" name="faulty_firearm_serial_no" class="form-control" id="exampleInputName1"
-                               placeholder="Firearm Serial Number" required>
-                            </div>                        
-                          </div>
-                         <!-- <div class="col-md-4">                     
-                            <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">Faulty Weapon No.</code></label>
-                              <input type="text" name="faulty_weapon_number" class="form-control" id="exampleInputName1"
-                               placeholder="Firearm Weapon Number" required>
-                            </div>                        
-                          </div> -->
-                          <div class="form-group">
-                            <label class="col-sm-3 col-form-label"><code style="color:#fff">Faulty Firearm Type</code></label>
-                            <div class="col-sm-9">
-                              <select name="faulty_firearm_type" class="form-control">
-                                <option style="color:#000" value="None">None</option>
-                                <option style="color:#000" value="Pump-Action">Pump Action</option>
-                                <option style="color:#000" value="Revolver">Revolver</option>
-                                <option style="color:#000" value="Rifle">Rifle</option>
-                                <option style="color:#000" value="ShortGun">Short Gun</option>
-                                <option style="color:#000" value="Carbine">Carbine</option>
-                              </select>
-                            </div>
-                          </div>
-                           
-                            <div class="form-group">
-                              <label for="exampleInputName1"><code style="color:#fff">Faulty Firearm Name</code></label>
-                              <input type="text" name="faulty_firearm_name" class="form-control" id="exampleInputName1"
-                               placeholder="Faulty Firearm Name" required>
-                            </div>
-                           
-                          <div class="form-group">
-                            <label class="col-sm-3 col-form-label"><code style="color:#fff">Faulty Firearm Class</code></label>
-                            <div class="col-sm-9">
-                              <select name="faulty_firearm_class" class="form-control">
-                                <option style="color:#000" value="Duty Weapon">Duty Weapon</option>
-                                <option style="color:#000" value="Spare Weapon">Spare Weapon</option>
-                                <option style="color:#000" value="Training Weapon">Training Weapon</option>
-                              </select>
-                            </div>
-                          </div>
-                            <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="exampleInputEmail3"><code style="color:#fff"> Fault Type </code></label>
-                              <input type="text" class="form-control" name="faulty_type" id="faulty_type" placeholder="Faulty Type" required>
-                            </div>     
-                            </div> 
-                            <div class="col-md-6"> 
-                            <div class="form-group">
-                            <label for="faulty_nature"><code style="color:#fff">Fault Nature</code></label>
-                              <select name="faulty_nature" class="form-control" required>
-                                <option style="color:#000" value="Serviceable">Serviceable</option>
-                                <option style="color:#000" value="Unserviceable">Unserviceable</option>
-                              </select>
-                              </div> 
-                          </div>                           
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="exampleFormControlFile1" style="color:#fff;"><code style="color:#fff">Upload Faulty Firearm Image</code></label>
-                                <input type="file" class="form-control" name="faulty_firearm_image" id="exampleFormControlFile1">
-                               </div>
-                              </div>
-                              <div class="col-xl-10">
-                                <div class="form-group">
-                                  <label for="faulty_firearm_comment"><code style="color:#fff">Comment</code> </label>
-                                  <textarea style="height:150px; background:#e1e4e8" name="faulty_firearm_comment" id="faulty_firearm_comment" class="form-control" id="exampleTextarea1" rows="40"></textarea>
-                                </div>
-                              </div>
-                            </div>
-                            <button type="submit" name="add_faulty_weapon" class="btn btn-inverse-success me-2">Submit</button>
-                            <button class="btn btn-inverse-danger" >Cancel</button>
-                         </form>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                      <h4 class="card-title text-uppercase">[SCAN] ADD FAULTY FIREARM</h4>
+                      <div>
+                        <a href="add-faulty-ammo.php" class="btn btn-tactical">
+                          <i class="mdi mdi-ammunition"></i> ADD FAULTY AMMO
+                        </a>
+                      </div>
+                    </div>
+                    <form class="forms-sample" method="POST" action="process-faulty-weapon.php" enctype="multipart/form-data">
+                      <div class="form-group">
+                        <label for="faulty_firearm_serial_no">[SELECT] Firearm Serial Number</label>
+                        <input type="text" class="form-control" id="faulty_firearm_serial_no" name="faulty_firearm_serial_no" placeholder="Enter or Search Serial Number" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="faulty_firearm_type">Firearm Type</label>
+                        <input type="text" class="form-control" id="faulty_firearm_type" name="faulty_firearm_type" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label for="faulty_firearm_name">Firearm Name</label>
+                        <input type="text" class="form-control" id="faulty_firearm_name" name="faulty_firearm_name" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label for="faulty_firearm_class">Firearm Class</label>
+                        <input type="text" class="form-control" id="faulty_firearm_class" name="faulty_firearm_class" readonly>
+                      </div>
+                      <div class="form-group">
+                        <label for="faulty_type">[SELECT] Fault Type</label>
+                        <select class="form-control" id="faulty_type" name="faulty_type" required>
+                            <option value="Breakage">Breakage</option>
+                            <option value="Malfunction">Malfunction</option>
+                            <option value="Lost">Lost</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="faulty_nature">[SELECT] Fault Nature</label>
+                        <select class="form-control" id="faulty_nature" name="faulty_nature" required>
+                            <option value="Serviceable">Serviceable</option>
+                            <option value="Unserviceable">Unserviceable</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="returned_by_officer">[SELECT] Returned by Officer</label>
+                        <input type="text" class="form-control" id="returned_by_officer" name="returned_by_officer" placeholder="Search and select officer" required>
+                        <input type="hidden" id="returned_officer_id" name="returned_officer_id">
+                      </div>
+                      <div class="form-group">
+                        <label for="faulty_firearm_comment">Comment</label>
+                        <textarea class="form-control" id="faulty_firearm_comment" name="faulty_firearm_comment" rows="4" placeholder="Enter comments here..."></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label>Images</label>
+                        <input type="file" name="faulty_weapon_images[]" id="images" class="form-control file-upload-info" multiple onchange="previewImages()">
+                        <div id="image_preview" style="display:flex; flex-wrap:wrap; margin-top:10px;"></div>
+                      </div>
+                      <button type="submit" name="add_faulty_weapon" class="btn btn-tactical me-2">SUBMIT_TRANSACTION</button>
+                      <button type="reset" class="btn btn-abort">ABORT_ENTRY</button>
+                    </form>
                   </div>
                 </div>
               </div>
             </div>
-            </div>
-          <!-- content-wrapper ends -->
-            <!-- partial:partials/footer.php-->
-            <?php  require_once('includes/footer.php');?>
-          
-          <!-- partial -->
+          </div>
+          <?php require_once('includes/footer.php');?>
         </div>
-        <!-- main-panel ends -->
       </div>
-      <!-- page-body-wrapper ends -->
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
+    
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="assets/vendors/select2/select2.min.js"></script>
-    <script src="assets/vendors/typeahead.js/typeahead.bundle.min.js"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script src="assets/js/file-upload.js"></script>
-    <script src="assets/js/typeahead.js"></script>
-    <script src="assets/js/select2.js"></script>
-    <!-- End custom js for this page -->
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+      $(function() {
+        // Autocomplete for serial numbers
+        $("#faulty_firearm_serial_no").autocomplete({
+          source: function(request, response) {
+            $.ajax({
+              url: "fetch-faulty-firearms.php",
+              dataType: "json",
+              data: {
+                term: request.term
+              },
+              success: function(data) {
+                response(data);
+              }
+            });
+          },
+          minLength: 1,
+          select: function(event, ui) {
+            $("#faulty_firearm_serial_no").val(ui.item.serial);
+            $("#faulty_firearm_type").val(ui.item.f_type);
+            $("#faulty_firearm_name").val(ui.item.f_name);
+            $("#faulty_firearm_class").val(ui.item.f_class);
+            return false;
+          }
+        });
+
+        // Autocomplete for returned by officer
+        $("#returned_by_officer").autocomplete({
+          source: function(request, response) {
+            $.ajax({
+              url: "fetchData_officer.php",
+              dataType: "json",
+              type: "POST",
+              data: {
+                search: request.term
+              },
+              success: function(data) {
+                response(data);
+              }
+            });
+          },
+          minLength: 1,
+          select: function(event, ui) {
+            $("#returned_by_officer").val(ui.item.label);
+            $("#returned_officer_id").val(ui.item.value);
+            return false;
+          }
+        });
+      });
+
+      function previewImages() {
+          var preview = document.querySelector('#image_preview');
+          preview.innerHTML = "";
+          var files = document.querySelector('#images').files;
+          if (files) {
+              [].forEach.call(files, function(file) {
+                  var reader = new FileReader();
+                  reader.onload = function(event) {
+                      var img = document.createElement("img");
+                      img.src = event.target.result;
+                      img.style.width = "100px";
+                      img.style.height = "100px";
+                      img.style.objectFit = "cover";
+                      img.style.margin = "5px";
+                      preview.appendChild(img);
+                  }
+                  reader.readAsDataURL(file);
+              });
+          }
+      }
+
+      document.addEventListener("DOMContentLoaded", function() {
+          const params = new URLSearchParams(window.location.search);
+          if(params.has('status')) {
+              let status = params.get('status');
+              let toast = document.createElement('div');
+              toast.className = 't-toast';
+              
+              if(status === 'success') {
+                  toast.innerHTML = '[SIGNAL]: TRANSACTION_COMMITTED';
+                  toast.style.borderLeft = '5px solid #00f2ff';
+              } else if(status === 'error') {
+                  toast.innerHTML = '[SIGNAL]: TRANSACTION_FAILED';
+                  toast.style.borderLeft = '5px solid #ff4d4d';
+              } else {
+                  toast.innerHTML = `[SIGNAL]: ${decodeURIComponent(status).toUpperCase()}`;
+                  toast.style.borderLeft = '5px solid #ff4d4d';
+              }
+              
+              document.getElementById('toast-container').appendChild(toast);
+              toast.style.display = 'block';
+              
+              setTimeout(function() {
+                  toast.style.display = 'none';
+                  toast.remove();
+              }, 3500);
+          }
+      });
+    </script>
   </body>
 </html>

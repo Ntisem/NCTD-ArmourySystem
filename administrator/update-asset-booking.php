@@ -7,7 +7,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"])) {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
         header("location: login");
         exit();
     }
@@ -38,8 +38,6 @@ require_once('includes/user_auth.php');
   $_SESSION['asset_comment'] = $asset_comment;   
   $asset_returns =$row['asset_returns'];
   $_SESSION['asset_returns'] = $asset_returns;
-  $bookingCode =$row['bookingCode'];
-  $_SESSION['bookingCode'] = $bookingCode;
   }?>
 
 <!DOCTYPE html>
@@ -48,7 +46,7 @@ require_once('includes/user_auth.php');
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - <?php echo 'Asset Booking Ticket-['.$bookingCode.']'?></title>
+    <title>GPS ARMOURY SYSTEM - <?php echo 'Asset Booking Ticket-GPSA-'.$asset_booking_ticket.': '.$asset_name ?></title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
@@ -82,7 +80,7 @@ require_once('includes/user_auth.php');
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-            <h3 class="page-title">Updating Asset Booking Ticket#<code class="success3">[<?php echo $bookingCode; ?>]</code> </h3>
+            <h3 class="page-title">Updating Asset Booking Ticket#<code class="success3">[GPSASB<?php echo $asset_booking_ticket; ?>]</code> </h3>
               <nav aria-label="breadcrumb">
               
               </nav>

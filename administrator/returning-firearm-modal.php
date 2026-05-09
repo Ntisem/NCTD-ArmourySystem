@@ -4,7 +4,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header" style="background:orange;" >
-        <h5 class="modal-title" id="exampleModalLabel" style="color:#000;">Booking Ticket-[<?php echo $row['bookingCode'];?>]</h5>     
+        <h5 class="modal-title" id="exampleModalLabel" style="color:#000;">Booking Ticket-GPSA-<?php echo $row['bookingID']; ?><?php echo $row['officerID']; ?></h5>     
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -76,7 +76,6 @@
         <input type="hidden" name="officer_image" value="<?php echo $row['officer_image']; ?>">
         <input type="hidden" name="firearm_name" value="<?php echo $row['firearm_name']; ?>">
         <input type="hidden" name="firearm_class" value="<?php echo $row['firearm_class']; ?>">
-        <input type="hidden" name="quantity_issued" value="<?php echo $row['quantity_issued']; ?>">
         <input type="hidden" name="ammunition_name" value="<?php echo $row['ammunition_name']; ?>">
         <input type="hidden" name="firearmID" value="<?php echo $row['firearmID']; ?>">
         <input type="hidden" name="ammoID" value="<?php echo $row['ammoID']; ?>">

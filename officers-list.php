@@ -257,7 +257,7 @@ if (isset($_GET['view_id'])) {
                             <?php $n=1; foreach($officers as $row): ?>
                             <tr>
                                 <td><?php echo $n++; ?></td>
-                                <td><img src="uploads/<?php echo $row['officer_image']; ?>" style="width:35px; height:35px; border-radius:3px; border:1px solid var(--neon);"></td>
+                                <td><img src="assets/images/officer_images/<?php echo $row['officer_image']; ?>" style="width:35px; height:35px; border-radius:3px; border:1px solid var(--neon);"></td>
                                 <td class="text-info font-weight-bold"><?php echo $row['officer_service_no']; ?></td>
                                 <td><?php echo $row['rank']; ?></td>
                                 <td><?php echo $row['full_name']; ?></td>

@@ -6,7 +6,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"])) {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
         header("location: login");
         exit();
     }
@@ -48,7 +48,40 @@ require_once('includes/user_auth.php');
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
-          
+          <div class="row">
+              <div class="col-12 grid-margin stretch-card">
+                <div class="card gps-gradient-card">
+                  <div class="card-body py-0 px-0 px-sm-3">
+                    <div class="row align-items-center">
+                      <div class="col-4 col-sm-3 col-xl-2">
+                        <img src="assets/images/dashboard/weapon.png" class="gradient-gps-img img-fluid" alt="">
+                      </div>
+                      <div class="col-5 col-sm-7 col-xl-8 p-0">
+                        <h4 class="mb-1 mb-sm-0">GHANA POLICE SERVICE ARMOURY SYSTEM</h4>
+                        <p class="mb-0 font-weight-normal d-none d-sm-block">Service with Integrity</p>
+                      </div>
+                      <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
+                        <span>
+                          <a href="https://police.gov.gh/en/" target="_blank" class="btn btn-outline-light btn-rounded get-started-btn">GPS WEBSITE</a>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xl-12 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                    
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- content-wrapper ends -->
           <!-- partial:includes/_footer.html -->

@@ -7,7 +7,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"])) {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
         header("location: login");
         exit();
     }
@@ -112,9 +112,9 @@ require_once('includes/user_auth.php');
                             <label class="col-sm-3 col-form-label"><code style="color:#fff">Asset State</code></label>
                             <div class="col-sm-9">
                               <select name="asset_state" class="form-control">
-                                <option style="color:#000" value="None">None</option>
-                                <option style="color:#000" value="Not Faulty">Not Faulty Asset</option>
-                                <option style="color:#000" value="Faulty">Faulty Asset </option>
+                                <option value="None">None</option>
+                                <option value="Not Faulty">Not Faulty Asset</option>
+                                <option value="Faulty">Faulty Asset </option>
                                 </select>
                             </div>
                           </div>

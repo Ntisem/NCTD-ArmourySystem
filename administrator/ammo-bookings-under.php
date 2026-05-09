@@ -8,7 +8,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"])) {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
         header("location: login");
         exit();
     }
@@ -92,7 +92,7 @@ require_once('includes/user_auth.php');
             while ($row = mysqli_fetch_array($query)) {
 
                 $output = "";
-               echo $ammo_name = '[ '.ucwords($row['ammo_serial_no']).' '.ucwords($row['ammo_name']).' ]';
+               echo $ammo_name = '[ '.ucwords($row['ammo_name']).' ]';
                
               }
               ?> </code>'s Bookings </h3>
@@ -156,7 +156,7 @@ require_once('includes/user_auth.php');
                               <td> '.$row['armourer_issuer'].' </td>
                               <td> 
                               <a href="update-ammo-booking?firearm-booking-ticket='.$row['book_ammoID'].'><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                              &nbsp; &nbsp;<a href="#delete-ammo-booking-'.$row['book_ammoID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
+                           
                               </td>
                            
                           </tr>
@@ -179,9 +179,7 @@ require_once('includes/user_auth.php');
                           <td> 
                           <a href="update-ammo-booking?firearm-booking-ticket='.$row['book_ammoID'].'">
                           <i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                          &nbsp; &nbsp;
-                          <a href="#delete-ammo-booking-'.$row['book_ammoID'].'" data-toggle="modal">
-                          <i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
+                       
                           </td>
                         </tr>
                           ';

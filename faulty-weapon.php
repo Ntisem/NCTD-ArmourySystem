@@ -444,6 +444,7 @@ $faulty_weapons = $stmt_faulty->fetchAll();
           <li class="list-group-item bg-transparent"><strong>Fault Type:</strong> ${item.faulty_type}</li>
           <li class="list-group-item bg-transparent"><strong>Nature of Fault:</strong> ${item.faulty_nature}</li>
           <li class="list-group-item bg-transparent"><strong>Remarks:</strong> ${item.faulty_firearm_comment}</li>
+           <li class="list-group-item bg-transparent"><strong>Faulty Image:</strong><img src="assets/images/faulty_weapon_images/${item.faulty_firearm_image}" alt="" style="height:250px;width:250px;"></li>
           <li class="list-group-item bg-transparent"><strong>Date Added:</strong> ${item.datetime}</li>
         </ul>`;
         $('#viewModalBody').html(content);

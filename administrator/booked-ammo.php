@@ -7,7 +7,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"])) {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
         header("location: login");
         exit();
     }
@@ -59,7 +59,7 @@ require_once('includes/user_auth.php');
             <h3 class="page-title"> Booked Ammunition </h3>
               <h3 class="page-title"><code><a href="booked-firearms" class="btn btn-outline-info btn-fw"> [ Booked Firearm ]</a>
             </code>&nbsp;&nbsp;<code><a href="booked-ammo" class="btn btn-outline-danger btn-fw">[ Booked Ammo ]</a>
-            </code>&nbsp;<code><a href="booked-other-assets" class="btn btn-outline-info btn-fw">[ Booked Assets ]</a></code></h3> 
+            </code></h3> 
               <nav aria-label="breadcrumb">
                 
               </nav>
@@ -79,8 +79,7 @@ require_once('includes/user_auth.php');
                 <table id="administrators-list" class="table table-bordered ">
                 <thead>
                       <tr>
-                        <th> Date/Time </th>
-                        <th>BookingCode</th>
+                        <th> Date/Time</th>
                         <th> Officer</th>
                         <th> Ammo Name </th>
                         <th> Ammo Rounds </th>
@@ -127,8 +126,7 @@ require_once('includes/user_auth.php');
                      
                             <tr>
                            
-                            <td>BT: '.$row['booking_time'].' </td>
-                            <td>'.$row['bookingCode'].' </td>
+                            <td>BT: '.$row['datetime'].' </td>
                             <td>
                             <a href="#ammo-booking-details-'.$row['book_ammoID'].'" data-toggle="modal" style="text-decoration:none;color:#fff;">
                             <img src="assets/images/officer_images/'.$row['officer_image'].'" alt="image" /> &nbsp; &nbsp;
@@ -143,7 +141,7 @@ require_once('includes/user_auth.php');
                             <td> '.$row['duty_type'].' @ '.$row['duty_location'].' </td>
                             <td> 
                             <a href="update-ammo-booking?ammo-booking-ticket='.$row['book_ammoID'].'"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                            &nbsp; &nbsp;<a href="#delete-ammo-booking-'.$row['book_ammoID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>
+                          
                             </td>
                           </tr>
                           ';
@@ -153,7 +151,6 @@ require_once('includes/user_auth.php');
                      
                           <tr>
                           <td> RT: '.$row['returned_time'].'  </td>
-                          <td>'.$row['bookingCode'].' </td>
                           <td>
                           <a href="#ammo-booking-details-'.$row['book_ammoID'].'" data-toggle="modal" style="text-decoration:none;color:#00d25b;">
                           <img src="assets/images/officer_images/'.$row['officer_image'].'" alt="image" />&nbsp; &nbsp; '.$row['to_officer'].'</a> 
@@ -167,7 +164,7 @@ require_once('includes/user_auth.php');
                           </td>
                           <td> 
                           <a href="update-ammo-booking?ammo-booking-ticket='.$row['book_ammoID'].'"><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
-                          &nbsp; &nbsp;<a href="#delete-ammo-booking-'.$row['book_ammoID'].'" data-toggle="modal"><i class="mdi mdi-delete f-16 mr-15 text-red"></i></a>  
+                        
                           </td>
                         </tr>
                         
