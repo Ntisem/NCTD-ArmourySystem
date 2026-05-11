@@ -1,21 +1,17 @@
 <?php
 // session_start();
-if(isset($_POST['type']) && $_POST['type']=='ajax'){
-	if((time()-$_SESSION['LAST_ACTIVE_TIME'])>900){
-		echo "logout";
-	}
-}else{
-	if(isset($_SESSION['LAST_ACTIVE_TIME'])){
-		if((time()-$_SESSION['LAST_ACTIVE_TIME'])>900){
-			header('location:logout');	
-			die();
-		}
-	}
-	$_SESSION['LAST_ACTIVE_TIME']=time();
-	$redirect_link_var = $_SESSION['page_url'];
-	if(!isset($_SESSION['IS_LOGIN'])){
-		header('location:login?page_url='.$redirect_link_var.'');
-		die();
-	}
+
+// Check if user is not logged in
+if (!isset($_SESSION["username"])) {
+    // Capture the current full URL (including query parameters like ?id=123)
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+    $current_url = $protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    
+    // Store coordinates and timestamp (3600 seconds persistence)
+    $_SESSION['redirect_url'] = $current_url;
+    $_SESSION['redirect_timestamp'] = time();
+
+    header("Location: login");
+    exit();
 }
 ?>

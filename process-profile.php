@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $dest_path = $uploadPath . $newFileName;
 
-                if (move_uploaded_file($TmpPath, $dest_path)) {
+                if (move_uploaded_file($fileTmpPath, $dest_path)) {
                     $profile_image = $newFileName;
 
                     // Remove the old image if it's not the default image

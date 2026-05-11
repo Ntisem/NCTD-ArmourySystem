@@ -89,7 +89,7 @@ if(!isset($_SESSION["username"])) {
                     <div class="card">
                       <div class="card-body">
                         <p class="card-description">
-                          <a href="add-new-armourer.php">
+                          <a href="add-new-armourer">
                             <i class="mdi mdi-account-plus f-22 text-green" style="color:#00f2ff;" title="Click to Add New Armourer"></i>
                           </a>
                         </p>

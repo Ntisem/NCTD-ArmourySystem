@@ -1,6 +1,5 @@
 <?php
 require_once('connections/connect-db.php');
-require_once('includes/redirect.php');
 
 if (isset($_POST['username'])) {
     $username = trim($_POST['username']);
@@ -18,6 +17,7 @@ if (isset($_POST['username'])) {
             $_SESSION['fullname'] = $row['fullname'];
             $_SESSION['rank'] = $row['rank'];
             $_SESSION['user_role'] = $row['user_role'];
+            $_SESSION['adminID'] = $row['id'] ?? 0;
             
             $log_stmt = $pdo->prepare("INSERT INTO `login_activity`(`admin_username`, `user_role`, `last_login_time`) VALUES (?, ?, ?)");
             $log_stmt->execute([$row['username'], $row['user_role'], $last_login_time]);
@@ -25,18 +25,27 @@ if (isset($_POST['username'])) {
             $_SESSION['status'] = "UPLINK ESTABLISHED: WELCOME " . strtoupper($row['rank']) . " " . strtoupper($row['fullname']);
             $_SESSION['status_code'] = "success";
 
-            $redirect_link = $_REQUEST['page_url'] ?? "";
-            $location = ($row['user_role'] == "Administrator") 
-                ? (($redirect_link == "") ? "administrator/index" : $redirect_link)
-                : (($redirect_link == "") ? "armourer" : $redirect_link);
+            // REDIRECT LOGIC: Check for stored URL within 1 hour
+            $location = ($row['user_role'] == "Administrator") ? "admin-dashboard" : "index";
             
+            if (isset($_SESSION['redirect_url']) && isset($_SESSION['redirect_timestamp'])) {
+                $time_elapsed = time() - $_SESSION['redirect_timestamp'];
+                if ($time_elapsed < 3600) { // 1 hour window
+                    $location = $_SESSION['redirect_url'];
+                }
+                // Clear redirect session to prevent loops
+                unset($_SESSION['redirect_url']);
+                unset($_SESSION['redirect_timestamp']);
+            }
+
             $_SESSION['redirect_to'] = $location;
+
         } else {
-            $_SESSION['status'] = "CRITICAL: AUTHENTICATION FAILURE - INVALID CREDENTIALS";
+            $_SESSION['status'] = "ACCESS DENIED: INVALID CREDENTIALS";
             $_SESSION['status_code'] = "error";
         }
     } catch (PDOException $e) {
-        $_SESSION['status'] = "SYS_ERR: " . strtoupper($e->getMessage());
+        $_SESSION['status'] = "SYSTEM ERROR: " . $e->getMessage();
         $_SESSION['status_code'] = "error";
     }
 }

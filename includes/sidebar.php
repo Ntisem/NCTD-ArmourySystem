@@ -249,7 +249,7 @@ try {
             <div class="collapse" id="armourers">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="armourers">Armourers</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="add-new-armourers">Add Armourers</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="add-new-armourer">Add Armourers</a></li>
                 </ul>
             </div>
         </li>

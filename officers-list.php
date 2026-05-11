@@ -53,8 +53,8 @@ if (isset($_POST['update_officer'])) {
     $full_name          = trim($_POST['edit_full_name']);
     $gender             = trim($_POST['edit_gender']);
     $dept_unit          = trim($_POST['edit_dept_unit']);
-    $phone              = trim($_POST['edit_phone']);
-    $email              = trim($_POST['edit_email']);
+    $phone_no              = trim($_POST['edit_phone_no']);
+    $officer_email              = trim($_POST['edit_officer_email']);
     $current_image      = $_POST['edit_current_image'];
 
     $officer_image = $current_image;
@@ -78,9 +78,9 @@ if (isset($_POST['update_officer'])) {
 
     try {
         $pdo->beginTransaction();
-        $sql = "UPDATE officers SET officer_service_no = ?, rank = ?, full_name = ?, gender = ?, dept_unit = ?, phone = ?, email = ?, officer_image = ? WHERE officerID = ?";
+        $sql = "UPDATE officers SET officer_service_no = ?, rank = ?, full_name = ?, gender = ?, dept_unit = ?, phone_no = ?, officer_email = ?, officer_image = ? WHERE officerID = ?";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$officer_service_no, $rank, $full_name, $gender, $dept_unit, $phone, $email, $officer_image, $officerID]);
+        $stmt->execute([$officer_service_no, $rank, $full_name, $gender, $dept_unit, $phone_no, $officer_email, $officer_image, $officerID]);
 
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log_action = "UPDATED_OFFICER: " . $full_name . " (SN: " . $officer_service_no . ")";
@@ -132,7 +132,7 @@ if (isset($_GET['view_id'])) {
         echo '<p><strong>Full Name:</strong> ' . htmlspecialchars($off['full_name']) . '</p>';
         echo '<p><strong>Status:</strong> ' . htmlspecialchars($off['officer_status']) . '</p>';
         echo '<p><strong>Dept/Unit:</strong> ' . htmlspecialchars($off['dept_unit']) . '</p>';
-        echo '<p><strong>Phone:</strong> ' . htmlspecialchars($off['phone']) . '</p>';
+        echo '<p><strong>Phone:</strong> ' . htmlspecialchars($off['phone_no']) . '</p>';
         echo '</div></div>';
     }
     exit();
@@ -300,8 +300,8 @@ if (isset($_GET['view_id'])) {
                             <option value="Male">Male</option><option value="Female">Female</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>PHONE</label><input type="text" name="edit_phone" id="edit_phone" class="form-control"></div>
-                    <div class="form-group"><label>EMAIL</label><input type="email" name="edit_email" id="edit_email" class="form-control"></div>
+                    <div class="form-group"><label>PHONE</label><input type="text" name="edit_phone_no" id="edit_phone_no" class="form-control"></div>
+                    <div class="form-group"><label>officer_email</label><input type="officer_email" name="edit_officer_email" id="edit_officer_email" class="form-control"></div>
                     <div class="form-group"><label>UPDATE IMAGE</label><input type="file" name="officer_image" class="form-control"></div>
                 </div>
                 <div class="modal-footer border-info">
@@ -372,8 +372,8 @@ if (isset($_GET['view_id'])) {
             $('#edit_full_name').val(off.full_name);
             $('#edit_gender').val(off.gender);
             $('#edit_dept_unit').val(off.dept_unit);
-            $('#edit_phone').val(off.phone);
-            $('#edit_email').val(off.email);
+            $('#edit_phone_no').val(off.phone_no);
+            $('#edit_officer_email').val(off.officer_email);
             $('#edit_current_image').val(off.officer_image);
             $('#editModal').modal('show');
         }
