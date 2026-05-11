@@ -3,7 +3,7 @@ require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
 if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
-    header("location: login.php");
+    header("location: login");
     exit();
 }
 
@@ -44,10 +44,10 @@ if (isset($_POST['add_officer'])) {
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], 'ADDED_OFFICER: ' . $full_name, $_SESSION['user_role']]);
 
-        header("Location: officers-list.php?status=success_add");
+        header("Location: officers-list?status=success_add");
         exit();
     } catch (Exception $e) {
-        header("Location: officers-list.php?status=error");
+        header("Location: officers-list?status=error");
         exit();
     }
 }
@@ -89,10 +89,10 @@ if (isset($_POST['update_officer'])) {
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], 'UPDATED_OFFICER: ' . $full_name, $_SESSION['user_role']]);
 
-        header("Location: officers-list.php?status=success_update");
+        header("Location: officers-list?status=success_update");
         exit();
     } catch (Exception $e) {
-        header("Location: officers-list.php?status=error");
+        header("Location: officers-list?status=error");
         exit();
     }
 }
@@ -108,10 +108,10 @@ if (isset($_POST['delete_officer'])) {
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], 'DELETED_OFFICER_ID: ' . $officerID, $_SESSION['user_role']]);
 
-        header("Location: officers-list.php?status=success_delete");
+        header("Location: officers-list?status=success_delete");
         exit();
     } catch (Exception $e) {
-        header("Location: officers-list.php?status=error");
+        header("Location: officers-list?status=error");
         exit();
     }
 }

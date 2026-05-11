@@ -50,11 +50,11 @@ if (isset($_POST['add_faulty_ammo'])) {
 
         $pdo->commit();
         $_SESSION['status'] = "Added Successfully";
-        header('location: faulty-ammo.php?status=success');
+        header('location: faulty-ammo?status=success');
         exit();
     } catch (PDOException $e) {
         $pdo->rollBack();
-        header('location: faulty-ammo.php?status=error');
+        header('location: faulty-ammo?status=error');
         exit();
     }
 }
@@ -88,11 +88,11 @@ if (isset($_POST['update_faulty_ammo'])) {
         
         $pdo->commit();
         $_SESSION['status'] = "Updated Successfully";
-        header('location: faulty-ammo.php?status=success');
+        header('location: faulty-ammo?status=success');
         exit();
     } catch (PDOException $e) {
         $pdo->rollBack();
-        header('location: faulty-ammo.php?status=error');
+        header('location: faulty-ammo?status=error');
         exit();
     }
 }
@@ -117,11 +117,11 @@ if (isset($_POST['delete_faulty_ammo'])) {
         $stmt->execute([$faulty_ammoID]);
         
         $pdo->commit();
-        header('location: faulty-ammo.php?status=success');
+        header('location: faulty-ammo?status=success');
         exit();
     } catch (PDOException $e) {
         $pdo->rollBack();
-        header('location: faulty-ammo.php?status=error');
+        header('location: faulty-ammo?status=error');
         exit();
     }
 }
@@ -146,11 +146,11 @@ if (isset($_POST['mark_fixed'])) {
         $stmt->execute([$faulty_ammoID]);
 
         $pdo->commit();
-        header('location: faulty-ammo.php?status=success');
+        header('location: faulty-ammo?status=success');
         exit();
     } catch (PDOException $e) {
         $pdo->rollBack();
-        header('location: faulty-ammo.php?status=error');
+        header('location: faulty-ammo?status=error');
         exit();
     }
 }

@@ -36,11 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_ammo'])) {
         $log->execute([$adminID, $adminName, $log_action, $_SESSION['user_role']]);
 
         $pdo->commit();
-        header("Location: ammunition.php?status=success");
+        header("Location: ammunition?status=success");
         exit();
     } catch (Exception $e) {
         $pdo->rollBack();
-        header("Location: ammunition.php?status=error&msg=" . urlencode($e->getMessage()));
+        header("Location: ammunition?status=error&msg=" . urlencode($e->getMessage()));
         exit();
     }
 }

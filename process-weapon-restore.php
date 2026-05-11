@@ -17,11 +17,11 @@ if (isset($_POST['confirm_restore'])) {
         $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], $log_action, $_SESSION['user_role']]);
 
         $pdo->commit();
-        header("Location: firearm-archive.php?status=success");
+        header("Location: firearm-archive?status=success");
         exit();
     } catch (Exception $e) {
         $pdo->rollBack();
-        header("Location: firearm-archive.php?status=error");
+        header("Location: firearm-archive?status=error");
         exit();
     }
 }

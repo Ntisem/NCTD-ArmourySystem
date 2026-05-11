@@ -41,6 +41,7 @@ if (isset($_POST['update_password'])) {
     <meta charset="UTF-8">
     <title>COMMAND NCTD | SECURITY_UPDATE</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         body { background: #05070a; font-family: 'Roboto Mono', monospace; color: #fff; }
         .tactical-box { 
@@ -85,7 +86,7 @@ if (isset($_POST['update_password'])) {
                         <button type="submit" name="update_password" class="btn btn-update mt-3">EXECUTE_RE-ENCRYPTION</button>
                     </form>
                     <div class="text-center mt-3">
-                        <a href="armourer" style="color: #ff3e3e; font-size: 15px;">ABORT_OPERATION</a>
+                        <a href="armourer-profile" style="color: #ff3e3e; font-size: 15px; font-weight: bold; text-decoration: none;">ABORT_OPERATION</a>
                     </div>
                 </div>
             </div>

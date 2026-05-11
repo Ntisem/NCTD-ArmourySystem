@@ -30,14 +30,14 @@ if (isset($_POST['soft_delete'])) {
         $log->execute([$adminID, $fullname, $log_action, $user_role]);
 
         $pdo->commit();
-        header("Location: booked-firearms.php?status=success");
+        header("Location: booked-firearms?status=success");
         exit();
 
     } catch (Exception $e) {
         if (isset($pdo) && $pdo->inTransaction()) {
             $pdo->rollBack();
         }
-        header("Location: booked-firearms.php?status=error");
+        header("Location: booked-firearms?status=error");
         exit();
     }
 }

@@ -19,11 +19,11 @@ if (isset($_POST['confirm_delete'])) {
             $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], $log_action, $_SESSION['user_role']]);
 
             $pdo->commit();
-            header("Location: firearm-names.php?status=success&msg=Asset_Archived");
+            header("Location: firearm-names?status=success&msg=Asset_Archived");
             exit();
         } catch (Exception $e) {
             $pdo->rollBack();
-            header("Location: firearm-names.php?status=error");
+            header("Location: firearm-names?status=error");
             exit();
         }
     }

@@ -195,10 +195,10 @@ body {
                 <a class="nav-link" id="profileDropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     <?php  
                         $username = $_SESSION['username'] ?? 'OPERATOR';
-                        $profile_image = $_SESSION['profile_image'] ?? 'avatar_placeholder.png';
+                        $profile_image = $_SESSION['profile_image'] ?? 'default.png';
                         echo '
                         <div class="navbar-profile">
-                            <img class="img-xs rounded-circle border border-info" src="assets/images/armourer_images/'. $profile_image .'" alt="" style="width:30px; height:30px;">
+                            <img class="img-xs rounded-circle border border-info" src="assets/images/armourer_images/'.$profile_image.'" alt="" style="width:30px; height:30px;">
                             <p class="mb-0 d-none d-sm-block navbar-profile-name ml-2">'.strtoupper($username).'</p>
                             <i class="mdi mdi-menu-down d-none d-sm-block text-cyan ml-1"></i>
                         </div>';
@@ -210,6 +210,7 @@ body {
                     <a href="armourer-profile.php" class="dropdown-item preview-item" style=" background-color: rgba(255,255,255,0.05);">
                         <i class="mdi mdi-account-card-details text-info mr-2"></i> Profile  
                     </a>
+                    
                     <div class="dropdown-divider"></div>
                     <a href="logout" class="dropdown-item preview-item logout-item" style=" background-color: rgba(255,255,255,0.05);">
                         <i class="mdi mdi-logout text-danger mr-2"></i> LOGOUT  

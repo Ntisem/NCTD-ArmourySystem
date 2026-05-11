@@ -136,6 +136,7 @@ try {
                             $img = !empty($row['profile_image']) ? $row['profile_image'] : 'default.png';
                             $disp_username = $row['username'];
                             $profile_image = $row['profile_image'];
+                            $_SESSION['profile_image'] = $profile_image;
                             $user_role = $row['user_role'];
                             ?>
                             <div class="count-indicator">

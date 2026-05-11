@@ -1,13 +1,27 @@
 <?php
-// session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// Check if user is not logged in
-if (!isset($_SESSION["username"])) {
-    // Capture the current full URL (including query parameters like ?id=123)
+/**
+ * TACTICAL SESSION MONITOR
+ * Inactivity Limit: 600 Seconds (10 Minutes)
+ */
+$inactivity_limit = 600; 
+
+if (isset($_SESSION['username'])) {
+    if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $inactivity_limit)) {
+        // Session expired due to inactivity
+        header("Location: logout.php?reason=timeout");
+        exit();
+    }
+    // Update activity timestamp
+    $_SESSION['last_activity'] = time();
+} else {
+    // Unauthorized access attempt: Capture coordinates for potential re-entry
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
     $current_url = $protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     
-    // Store coordinates and timestamp (3600 seconds persistence)
     $_SESSION['redirect_url'] = $current_url;
     $_SESSION['redirect_timestamp'] = time();
 

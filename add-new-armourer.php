@@ -20,6 +20,7 @@ $created_by = $_SESSION['username'];
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;500&display=swap" rel="stylesheet">
     <style>
         :root { --neon: #00f2ff; --bg-deep: #05070a; --card-bg: #0d1117; --danger: #ff3e3e; --success: #00ff88; }
@@ -93,7 +94,7 @@ $created_by = $_SESSION['username'];
 
                             <form action="process-armourer.php" method="POST" enctype="multipart/form-data" id="armourerForm">
                                 <input type="hidden" name="action" value="add">
-                                <input type="hidden" name="status" value="Active">
+                                <input type="hidden" name="status" value="Verified">
                                 <input type="hidden" name="code" value="<?= $security_code ?>">
                                 <input type="hidden" name="created_by" value="<?= $created_by ?>">
 

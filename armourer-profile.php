@@ -96,11 +96,11 @@ $unit_dept    = $row['unit_dept'] ?? '';
             <div class="page-header">
               <h3 class="page-title" style="color:#00f2ff">Armourer Profile Settings</h3>
             </div>
-                <div class="d-flex align-items-center mb-2 mb-md-0">
+                <!-- <div class="d-flex align-items-center mb-2 mb-md-0">
                     <a href="javascript:history.back();" class="btn btn-tactical btn-sm mr-3">
                       <i class="mdi mdi-arrow-left"></i> Back
                     </a>
-                  </div>
+                  </div> -->
             <section class="content">
               <div class="container-fluid">
                 <div class="row justify-content-center">
@@ -146,7 +146,8 @@ $unit_dept    = $row['unit_dept'] ?? '';
                             </table>
                             <div class="mt-4">
                               <button type="button" class="btn btn-tactical" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
-                              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteProfileModal">Decommission Profile</button>
+                              <a href="change-password" class="btn btn-tactical" >Change Password</a>
+                              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteProfileModal">Delete Profile</button>
                             </div>
                           </div>
                         </div>

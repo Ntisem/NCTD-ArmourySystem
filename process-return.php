@@ -61,7 +61,7 @@ if (isset($_POST['update_status'])) {
         $log->execute([$adminID, $fullname, $log_msg, $user_role]);
 
         $pdo->commit();
-        header("Location: booked-firearms.php?status=success");
+        header("Location: booked-firearms?status=success");
         exit();
 
     } catch (Exception $e) {
@@ -69,7 +69,7 @@ if (isset($_POST['update_status'])) {
             $pdo->rollBack();
         }
         // Redirect with error
-        header("Location: booked-firearms.php?status=error");
+        header("Location: booked-firearms?status=error");
         exit();
     }
 }

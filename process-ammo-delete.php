@@ -22,14 +22,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
             $log->execute([$adminID, $adminName, "DELETED_AMMO_ID_" . $id, $role]);
 
             $pdo->commit();
-            header("Location: ammunition.php?status=success");
+            header("Location: ammunition?status=success");
             exit();
         } catch (Exception $e) {
             $pdo->rollBack();
-            header("Location: ammunition.php?status=error&msg=" . urlencode($e->getMessage()));
+            header("Location: ammunition?status=error&msg=" . urlencode($e->getMessage()));
             exit();
         }
     }
 }
-header("Location: ammunition.php?status=error");
+header("Location: ammunition?status=error");
 exit();

@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_weapon'])) {
         $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], $log_action, $_SESSION['user_role']]);
 
         $pdo->commit();
-        header("Location: firearm-names.php?firearm-name=" . urlencode($name) . "&status=success");
+        header("Location: firearm-names?firearm-name=" . urlencode($name) . "&status=success");
         exit();
 
     } catch (Exception $e) {
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_weapon'])) {
             $pdo->rollBack();
         }
         // Redirect with detailed error for debugging
-        header("Location: firearm-names.php?status=error&details=" . urlencode($e->getMessage()));
+        header("Location: firearm-names?status=error&details=" . urlencode($e->getMessage()));
         exit();
     }
 }
