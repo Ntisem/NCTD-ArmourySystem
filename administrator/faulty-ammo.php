@@ -3,7 +3,7 @@ require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
 
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
     header("location: login");
     exit();
 }
@@ -18,7 +18,7 @@ if ($admin_data) {
     $_SESSION['service_no'] = $admin_data['service_no'];
     $_SESSION['rank'] = $admin_data['rank'];
     $_SESSION['adminID'] = $admin_data['adminID'];
-    $_SESSION['armourer_admin_name'] = $admin_data['service_no'] . ' ' . $admin_data['rank'] . ' ' . $admin_data['fullname'];
+    $_SESSION['administrator_admin_name'] = $admin_data['service_no'] . ' ' . $admin_data['rank'] . ' ' . $admin_data['fullname'];
 }
 
 $query = "SELECT * FROM faulty_ammo ORDER BY faulty_ammoID DESC";

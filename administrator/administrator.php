@@ -4,7 +4,7 @@ require_once('functions.php');
 require_once('includes/user_auth.php');
 
 // Access Control
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
     header("location: login");
     exit();
 }
@@ -263,7 +263,7 @@ try {
                                         FROM firearms 
                                         WHERE is_deleted = 0 
                                         GROUP BY firearm_name 
-                                        ORDER BY qty DESC
+                                        ORDER BY qty DESC  LIMIT 12
                                     ");
 
                                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):

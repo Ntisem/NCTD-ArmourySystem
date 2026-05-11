@@ -2,7 +2,7 @@
 require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
     header("location: login");
     exit();
 }
@@ -54,7 +54,7 @@ $a_id   = $_SESSION['adminID'] ?? 0;
                             <h4 class="card-title text-cyan">[REGISTRY_UPLINK]: ADD_NEW_CATEGORY</h4>
                             <form action="functions-add-new-categories.php" method="POST" class="row">
                                 <input type="hidden" name="adminID" value="<?= $a_id ?>">
-                                <input type="hidden" name="armourer_admin_name" value="<?= $u_name ?>">
+                                <input type="hidden" name="administrator_admin_name" value="<?= $u_name ?>">
                                 
                                 <div class="col-md-4">
                                     <label class="small text-muted">MANUFACTURER</label>

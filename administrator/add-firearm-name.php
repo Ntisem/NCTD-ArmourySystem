@@ -3,7 +3,7 @@ require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
 
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
     header("location: login");
     exit();
 }
@@ -65,7 +65,7 @@ $admin_data = $stmtAdmin->fetch();
                               <div class="card-body">
                                 <h6 class="card-title" style="color:var(--neon-amber)">[ ADD_NOMENCLATURE ]</h6>
                                 <form id="inductionForm" method="POST" action="functions-add-new-names.php">
-                                    <input type="hidden" name="armourer_admin_name" value="<?= $admin_data['service_no'].' '.$admin_data['rank'].' '.$admin_data['fullname'] ?>">
+                                    <input type="hidden" name="administrator_admin_name" value="<?= $admin_data['service_no'].' '.$admin_data['rank'].' '.$admin_data['fullname'] ?>">
                                     <input type="hidden" name="adminID" value="<?= $admin_data['adminID']; ?>">
 
                                     <div class="row align-items-end">

@@ -3,7 +3,7 @@ require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
 
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
     header("location: login.php");
     exit();
 }
@@ -119,8 +119,8 @@ $bookings = $stmt_bookings->fetchAll();
                                     <p class="text-muted"><?= htmlspecialchars($officer['rank']) . " | " . htmlspecialchars($officer['officer_service_no']) ?></p>
                                     <hr style="border-color: var(--neon)">
                                     <p><strong>Dept:</strong> <?= htmlspecialchars($officer['dept_unit']) ?></p>
-                                    <p><strong>Phone:</strong> <?= htmlspecialchars($officer['phone']) ?></p>
-                                    <p><strong>Email:</strong> <?= htmlspecialchars($officer['email']) ?></p>
+                                    <p><strong>Phone:</strong> <?= htmlspecialchars($officer['phone_no']) ?></p>
+                                    <p><strong>Email:</strong> <?= htmlspecialchars($officer['officer_email']) ?></p>
                                 </div>
                             </div>
                         </div>

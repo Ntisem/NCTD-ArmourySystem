@@ -1,6 +1,6 @@
 <?php
 require_once('connections/connect-db.php');
-require_once('includes/redirect.php');
+session_start();
 
 if (isset($_POST['username'])) {
     $username = trim($_POST['username']);
@@ -13,30 +13,46 @@ if (isset($_POST['username'])) {
         $row = $stmt->fetch();
 
         if ($row) {
+            // Standard Session Establishment
             $_SESSION['username'] = $row['username'];
             $_SESSION['IS_LOGIN'] = 'yes';
             $_SESSION['fullname'] = $row['fullname'];
             $_SESSION['rank'] = $row['rank'];
             $_SESSION['user_role'] = $row['user_role'];
+            $_SESSION['last_activity'] = time(); // Initialize activity timer
             
+            // Log Login Activity
             $log_stmt = $pdo->prepare("INSERT INTO `login_activity`(`admin_username`, `user_role`, `last_login_time`) VALUES (?, ?, ?)");
             $log_stmt->execute([$row['username'], $row['user_role'], $last_login_time]);
 
-            $_SESSION['status'] = "UPLINK ESTABLISHED: WELCOME " . strtoupper($row['rank']) . " " . strtoupper($row['fullname']);
-            $_SESSION['status_code'] = "success";
+            // REDIRECT LOGIC
+            $redirect_url = $_SESSION['redirect_url'] ?? "";
+            $redirect_time = $_SESSION['redirect_timestamp'] ?? 0;
+            $current_time = time();
+            $time_diff = ($current_time - $redirect_time) / 60; // Difference in minutes
 
-            $redirect_link = $_REQUEST['page_url'] ?? "";
-            $location = ($row['user_role'] == "Administrator") 
-                ? (($redirect_link == "") ? "administrator/index" : $redirect_link)
-                : (($redirect_link == "") ? "armourer" : $redirect_link);
-            
+            /**
+             * CONDITION: 
+             * 1. Within 1-60 mins -> Return to last page
+             * 2. Over 60 mins -> Default Dashboard (administrator.php)
+             */
+            if (!empty($redirect_url) && $time_diff >= 1 && $time_diff <= 60) {
+                $location = $redirect_url;
+                $_SESSION['status'] = "UPLINK_RESTORED: RETURNING_TO_STATION";
+            } else {
+                $location = "administrator";
+                $_SESSION['status'] = "UPLINK_ESTABLISHED: WELCOME " . strtoupper($row['rank']);
+            }
+
+            $_SESSION['status_code'] = "success";
             $_SESSION['redirect_to'] = $location;
+
         } else {
-            $_SESSION['status'] = "CRITICAL: AUTHENTICATION FAILURE - INVALID CREDENTIALS";
+            $_SESSION['status'] = "ACCESS_DENIED: INVALID_CREDENTIALS";
             $_SESSION['status_code'] = "error";
         }
     } catch (PDOException $e) {
-        $_SESSION['status'] = "SYS_ERR: " . strtoupper($e->getMessage());
+        $_SESSION['status'] = "SYSTEM_ERROR: " . $e->getMessage();
         $_SESSION['status_code'] = "error";
     }
 }
@@ -46,12 +62,11 @@ if (isset($_POST['username'])) {
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>TERMINAL LOGIN | VERTEX OS</title>
+    <title>TERMINAL LOGIN | NCTD-ARMOURY SYSTEM </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="plugins/icon-kit/dist/css/iconkit.min.css">
-    <link rel="shortcut icon" href="assets/images/favicon.png" />
-    
+    <link rel="shortcut icon" href="assets/images/favicon.png"/>
     <style>
         :root {
             --neon-cyan: #00f2ff;
@@ -66,6 +81,7 @@ if (isset($_POST['username'])) {
             font-family: 'JetBrains Mono', monospace;
             margin: 0;
             overflow: hidden;
+
         }
 
         #matrix-canvas {
@@ -129,8 +145,28 @@ if (isset($_POST['username'])) {
         }
         .top-right { top: 10px; right: 20px; }
         .bottom-left { bottom: 10px; left: 20px; }
+        .recovery-link {
+            color: #fff;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 10px;
+        }
 
+        .recovery-link:hover {
+            color: var(--neon-cyan ); /* Neon blue glow on hover */
+            text-shadow: 0 0 10px var(--neon);
+            text-decoration: none;
+        }
 
+        /* Ensure the card has enough space for the link */
+        .auth-form-light {
+            padding-bottom: 40px !important;
+        }
         .btn-initialize {
             width: 100%;
             background: var(--glass-cyan);
@@ -181,7 +217,7 @@ if (isset($_POST['username'])) {
                 <img src="assets/images/gps_logo_blue.png" alt="GPS" width="70">
             </div>
             <h3>NCTD ARMOURY SYSTEM</h3>
-             <h3>USER ACCESS PORTAL</h3>
+            <h3>USER ACCESS PORTAL</h3>
             <form method="POST" action="" id="login-form">
                 <div class="input-box">
                     <i class="ik ik-terminal" style="position:absolute; left:0; top:12px; color:var(--neon-cyan)"></i>
@@ -195,7 +231,11 @@ if (isset($_POST['username'])) {
                 <button class="btn-initialize" type="submit" id="btn-submit">
                     [ INITIALIZE UPLINK ]
                 </button>
-
+                <!-- <div class="mt-4 text-center">
+                    <a href="forgot-password.php" class="recovery-link">
+                        <i class="mdi mdi-security-network mr-1"></i> [ FORGOT PASSWORD ]
+                    </a>
+                </div> -->
                 <div id="sweep-container">
                     <div class="sweep-label">
                         <span>SECURITY_SWEEP_IN_PROGRESS...</span>
@@ -215,6 +255,17 @@ if (isset($_POST['username'])) {
         </div>
     </div>
 
+        <script>
+            // Real-Time System Clock
+            function updateClock() {
+                const now = new Date();
+                const utcTime = now.toUTCString().split(' ')[4];
+                document.getElementById('system-clock').textContent = utcTime + " UTC";
+            }
+            setInterval(updateClock, 1000);
+            updateClock(); // Initial call to set clock immediately
+            
+    </script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
         // Matrix Rain

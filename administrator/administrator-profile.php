@@ -38,7 +38,7 @@ $unit_dept    = $row['unit_dept'] ?? '';
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - ARMOURER PROFILE</title>
+    <title>GPS ARMOURY SYSTEM - administrator PROFILE</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="dist/css/theme.min.css">
@@ -94,13 +94,13 @@ $unit_dept    = $row['unit_dept'] ?? '';
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title" style="color:#00f2ff">Armourer Profile Settings</h3>
+              <h3 class="page-title" style="color:#00f2ff">administrator Profile Settings</h3>
             </div>
-                <div class="d-flex align-items-center mb-2 mb-md-0">
+                <!-- <div class="d-flex align-items-center mb-2 mb-md-0">
                     <a href="javascript:history.back();" class="btn btn-tactical btn-sm mr-3">
                       <i class="mdi mdi-arrow-left"></i> Back
                     </a>
-                  </div>
+                  </div> -->
             <section class="content">
               <div class="container-fluid">
                 <div class="row justify-content-center">
@@ -109,7 +109,7 @@ $unit_dept    = $row['unit_dept'] ?? '';
                       <div class="card-body">
                         <div class="row">
                           <div class="col-md-4 text-center">
-                            <img src="assets/images/armourer_images/<?php echo htmlspecialchars($profile_image ?: 'default.png'); ?>" alt="Profile" class="img-profile mb-3">
+                            <img src="assets/images/administrator_images/<?php echo htmlspecialchars($profile_image ?: 'default.png'); ?>" alt="Profile" class="img-profile mb-3">
                             <h4 style="color:#00f2ff;"><?php echo htmlspecialchars($fullname); ?></h4>
                             <p class="text-muted"><?php echo htmlspecialchars($user_role); ?></p>
                           </div>
@@ -146,7 +146,8 @@ $unit_dept    = $row['unit_dept'] ?? '';
                             </table>
                             <div class="mt-4">
                               <button type="button" class="btn btn-tactical" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
-                              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteProfileModal">Decommission Profile</button>
+                              <a href="change-password" class="btn btn-tactical" >Change Password</a>
+                              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteProfileModal">Delete Profile</button>
                             </div>
                           </div>
                         </div>

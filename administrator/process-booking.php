@@ -33,11 +33,11 @@ if (isset($_POST['booking_firearm'])) {
         }
 
         $pdo->commit();
-        header("Location: booking.php?status=success");
+        header("Location: booking?status=success");
         exit();
     } catch (Exception $e) {
         $pdo->rollBack();
-        header("Location: booking.php?status=error");
+        header("Location: booking?status=error");
         exit();
     }
 }

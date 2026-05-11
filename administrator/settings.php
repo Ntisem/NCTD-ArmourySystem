@@ -4,7 +4,7 @@ require_once('includes/user_auth.php');
  ?>
    
    <?php
-  if(!isset($_SESSION["username"]) && ($_SESSION['user_role'] == "Armourer")) {
+  if(!isset($_SESSION["username"]) && ($_SESSION['user_role'] == "Administrator")) {
   // header("location: login");
   // exit();
   ?>
@@ -170,7 +170,7 @@ tr th{
                         echo
                         $output .= '
                        <tr>
-                      <td>Armourer:&nbsp;&nbsp;&nbsp;&nbsp;<strong style="color:orange">'.$row['service_no'].' '.$row['rank'].' '.$row['fullname'].'</strong></td>
+                      <td>Administrator:&nbsp;&nbsp;&nbsp;&nbsp;<strong style="color:orange">'.$row['service_no'].' '.$row['rank'].' '.$row['fullname'].'</strong></td>
                     </tr>
                     <tr>
                       <td><img src="./administrator/assets/images/profile_images/avatar_placeholder.png" alt="" style="height: 250px;width:250px"></td>
@@ -217,7 +217,7 @@ tr th{
                       echo
                       $output .= '
                      <tr>
-                      <td>Armourer:&nbsp;&nbsp;&nbsp;&nbsp;<strong style="color:orange">'.$row['service_no'].' '.$row['rank'].' '.$row['fullname'].'</strong> </td>
+                      <td>Administrator:&nbsp;&nbsp;&nbsp;&nbsp;<strong style="color:orange">'.$row['service_no'].' '.$row['rank'].' '.$row['fullname'].'</strong> </td>
                     </tr>
                     <tr>
                       <td><img src="./administrator/assets/images/profile_images/'.$row['profile_image'].'" alt="" style="height: 250px;width:250px"></td>

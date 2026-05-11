@@ -37,11 +37,11 @@ try {
     }
 
     $pdo->commit();
-    header("Location: daily-logs.php?status=success&moved=" . $moved_count);
+    header("Location: daily-logs?status=success&moved=" . $moved_count);
     exit();
 
 } catch (Exception $e) {
     $pdo->rollBack();
-    header("Location: daily-logs.php?status=error&msg=" . urlencode($e->getMessage()));
+    header("Location: daily-logs?status=error&msg=" . urlencode($e->getMessage()));
     exit();
 }

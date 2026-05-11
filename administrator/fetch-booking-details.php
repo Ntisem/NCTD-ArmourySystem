@@ -12,7 +12,7 @@ if(isset($_GET['id'])) {
             <div class="col-md-6 border-right border-info">
                 <h6 class="text-info small">01_OFFICER_INTEL</h6>
                 <p><b>NAME:</b> '.$b['to_officer'].'</p>
-                <p><b>ISSUER:</b> '.$b['armourer_issuer'].'</p>
+                <p><b>ISSUER:</b> '.$b['administrator_issuer'].'</p>
                 <p><b>TIME:</b> '.$b['booking_time'].'</p>
                 <p><b>DUTY LOC:</b> '.$b['duty_location'].'</p>
             </div>

@@ -1,93 +1,52 @@
-
-<?php  require_once('connections/connect-db.php');
-       require_once "controllerUserData.php";
+<?php
+session_start();
 ?>
-<!doctype html>
-<html class="no-js" lang="en">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Forgot Password | GPS ARMORY SYSTEM</title>
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="icon" href="assets/images/favicon.png" type="image/x-icon" />
-
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
-
-    <link rel="stylesheet" href="plugins/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="plugins/ionicons/dist/css/ionicons.min.css">
-    <link rel="stylesheet" href="plugins/icon-kit/dist/css/iconkit.min.css">
-    <link rel="stylesheet" href="plugins/perfect-scrollbar/css/perfect-scrollbar.css">
-    <link rel="stylesheet" href="dist/css/theme.min.css">
-    <script src="src/js/vendor/modernizr-2.8.3.min.js"></script>
+    <title>RECOVERY_TERMINAL | PASSWORD_RESET</title>
+    <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;500&display=swap" rel="stylesheet">
+   <link rel="shortcut icon" href="assets/images/favicon.png" />
+   <style>
+        :root { --neon: #00f2ff; --bg-deep: #05070a; --card-bg: #0d1117; --danger: #ff3e3e; }
+        body { background: var(--bg-deep); font-family: 'Roboto Mono', monospace; color: #c0c5ce; height: 100vh; display: flex; align-items: center; }
+        .recovery-card { background: var(--card-bg) !important; border: 1px solid var(--neon); width: 100%; max-width: 450px; margin: auto; padding: 30px; box-shadow: 0 0 20px rgba(0, 242, 255, 0.1); }
+        .form-control { background: #000 !important; color: var(--neon) !important; border: 1px solid #333 !important; border-radius: 0; }
+        .btn-comm { background: transparent; border: 1px solid var(--neon); color: var(--neon); font-family: 'Orbitron'; width: 100%; padding: 12px; transition: 0.4s; }
+        .btn-comm:hover { background: var(--neon); color: #000; }
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
+        .t-toast { background: rgba(0,0,0,0.9); border-left: 5px solid var(--neon); padding: 15px; margin-bottom: 10px; font-size: 12px; }
+    </style>
 </head>
-
 <body>
-    <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-        <div class="auth-wrapper">
-        <div class="container-fluid h-100">
-            <div class="row flex-row h-100 bg-white">
-                <div class="col-xl-8 col-lg-6 col-md-5 p-0 d-md-block d-lg-block d-sm-none d-none">
-                <div class="lavalite-bg" style="background-image: url('assets/images/auth/login_gps_officer.jpg')">
-                        <div class="lavalite-overlay"></div>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-6 col-md-7 my-auto p-0">
-                    <div class="authentication-form mx-auto">
-                        <div class="logo-centered">
-                        <a href="#"><img src="assets/images/gps_logo_blue.png" alt=""></a> 
-                        </div>
-                        <h3>Forgot Password</h3>
-                        <p>Enter your email address</p>
-                        <?php
-                        if(count($errors) > 0){
-                            ?>
-                            <div class="alert alert-danger text-center">
-                                <?php 
-                                    foreach($errors as $error){
-                                        echo $error;
-                                    }
-                                ?>
-                            </div>
-                            <?php
-                        }
-                      ?>
-                        
-                        <form method="POST" action="forgot-password.php"  autocomplete="">
-                            <div class="form-group">
-                                <input type="email" name="email" class="form-control" placeholder="Your email address" required="">
-                                <!-- <input type="hidden" name="token" value=""> -->
-                                <i class="ik ik-mail"></i>
-                            </div>
-                            <div class="sign-btn text-center">
-                                <button type="submit" name="forgot_check_email" class="btn" style="background-color: #ffa600; color:#fff;">Submit Email</button>
-                                <a class="btn btn-link ml-2" href="login.php">Cancel</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+    <div id="toast-container"></div>
+    <div class="recovery-card">
+        <h4 style="font-family: 'Orbitron'; text-align: center;">[ ACCESS_RECOVERY ]</h4>
+        <p style="font-size: 11px; color: #666; text-align: center;" class="mb-4">ENTER_REGISTERED_EMAIL_TO_RECEIVE_RESET_TOKEN</p>
+        
+        <form action="process-forgot-password.php" method="POST">
+            <div class="form-group">
+                <label style="font-size: 10px; color: var(--neon);">IDENTIFIED_EMAIL_NODE</label>
+                <input type="email" name="email" class="form-control" placeholder="admin@nctd.gov.gh" required>
             </div>
-        </div>
+            <button type="submit" name="recover_access" class="btn-comm mt-3">INITIATE_RECOVERY</button>
+            <div class="text-center mt-4">
+                <a href="login" style="color: red; font-weight: bold; font-size: 11px;  text-decoration: none;">RETURN_TO_LOGIN</a>
+            </div>
+        </form>
     </div>
-   
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <?php if(isset($_SESSION['status'])): ?>
     <script>
-    window.jQuery || document.write('<script src="src/js/vendor/jquery-3.3.1.min.js"><\/script>')
+        const msg = "<?= $_SESSION['status'] ?>";
+        const type = "<?= $_SESSION['status_code'] ?>";
+        $(`<div class="t-toast" style="border-color: ${type === 'error' ? '#ff3e3e' : '#00f2ff'}">[SIGNAL]: ${msg}</div>`)
+            .appendTo('#toast-container').delay(5000).fadeOut();
     </script>
-    <script src="plugins/popper.js/dist/umd/popper.min.js"></script>
-    <script src="plugins/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="plugins/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
-    <script src="plugins/screenfull/dist/screenfull.js"></script>
-    <script src="dist/js/theme.js"></script>
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <?php  require_once('includes/google-analytics.php');?>
+    <?php unset($_SESSION['status']); unset($_SESSION['status_code']); endif; ?>
 </body>
-
 </html>

@@ -4,7 +4,7 @@ require_once('functions.php');
 require_once('includes/user_auth.php');
 
 // 1. Authorization Check
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
     header("location: login");
     exit();
 }
@@ -19,7 +19,7 @@ $admin_data = $stmt->fetch();
 if ($admin_data) {
     $_SESSION['adminID'] = $admin_data['adminID'];
     $_SESSION['fullname'] = $admin_data['service_no'] . ' ' . $admin_data['rank'] . ' ' . $admin_data['fullname'];
-    $_SESSION['user_role'] = 'Armourer'; // Ensure this matches your login logic
+    $_SESSION['user_role'] = 'administrator'; // Ensure this matches your login logic
 }
 
 // 3. Handle Weapon Selection

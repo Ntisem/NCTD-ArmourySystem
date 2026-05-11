@@ -87,11 +87,11 @@ if (isset($_POST['update_officer'])) {
         $log->execute([$admin['adminID'], $admin['fullname'], $log_action, $_SESSION['user_role']]);
 
         $pdo->commit();
-        header("Location: officers-list.php?status=success");
+        header("Location: officers-list?status=success");
         exit();
     } catch (Exception $e) {
         $pdo->rollBack();
-        header("Location: officers-list.php?status=error");
+        header("Location: officers-list?status=error");
         exit();
     }
 }
@@ -108,11 +108,11 @@ if (isset($_POST['delete_officer'])) {
         $log->execute([$admin['adminID'], $admin['fullname'], "DELETED_OFFICER_ID_" . $id, $_SESSION['user_role']]);
 
         $pdo->commit();
-        header("Location: officers-list.php?status=success");
+        header("Location: officers-list?status=success");
         exit();
     } catch (Exception $e) {
         $pdo->rollBack();
-        header("Location: officers-list.php?status=error");
+        header("Location: officers-list?status=error");
         exit();
     }
 }
@@ -204,19 +204,19 @@ if (isset($_GET['view_id'])) {
                         <div class="dropdown-menu dropdown-menu-right landscape-dropdown-menu">
                             <h6 class="dropdown-header text-info mb-3">[ PERSONNEL_HIERARCHY_LEVELS ]</h6>
                             <div class="tactical-grid">
-                                <a href="officers-list.php?Rank=COP" class="dropdown-item">COP</a>
-                                <a href="officers-list.php?Rank=DCOP" class="dropdown-item">DCOP</a>
-                                <a href="officers-list.php?Rank=ACP" class="dropdown-item">ACP</a>
-                                <a href="officers-list.php?Rank=C/SUPT" class="dropdown-item">C/SUPT</a>
-                                <a href="officers-list.php?Rank=SUPT" class="dropdown-item">SUPT</a>
-                                <a href="officers-list.php?Rank=DSP" class="dropdown-item">DSP</a>
-                                <a href="officers-list.php?Rank=ASP" class="dropdown-item">ASP</a>
-                                <a href="officers-list.php?Rank=C/INSPR" class="dropdown-item">C/INSPR</a>
-                                <a href="officers-list.php?Rank=INSPR" class="dropdown-item">INSPECTOR</a>
-                                <a href="officers-list.php?Rank=SGT" class="dropdown-item">SERGEANT</a>
-                                <a href="officers-list.php?Rank=CPL" class="dropdown-item">CORPORAL</a>
-                                <a href="officers-list.php?Rank=L/CPL" class="dropdown-item">L/CORPORAL</a>
-                                <a href="officers-list.php?Rank=CONST" class="dropdown-item">CONSTABLE</a>
+                                <a href="officers-list?Rank=COP" class="dropdown-item">COP</a>
+                                <a href="officers-list?Rank=DCOP" class="dropdown-item">DCOP</a>
+                                <a href="officers-list?Rank=ACP" class="dropdown-item">ACP</a>
+                                <a href="officers-list?Rank=C/SUPT" class="dropdown-item">C/SUPT</a>
+                                <a href="officers-list?Rank=SUPT" class="dropdown-item">SUPT</a>
+                                <a href="officers-list?Rank=DSP" class="dropdown-item">DSP</a>
+                                <a href="officers-list?Rank=ASP" class="dropdown-item">ASP</a>
+                                <a href="officers-list?Rank=C/INSPR" class="dropdown-item">C/INSPR</a>
+                                <a href="officers-list?Rank=INSPR" class="dropdown-item">INSPECTOR</a>
+                                <a href="officers-list?Rank=SGT" class="dropdown-item">SERGEANT</a>
+                                <a href="officers-list?Rank=CPL" class="dropdown-item">CORPORAL</a>
+                                <a href="officers-list?Rank=L/CPL" class="dropdown-item">L/CORPORAL</a>
+                                <a href="officers-list?Rank=CONST" class="dropdown-item">CONSTABLE</a>
                             </div>
                         </div>
                     </div>
@@ -270,8 +270,7 @@ if (isset($_GET['view_id'])) {
                                 <td>
                                     <button class="btn btn-tactical btn-sm" onclick="viewDetails(<?php echo $row['officerID']; ?>)"><i class="mdi mdi-eye"></i></button>
                                     <button class="btn btn-tactical btn-sm" onclick='openEditModal(<?php echo json_encode($row); ?>)'><i class="mdi mdi-pencil"></i></button>
-                                    <a href="officer-details.php?officerID=<?php echo $row['officerID']; ?>" class="btn btn-tactical btn-sm"><i class="mdi mdi-radar"></i></a>
-                                    <button class="btn btn-danger-tactical btn-sm" onclick="confirmDelete(<?php echo $row['officerID']; ?>)"><i class="mdi mdi-delete"></i></button>
+                                    <a href="officer-details?officerID=<?php echo $row['officerID']; ?>" class="btn btn-tactical btn-sm"><i class="mdi mdi-radar"></i></a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -326,7 +325,7 @@ if (isset($_GET['view_id'])) {
             </form>
         </div>
     </div>
-
+ <?php require_once('includes/footer.php'); ?>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

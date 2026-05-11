@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (in_array($Extension, $allowed)) {
                 $newFileName = md5(time() . $FileName) . '.' . $Extension;
-                $uploadPath  = 'assets/images/armourer_images/';
+                $uploadPath  = 'assets/images/administrator_images/';
 
                 if (!is_dir($uploadPath)) {
                     mkdir($uploadPath, 0755, true);
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $dest_path = $uploadPath . $newFileName;
 
-                if (move_uploaded_file($TmpPath, $dest_path)) {
+                if (move_uploaded_file($fileTmpPath, $dest_path)) {
                     $profile_image = $newFileName;
 
                     // Remove the old image if it's not the default image
@@ -84,11 +84,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['username'] = $username;
             }
 
-            header("location: armourer-profile");
+            header("location: administrator-profile");
             exit();
         } catch (PDOException $e) {
             $_SESSION['error'] = "Error updating profile: " . $e->getMessage();
-            header("location: armourer-profile");
+            header("location: administrator-profile");
             exit();
         }
 
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($row) {
                 $current_image = $row['profile_image'];
-                $uploadPath = 'assets/images/armourer_images/';
+                $uploadPath = 'assets/images/administrator_images/';
                 if ($current_image && $current_image !== 'default.png' && file_exists($uploadPath . $current_image)) {
                     unlink($uploadPath . $current_image);
                 }
@@ -123,15 +123,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         } catch (PDOException $e) {
             $_SESSION['error'] = "Error decommissioning profile: " . $e->getMessage();
-            header("location: armourer-profile");
+            header("location: administrator-profile");
             exit();
         }
     } else {
         $_SESSION['error'] = "Invalid action.";
-        header("location: armourer-profile");
+        header("location: administrator-profile");
         exit();
     }
 } else {
-    header("location: armourer-profile");
+    header("location: administrator-profile");
     exit();
 }

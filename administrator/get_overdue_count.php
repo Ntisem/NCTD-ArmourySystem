@@ -2,8 +2,8 @@
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
-// Security Gate: Only Armourers or Admins should see this data
-if($_SESSION["user_role"] != 'Armourer' && $_SESSION["user_role"] != 'SuperAdmin') {
+// Security Gate: Only administrators or Admins should see this data
+if($_SESSION["user_role"] != 'administrator' && $_SESSION["user_role"] != 'SuperAdmin') {
     exit('0');
 }
 

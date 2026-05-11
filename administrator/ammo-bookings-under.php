@@ -8,7 +8,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='administrator') {
         header("location: login");
         exit();
     }
@@ -28,14 +28,14 @@ require_once('includes/user_auth.php');
    $_SESSION['service_no']=$service_no;
    $admin_rank =$row['rank'];
    $_SESSION['rank']=$admin_rank;
-   $adminID_armourerID =$row['adminID'];
-   $_SESSION['adminID']=$adminID_armourerID;    
-   $_SESSION['adminID_armourerID']=$adminID_armourerID; 
-   $admin_armourer_user_role = $row['user_role'];
-   $_SESSION['user_role'] =  $admin_armourer_user_role;   
-   $_SESSION['admin_armourer_user_role'] =  $admin_armourer_user_role;                
-   $armourer_admin_name  =  $service_no.' '.$admin_rank.' '.$fullname;
-   $_SESSION['armourer_admin_name'] = $armourer_admin_name;
+   $adminID_administratorID =$row['adminID'];
+   $_SESSION['adminID']=$adminID_administratorID;    
+   $_SESSION['adminID_administratorID']=$adminID_administratorID; 
+   $admin_administrator_user_role = $row['user_role'];
+   $_SESSION['user_role'] =  $admin_administrator_user_role;   
+   $_SESSION['admin_administrator_user_role'] =  $admin_administrator_user_role;                
+   $administrator_admin_name  =  $service_no.' '.$admin_rank.' '.$fullname;
+   $_SESSION['administrator_admin_name'] = $administrator_admin_name;
        }
 
 ?>
@@ -153,7 +153,7 @@ require_once('includes/user_auth.php');
                               data-toggle="modal" class=" btn-outline-warning" style="padding-top:6px;text-decoration:none;">[ '.$row['ammo_returns'].' ]</a>         
                               </td>
                               <td> '.$row['duty_type'].' @ '.$row['duty_location'].' </td>
-                              <td> '.$row['armourer_issuer'].' </td>
+                              <td> '.$row['administrator_issuer'].' </td>
                               <td> 
                               <a href="update-ammo-booking?firearm-booking-ticket='.$row['book_ammoID'].'><i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>
                            
@@ -175,7 +175,7 @@ require_once('includes/user_auth.php');
                           <a href="#" class=" btn-outline-success" style="padding-top:6px;text-decoration:none;">[ '.$row['ammo_returns'].' ]</a>   
                           </td>
                             <td> '.$row['duty_type'].' @ '.$row['duty_location'].' </td>
-                            <td> '.$row['armourer_issuer'].' </td>
+                            <td> '.$row['administrator_issuer'].' </td>
                           <td> 
                           <a href="update-ammo-booking?firearm-booking-ticket='.$row['book_ammoID'].'">
                           <i class="mdi mdi-playlist-edit f-16 mr-15 text-green"></i></a>

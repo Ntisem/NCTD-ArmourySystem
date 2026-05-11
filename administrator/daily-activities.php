@@ -7,7 +7,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='administrator') {
         header("location: login");
         exit();
     }
@@ -109,7 +109,7 @@ require_once('includes/user_auth.php');
                     while($row = mysqli_fetch_assoc($result)) {
                         echo "
                         <tr>
-                        <td>".$row['armourer_admin_name']."</td>
+                        <td>".$row['administrator_admin_name']."</td>
                         <td>".$row['datetime']."</td>
                         <td>".$row['user_role']."</td>
                         <td>".$row['action_taken']."</td>

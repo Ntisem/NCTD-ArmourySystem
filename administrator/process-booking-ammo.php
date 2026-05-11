@@ -48,14 +48,14 @@ if (isset($_POST['booking_ammo'])) {
         $log->execute([$adminID, $_SESSION['fullname'], $action, $_SESSION['user_role']]);
 
         $pdo->commit();
-        header("Location: booking-ammo.php?status=success");
+        header("Location: booking-ammo?status=success");
         exit();
 
     } catch (Exception $e) {
         $pdo->rollBack();
         // Log actual error for the developer (you can check your server error logs)
         error_log("Database Error: " . $e->getMessage());
-        header("Location: booking-ammo.php?status=error");
+        header("Location: booking-ammo?status=error");
         exit();
     }
 }

@@ -15,21 +15,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
 
             // 2. Audit Log - Using fallback values to prevent errors
             $adminID = $_SESSION['adminID'] ?? 0;
-            $adminName = $_SESSION['fullname'] ?? 'Unknown Armourer';
-            $role = $_SESSION['user_role'] ?? 'Armourer';
+            $adminName = $_SESSION['fullname'] ?? 'Unknown administrator';
+            $role = $_SESSION['user_role'] ?? 'administrator';
 
             $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
             $log->execute([$adminID, $adminName, "DELETED_AMMO_ID_" . $id, $role]);
 
             $pdo->commit();
-            header("Location: ammunition.php?status=success");
+            header("Location: ammunition?status=success");
             exit();
         } catch (Exception $e) {
             $pdo->rollBack();
-            header("Location: ammunition.php?status=error&msg=" . urlencode($e->getMessage()));
+            header("Location: ammunition?status=error&msg=" . urlencode($e->getMessage()));
             exit();
         }
     }
 }
-header("Location: ammunition.php?status=error");
+header("Location: ammunition?status=error");
 exit();

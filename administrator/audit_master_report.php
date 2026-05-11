@@ -9,10 +9,10 @@ require_once('includes/user_auth.php');
     <script>
         window.onload = function() {
             // Automatically trigger the PDF in a new tab
-            window.open('audit_engine.php?type=master', '_blank');
+            window.open('audit_engine?type=master', '_blank');
             // Return user to dashboard after 1 second
             setTimeout(function() {
-                window.location.href = 'armourer.php';
+                window.location.href = 'administrator';
             }, 1000);
         };
     </script>

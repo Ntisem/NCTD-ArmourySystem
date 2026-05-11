@@ -7,7 +7,7 @@ require_once('includes/user_auth.php');
  * Refactored from MySQLi to PDO for enhanced security and performance.
  */
 
-if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
     header("location: login?status=unauthorized");
     exit();
 }

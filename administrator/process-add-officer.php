@@ -3,8 +3,8 @@ require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
 // Verify that an Armourer is logged in
-if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
-    header("location: login.php");
+if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
+    header("location: login");
     exit();
 }
 
@@ -98,18 +98,18 @@ if (isset($_POST['add_officer'])) {
 
         // 5. Commit and Redirect
         $pdo->commit();
-        header("Location: officers-list.php?status=success");
+        header("Location: officers-list?status=success");
         exit();
 
     } catch (Exception $e) {
         $pdo->rollBack();
         // Redirect back with an error message
-        header("Location: officers-list.php?status=error&message=" . urlencode($e->getMessage()));
+        header("Location: officers-list?status=error&message=" . urlencode($e->getMessage()));
         exit();
     }
 } else {
     // If accessed directly without form submission
-    header("Location: officers-list.php");
+    header("Location: officers-list");
     exit();
 }
 ?>

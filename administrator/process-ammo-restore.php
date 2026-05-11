@@ -8,8 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("UPDATE ammunitions SET is_deleted = 0 WHERE ammoID = ?");
         $stmt->execute([$id]);
         
-        header("Location: ammo-archive.php?status=success");
+        header("Location: ammo-archive?status=success");
     } catch (Exception $e) {
-        header("Location: ammo-archive.php?status=error");
+        header("Location: ammo-archive?status=error");
     }
 }

@@ -4,7 +4,7 @@ require_once('functions.php');
 require_once('includes/user_auth.php');
 
 // Access Control
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
     header("location: login");
     exit();
 }
@@ -234,7 +234,7 @@ $bookings = $stmt->fetchAll();
                         </select>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="text-muted small">ARMOURER_NOTES</label>
+                        <label class="text-muted small">administrator_NOTES</label>
                         <textarea name="remarks" class="form-control bg-black text-white border-secondary" rows="3"></textarea>
                     </div>
                     <div class="mt-4 d-flex justify-content-between">

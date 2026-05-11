@@ -2,8 +2,8 @@
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
-// Ensure only authorised Armourer is interacting with the script
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+// Ensure only authorised Administrator is interacting with the script
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
     header("location: login");
     exit();
 }

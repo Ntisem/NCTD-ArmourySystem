@@ -5,7 +5,7 @@ if (ob_get_length()) ob_end_clean();
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
-if($_SESSION["user_role"] != 'Armourer' && $_SESSION["user_role"] != 'SuperAdmin') {
+if($_SESSION["user_role"] != 'administrator' && $_SESSION["user_role"] != 'SuperAdmin') {
     die("UNAUTHORIZED_ACCESS_EXCEPTION: AUDIT_CLEARANCE_REQUIRED");
 }
 

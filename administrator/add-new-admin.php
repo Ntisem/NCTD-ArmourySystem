@@ -3,7 +3,7 @@ require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
 
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] != 'Armourer') {
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] != 'Administrator') {
     header("location: login");
     exit();
 }
@@ -79,7 +79,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] != 'Armourer') {
                 <div class="card">
                   <div class="card-body">
                     <p class="card-description" style="color:#00f2ff">Personal Information</p>
-                    <form method="POST" action="process-armourer.php" enctype="multipart/form-data" class="forms-sample">
+                    <form method="POST" action="process-administrator.php" enctype="multipart/form-data" class="forms-sample">
                       <input type="hidden" name="action" value="add">
                       
                       <div class="form-group">

@@ -113,7 +113,7 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
                                             <th>TYPE</th>
                                             <th>CALIBER/CAP</th>
                                             <th>REGISTRY_DATE</th>
-                                            <th class="text-center">OPERATIONS</th>
+                                            <th class="text-center">ACTIONS</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -126,14 +126,14 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
                                         ?>
                                         <tr>
                                             <td><?= $i++ ?></td>
-                                            <td><a href="firearm-details.php?id=<?= $row['firearmID'] ?>" class="clickable-asset font-weight-bold"><?= $row['firearm_serial_no'] ?></a></td>
-                                            <td><a href="firearm-details.php?id=<?= $row['firearmID'] ?>" class="clickable-asset"><?= $row['firearm_name'] ?></a></td>
+                                            <td><a href="firearm-details?id=<?= $row['firearmID'] ?>" class="clickable-asset font-weight-bold"><?= $row['firearm_serial_no'] ?></a></td>
+                                            <td><a href="firearm-details?id=<?= $row['firearmID'] ?>" class="clickable-asset"><?= $row['firearm_name'] ?></a></td>
                                             <td><?= $row['firearm_type'] ?></td>
                                             <td><span class="badge border border-info text-info">[<?= $row['firearm_caliber'] ?>] / [<?= $row['firearm_capacity'] ?>]</span></td>
                                             <td class="small"><?= $row['datetime'] ?></td>
                                             <td class="text-center">
                                                 <button class="btn btn-xs btn-outline-info" onclick='openEditModal(<?= json_encode($row) ?>)'><i class="mdi mdi-pencil"></i></button>
-                                                <button class="btn btn-xs btn-outline-danger" onclick="openDeleteModal('<?= $row['firearmID'] ?>', '<?= $row['firearm_serial_no'] ?>')"><i class="mdi mdi-delete-forever"></i></button>
+                                                
                                             </td>
                                         </tr>
                                         <?php endwhile; ?>
@@ -236,8 +236,9 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
             </form>
         </div>
     </div>
-</div>
-
+    </div>
+    
+ <?php require_once('includes/footer.php'); ?>
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>

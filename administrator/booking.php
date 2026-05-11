@@ -67,9 +67,9 @@ $admin = $stmt->fetch();
                                             <input type="hidden" name="officerID" id="officerID">
                                         </div>
                                         <div class="col-md-6">
-                                            <label>ISSUING_ARMOURER</label>
+                                            <label>ISSUING_administrator</label>
                                             <input type="text" class="form-control" value="<?php echo $admin['fullname']; ?>" readonly>
-                                            <input type="hidden" name="armourer_issuer" value="<?php echo $admin['fullname']; ?>">
+                                            <input type="hidden" name="administrator_issuer" value="<?php echo $admin['fullname']; ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -166,7 +166,7 @@ $admin = $stmt->fetch();
             </div>
         </div>
     </div>
-
+<?php require_once('includes/footer.php'); ?>
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>

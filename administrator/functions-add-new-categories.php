@@ -2,7 +2,7 @@
 require_once('connections/connect-db.php');
 session_start();
 
-if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
     header("location: login?status=unauthorized");
     exit();
 }

@@ -3,8 +3,8 @@ require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
 
-// 1. Authorization Check (Command/Armourer Level Only)
-if(!isset($_SESSION["username"]) || !in_array($_SESSION["user_role"], ['Armourer', 'Admin'])) {
+// 1. Authorization Check (Command/administrator Level Only)
+if(!isset($_SESSION["username"]) || !in_array($_SESSION["user_role"], ['administrator', 'Admin'])) {
     header("location: login");
     exit();
 }
@@ -72,7 +72,7 @@ $logs = $stmt->fetchAll();
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <i class="mdi mdi-account-circle-outline mr-2 text-info"></i>
-                                                <?= htmlspecialchars($log['armourer_admin_name']) ?>
+                                                <?= htmlspecialchars($log['administrator_admin_name']) ?>
                                             </div>
                                         </td>
                                         <td>

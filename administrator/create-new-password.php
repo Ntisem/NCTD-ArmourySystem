@@ -116,10 +116,10 @@ if($rows>0){
                                  $_SESSION['rank']=$admin_rank;
                                  $adminID =$row['adminID'];
                                  $_SESSION['adminID']=$adminID;                           
-                                 $armourer_admin_name  =  $service_no.' '.$admin_rank.' '.$fullname;
-                                 $_SESSION['armourer_admin_name'] = $armourer_admin_name;
+                                 $administrator_admin_name  =  $service_no.' '.$admin_rank.' '.$fullname;
+                                 $_SESSION['administrator_admin_name'] = $administrator_admin_name;
                                }?>      
-                              <input type="hidden" name="armourer_admin_name" class="form-control" id="exampleInputName1" value="<?php echo $service_no.' '.$admin_rank.' '.$fullname ?>">
+                              <input type="hidden" name="administrator_admin_name" class="form-control" id="exampleInputName1" value="<?php echo $service_no.' '.$admin_rank.' '.$fullname ?>">
                               <input type="hidden" name="adminID" class="form-control" id="exampleInputName1" value="<?php echo $adminID; ?>">
                               <input type="hidden" name="user_role" class="form-control" id="exampleInputName1" value="<?php echo $user_role; ?>">                 
                         <?php

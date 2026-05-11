@@ -171,9 +171,7 @@ $bookings = $stmt->fetchAll();
                                                     <button class="btn btn-tactical btn-sm" onclick="openReturnModal(<?= $b['bookingID'] ?>, 'Returned', <?= htmlspecialchars($b['number_of_rounds'] ?? 0) ?>)" title="Return Asset">
                                                         <i class="mdi mdi-undo-variant"></i>
                                                     </button>
-                                                    <button class="btn btn-danger-tactical btn-sm" onclick="confirmArchive(<?= $b['bookingID'] ?>)" title="Archive">
-                                                        <i class="mdi mdi-delete"></i>
-                                                    </button>
+
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

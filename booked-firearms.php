@@ -114,7 +114,7 @@ $bookings = $stmt->fetchAll();
                     <?php if($overdue_count > 0): ?>
                     <div class="alert alert-danger bg-dark text-white mb-4 d-flex justify-content-between align-items-center" style="border-left: 5px solid var(--danger) !important; border-radius:0;">
                         <div><i class="mdi mdi-alert-octagon text-danger mr-2"></i> SIGNAL_ALERT: <?php echo $overdue_count; ?> ASSETS OVERDUE.</div>
-                        <a href="overdue-bookings.php" class="btn btn-sm btn-danger" style="border-radius:0;">INTERCEPT</a>
+                        <a href="overdue-bookings" class="btn btn-sm btn-danger" style="border-radius:0;">INTERCEPT</a>
                     </div>
                     <?php endif; ?>
 
@@ -125,12 +125,12 @@ $bookings = $stmt->fetchAll();
                                     <button class="btn btn-dropdown-tactical" id="weaponBtn">[ SELECT_WEAPON_SYSTEM ]</button>
                                     <div class="dropdown-menu-tactical" id="weaponMenu">
                                         <div class="dropdown-header-full"><small class="text-muted" style="letter-spacing:3px;">ARMORY_STOCKS</small></div>
-                                        <a href="booked-firearms.php" class="dropdown-item-tactical <?= is_null($firearm_name_filter) ? 'dropdown-item-active' : '' ?>">ALL_SYSTEMS_LOG</a>
+                                        <a href="booked-firearms" class="dropdown-item-tactical <?= is_null($firearm_name_filter) ? 'dropdown-item-active' : '' ?>">ALL_SYSTEMS_LOG</a>
                                         <?php
                                         $stmt_names = $pdo->query("SELECT firearm_name FROM `firearm_name` ORDER BY `firearm_name` ASC");
                                         while ($n_row = $stmt_names->fetch(PDO::FETCH_ASSOC)) {
                                             $isActive = ($firearm_name_filter == $n_row['firearm_name']) ? 'dropdown-item-active' : '';
-                                            echo '<a href="booked-firearms.php?firearm-name=' . urlencode($n_row['firearm_name']) . '" class="dropdown-item-tactical ' . $isActive . '">' . htmlspecialchars($n_row['firearm_name']) . '</a>';
+                                            echo '<a href="booked-firearms?firearm-name=' . urlencode($n_row['firearm_name']) . '" class="dropdown-item-tactical ' . $isActive . '">' . htmlspecialchars($n_row['firearm_name']) . '</a>';
                                         }
                                         ?>
                                     </div>
@@ -149,8 +149,8 @@ $bookings = $stmt->fetchAll();
                         <div class="card-body d-flex justify-content-between align-items-center border-bottom border-secondary mb-3">
                             <h4 class="text-neon mb-0" style="font-family:'Orbitron';">Deployment_Registry_Log</h4>
                             <div>
-                                <a href="not-returns-firearms" class="btn btn-tactical py-1" title="Unreturned Firearms"><i class="mdi mdi-pistol"></i></a>
-                                <a href="not-returns-ammo" class="btn btn-tactical py-1 ml-1" title="Unreturned Ammo"><i class="mdi mdi-ammunition"></i></a>
+                                <a href="not-returns-firearms" class="btn btn-tactical text-danger py-1" title="Unreturned Firearms"><i class="mdi mdi-pistol"></i></a>
+                                <a href="not-returns-ammo" class="btn btn-tactical text-danger py-1 ml-1" title="Unreturned Ammo"><i class="mdi mdi-ammunition"></i></a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -166,7 +166,7 @@ $bookings = $stmt->fetchAll();
                                         <tr>
                                             <td><?= $i++ ?></td> 
                                             <td>
-                                                <a href="officer-profile.php?id=<?= $row['officerID'] ?>" class="text-info font-weight-bold" style="text-decoration:none;">
+                                                <a href="officer-profile?id=<?= $row['officerID'] ?>" class="text-info font-weight-bold" style="text-decoration:none;">
                                                     <?= htmlspecialchars($row['to_officer']) ?>
                                                 </a>
                                             </td>
@@ -180,8 +180,7 @@ $bookings = $stmt->fetchAll();
                                             <td style="font-size:11px;"><?= $row['booking_time'] ?></td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <button onclick="viewDetails(<?= $row['bookingID'] ?>)" class="btn btn-tactical py-1">VIEW</button>
-                                                    <button onclick="confirmArchive(<?= $row['bookingID'] ?>)" class="btn btn-outline-danger py-1" style="border-radius:0; border-left:none;"><i class="mdi mdi-delete"></i></button>
+                                                    <button onclick="viewDetails(<?= $row['bookingID'] ?>)" class="btn btn-tactical py-1">VIEW</button>                                                  
                                                 </div>
                                             </td>
                                         </tr>
@@ -251,18 +250,18 @@ $bookings = $stmt->fetchAll();
             <form action="process-booking-crud.php" method="POST" class="modal-content bg-dark border-danger" style="border-radius:0;">
                 <div class="modal-body p-4 text-center">
                     <i class="mdi mdi-alert-circle-outline text-danger" style="font-size:50px;"></i>
-                    <h4 class="text-danger mt-3" style="font-family:'Orbitron';">[ PURGE_RECORD ]</h4>
+                    <h4 class="text-danger mt-3" style="font-family:'Orbitron';">[ DELETE_RECORD ]</h4>
                     <p class="text-muted small">CRITICAL: This will remove the deployment record from the active database log.</p>
                     <input type="hidden" name="delete_id" id="delete_id">
                     <div class="mt-4 d-flex justify-content-between">
                         <button type="button" class="btn btn-tactical" data-bs-dismiss="modal">CANCEL</button>
-                        <button type="submit" name="soft_delete" class="btn btn-danger" style="border-radius:0;">CONFIRM_PURGE</button>
+                        <button type="submit" name="soft_delete" class="btn btn-danger" style="border-radius:0;">CONFIRM_DELETE</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-
+ <?php require_once('includes/footer.php'); ?>
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>

@@ -202,7 +202,7 @@ $created_by = $_SESSION['username'];
             </div>
         </div>
     </div>
-
+ <?php require_once('includes/footer.php'); ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <div id="toast-container"></div>
 

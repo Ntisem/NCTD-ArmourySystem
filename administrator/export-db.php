@@ -2,8 +2,8 @@
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
-// Security Check: Only Armourers can backup
-if($_SESSION["user_role"] != 'Armourer') { exit("UNAUTHORIZED_ACCESS"); }
+// Security Check: Only administrators can backup
+if($_SESSION["user_role"] != 'administrator') { exit("UNAUTHORIZED_ACCESS"); }
 
 $tables = array();
 $stmt_tables = $pdo->query("SHOW TABLES");

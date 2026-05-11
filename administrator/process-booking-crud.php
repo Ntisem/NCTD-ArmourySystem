@@ -23,21 +23,21 @@ if (isset($_POST['soft_delete'])) {
         // 2. Audit Trail
         $adminID   = isset($_SESSION['adminID']) ? $_SESSION['adminID'] : 0;
         $fullname  = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : 'System Administrator';
-        $user_role = isset($_SESSION['user_role']) ? $_SESSION['user_role'] : 'Armourer';
+        $user_role = isset($_SESSION['user_role']) ? $_SESSION['user_role'] : 'Administrator';
 
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log_action = "ARCHIVED_BOOKING_RECORD: ID " . $id;
         $log->execute([$adminID, $fullname, $log_action, $user_role]);
 
         $pdo->commit();
-        header("Location: booked-firearms.php?status=success");
+        header("Location: booked-firearms?status=success");
         exit();
 
     } catch (Exception $e) {
         if (isset($pdo) && $pdo->inTransaction()) {
             $pdo->rollBack();
         }
-        header("Location: booked-firearms.php?status=error");
+        header("Location: booked-firearms?status=error");
         exit();
     }
 }

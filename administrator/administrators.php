@@ -167,7 +167,7 @@ if(!isset($_SESSION["username"])) {
                                         <span aria-hidden="true">&times;</span>
                                       </button>
                                     </div>
-                                    <form action="process-armourer.php" method="POST" enctype="multipart/form-data">
+                                    <form action="process-administrator.php" method="POST" enctype="multipart/form-data">
                                       <div class="modal-body">
                                         <input type="hidden" name="action" value="edit">
                                         <input type="hidden" name="adminID" value="<?php echo $row['adminID']; ?>">
@@ -177,7 +177,7 @@ if(!isset($_SESSION["username"])) {
                                           <label>User Role</label>
                                           <select name="user_role" class="form-control" required>
                                             <option value="Administrator" <?php if($row['user_role'] == 'Administrator') echo 'selected';?>>Administrator</option>
-                                            <option value="Armourer" <?php if($row['user_role'] == 'Armourer') echo 'selected';?>>Armourer</option>
+                                            <option value="administrator" <?php if($row['user_role'] == 'administrator') echo 'selected';?>>administrator</option>
                                           </select>
                                         </div>
                                         <div class="form-group">
@@ -238,7 +238,7 @@ if(!isset($_SESSION["username"])) {
                                         <span aria-hidden="true">&times;</span>
                                       </button>
                                     </div>
-                                    <form action="process-armourer.php" method="POST">
+                                    <form action="process-administrator.php" method="POST">
                                       <div class="modal-body">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="adminID" value="<?php echo $row['adminID']; ?>">

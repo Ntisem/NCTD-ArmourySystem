@@ -103,7 +103,7 @@ $admin_data = $user_stmt->fetch();
                                             <td>
                                                 <button class="btn btn-xs btn-outline-success" onclick='viewDetails(<?= $jsData ?>)' title="View"><i class="mdi mdi-eye"></i></button>
                                                 <button class="btn btn-xs btn-outline-info" onclick='openEditModal(<?= $jsData ?>)' title="Edit"><i class="mdi mdi-pencil"></i></button>
-                                                <button class="btn btn-xs btn-outline-danger" onclick='openDeleteModal(<?= $row['ammoID'] ?>, "<?= htmlspecialchars($row['ammo_name']) ?>")' title="Delete"><i class="mdi mdi-trash-can"></i></button>
+                                                
                                             </td>
                                         </tr>
                                         <?php endwhile; ?>
@@ -180,7 +180,9 @@ $admin_data = $user_stmt->fetch();
             </div>
         </div>
     </div>
-
+ </div>
+ </div>
+<?php require_once('includes/footer.php'); ?>
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>

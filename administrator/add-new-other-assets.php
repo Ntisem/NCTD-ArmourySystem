@@ -7,7 +7,7 @@ require_once('includes/user_auth.php');
 
 <?php
     // session_start();
-    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Armourer') {
+    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='administrator') {
         header("location: login");
         exit();
     }
@@ -81,7 +81,7 @@ require_once('includes/user_auth.php');
                                 $_SESSION['adminID']=$adminID;
                                 $_SESSION['user_role'] =  $user_role;    
                             }?>      
-                              <input type="hidden" name="armourer_admin_name" class="form-control" id="exampleInputName1" value="<?php echo $service_no.' '.$admin_rank.' '.$fullname ?>">
+                              <input type="hidden" name="administrator_admin_name" class="form-control" id="exampleInputName1" value="<?php echo $service_no.' '.$admin_rank.' '.$fullname ?>">
                               <input type="hidden" name="adminID" class="form-control" id="exampleInputName1" value="<?php echo $adminID; ?>">
                               <input type="hidden" name="booking_status" class="form-control" id="exampleInputName1" value="Available">
                               <input type="hidden" name="user_role" class="form-control" id="exampleInputName1" value="<?php echo $user_role; ?>">

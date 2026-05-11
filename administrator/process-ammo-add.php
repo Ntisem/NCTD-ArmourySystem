@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_ammo'])) {
     // If the session is empty, we use a fallback ID (e.g., 0 or 1) 
     // to prevent the integrity constraint violation.
     $sessionAdminID   = $_SESSION['adminID'] ?? 0; 
-    $sessionFullname  = $_SESSION['fullname'] ?? 'System Armourer';
-    $sessionUserRole  = $_SESSION['user_role'] ?? 'Armourer';
+    $sessionFullname  = $_SESSION['fullname'] ?? 'System Administrator';
+    $sessionUserRole  = $_SESSION['user_role'] ?? 'Administrator';
 
     try {
         $pdo->beginTransaction();
@@ -50,16 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_ammo'])) {
         $pdo->commit();
         
         // Success Redirect
-        header("Location: ammunition.php?status=success");
+        header("Location: ammunition?status=success");
         exit();
 
     } catch (Exception $e) {
         $pdo->rollBack();
         // This will now show the specific SQL error in your toast alert for debugging
-        header("Location: ammunition.php?status=error&msg=" . urlencode($e->getMessage()));
+        header("Location: ammunition?status=error&msg=" . urlencode($e->getMessage()));
         exit();
     }
 } else {
-    header("Location: ammunition.php");
+    header("Location: ammunition");
     exit();
 }
