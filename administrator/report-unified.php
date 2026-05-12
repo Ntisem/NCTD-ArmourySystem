@@ -2,6 +2,13 @@
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
 // Fetch Active Firearms
 $stmtF = $pdo->query("SELECT firearm_serial_no, firearm_name, firearm_type, booking_status FROM firearms WHERE is_deleted = 0");
 $firearms = $stmtF->fetchAll();

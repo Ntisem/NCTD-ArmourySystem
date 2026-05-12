@@ -41,7 +41,7 @@ if (isset($_POST['username'])) {
                 $_SESSION['status'] = "UPLINK_RESTORED: RETURNING_TO_STATION";
             } else {
                 $location = "armourer.php";
-                $_SESSION['status'] = "UPLINK_ESTABLISHED: WELCOME " . strtoupper($row['rank']);
+                $_SESSION['status'] = "UPLINK_ESTABLISHED: WELCOME " . strtoupper($row['rank'])." " . strtoupper($row['fullname']);
             }
 
             $_SESSION['status_code'] = "success";

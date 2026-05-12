@@ -192,7 +192,7 @@ $admin_data = $stmt->fetch(PDO::FETCH_ASSOC);
                                                         <option value="">~ SELECT ORIGIN ~</option>
                                                         <?php
                                                         // PDO implementation for manufacturer dropdown
-                                                        $stmtM = $pdo->query("SELECT DISTINCT firearm_manufacturer FROM firearm_categories ORDER BY firearm_manufacturer ASC");
+                                                        $stmtM = $pdo->query("SELECT DISTINCT firearm_manufacturer FROM firearm_manufacturers ORDER BY firearm_manufacturer ASC");
                                                         while($row = $stmtM->fetch(PDO::FETCH_ASSOC)) {
                                                             echo "<option value='".$row['firearm_manufacturer']."'>".$row['firearm_manufacturer']."</option>";
                                                         }
@@ -244,7 +244,7 @@ $admin_data = $stmt->fetch(PDO::FETCH_ASSOC);
                                                         <option value="">~ SELECT CALIBER ~</option>
                                                         <?php
                                                         // PDO implementation for caliber
-                                                        $stmtCal = $pdo->query("SELECT DISTINCT firearm_caliber FROM firearm_categories ORDER BY firearm_caliber ASC");
+                                                        $stmtCal = $pdo->query("SELECT DISTINCT firearm_caliber FROM firearm_calibers ORDER BY firearm_caliber ASC");
                                                         while($row = $stmtCal->fetch(PDO::FETCH_ASSOC)) {
                                                             echo "<option value='".$row['firearm_caliber']."'>".$row['firearm_caliber']."</option>";
                                                         }

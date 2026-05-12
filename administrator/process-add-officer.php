@@ -3,7 +3,7 @@ require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
 // Verify that an Armourer is logged in
-if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
+if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
     header("location: login");
     exit();
 }

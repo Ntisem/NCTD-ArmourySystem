@@ -5,13 +5,13 @@ require_once('includes/user_auth.php');
    
    <?php
   if(!isset($_SESSION["username"]) && ($_SESSION['user_role'] == "Administrator")) {
-  // header("location: login");
-  // exit();
-  ?>
-  <script>
-    window.location="login.php";
-  </script>
-    <?php
+  header("location: login");
+  exit();
+
+  // <!-- <script>
+  //   window.location="login.php";
+  // </script>
+   
   }
 
   ?>

@@ -2,7 +2,7 @@
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
     header("location: login.php");
     exit();
 }
@@ -82,7 +82,7 @@ if (isset($_POST['update_officer'])) {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$officer_service_no, $rank, $full_name, $gender, $dept_unit, $phone_no, $officer_email, $officer_image, $officerID]);
 
-        $log = $pdo->prepare("INSERT INTO daily_activities (adminID, administrator_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
+        $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log_action = "UPDATED_OFFICER: " . $full_name . " (SN: " . $officer_service_no . ")";
         $log->execute([$admin['adminID'], $admin['fullname'], $log_action, $_SESSION['user_role']]);
 
@@ -104,7 +104,7 @@ if (isset($_POST['delete_officer'])) {
         $stmt = $pdo->prepare("DELETE FROM officers WHERE officerID = ?");
         $stmt->execute([$id]);
 
-        $log = $pdo->prepare("INSERT INTO daily_activities (adminID, administrator_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
+        $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log->execute([$admin['adminID'], $admin['fullname'], "DELETED_OFFICER_ID_" . $id, $_SESSION['user_role']]);
 
         $pdo->commit();

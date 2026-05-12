@@ -16,7 +16,7 @@ $overdueCount = $overdueStmt->fetchColumn();
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>AMMO_LOG | P.A.L.A.D.I.N. SYSTEM</title>
+    <title>AMMO_LOG | NCTD ARMOURY SYSTEM</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">

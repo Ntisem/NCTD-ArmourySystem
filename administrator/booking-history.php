@@ -4,7 +4,7 @@ require_once('functions.php');
 require_once('includes/user_auth.php');
 
 // Security Check
-if(!isset($_SESSION["username"]) || ($_SESSION["user_role"] != 'administrator' && $_SESSION["user_role"] != 'SuperAdmin')) {
+if(!isset($_SESSION["username"]) || ($_SESSION["user_role"] != 'Administrator')) {
     header("location: login");
     exit();
 }

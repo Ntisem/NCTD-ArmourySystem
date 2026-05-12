@@ -28,7 +28,7 @@ $admin_data = $stmtAdmin->fetch();
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         :root { --neon: #00f2ff; --bg-deep: #05070a; --card-bg: #0d1117; --danger: #ff3e3e; --success: #00ff88; }
         body { background: var(--bg-deep); font-family: 'Roboto Mono', monospace; color: #c0c5ce; }
@@ -67,7 +67,7 @@ $admin_data = $stmtAdmin->fetch();
                                     <div class="form-group">
                                         <label class="small text-info">ASSET_IDENTIFIER</label>
                                         <input type="text" name="new_firearm_name" id="new_firearm_name" 
-                                               class="form-control" placeholder="e.g. AK-47 ASSAULT RIFLE" 
+                                               class="form-control" placeholder="e.g. AK47 ASSAULT RIFLE" 
                                                onkeyup="checkNewFirearmName()" required>
                                         <div id="check-new-firearm-name" class="mt-2 small"></div>
                                     </div>

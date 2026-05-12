@@ -115,10 +115,10 @@ try {
 
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-        <a class="sidebar-brand brand-logo" href="armourer">
+        <a class="sidebar-brand brand-logo" href="administrator">
             <img src="assets/images/gps_logo_armory.png" alt="Tactical Command Logo" style="width: 180px; height: auto; filter: drop-shadow(0 0 5px rgba(0, 242, 255, 0.3));" />
         </a>
-        <a class="sidebar-brand brand-logo-mini" href="armourer">
+        <a class="sidebar-brand brand-logo-mini" href="administrator">
             <img src="assets/images/gps_logo_armory_mini.png" alt="logo" style="width: 50px; height: auto;" />
         </a>
     </div>
@@ -140,7 +140,7 @@ try {
                             $user_role = $row['user_role'];
                             ?>
                             <div class="count-indicator">
-                                <img class="img-xs rounded-circle" src="assets/images/armourer_images/<?= $img ?>" alt="">
+                                <img class="img-xs rounded-circle" src="assets/images/administrator_images/<?= $img ?>" alt="">
                                 <span class="count bg-success"></span>
                             </div>
                             <div class="profile-name">
@@ -159,7 +159,7 @@ try {
         </li>
 
         <li class="nav-item menu-items">
-            <a class="nav-link" href="armourer">
+            <a class="nav-link" href="administrator">
                 <span class="menu-icon"><i class="mdi mdi-view-dashboard"></i></span>
                 <span class="menu-title">Command Center</span>
             </a>
@@ -243,18 +243,19 @@ try {
             </div>
         </li>
     <li class="nav-item menu-items">
-            <a class="nav-link" data-bs-toggle="collapse" href="#armourers" aria-expanded="false" aria-controls="armourers">
+            <a class="nav-link" data-bs-toggle="collapse" href="#administrators" aria-expanded="false" aria-controls="administrators">
                 <span class="menu-icon"><i class="mdi mdi-account-group-outline"></i></span>
-                <span class="menu-title">Armourers</span>
+                <span class="menu-title">Administrators</span>
                 <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="armourers">
+            <div class="collapse" id="administrators">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="armourers">Armourers</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="add-new-armourer">Add Armourers</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="administrators">Administrators</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="add-new-administrator">Add Administrators</a></li>
                 </ul>
             </div>
         </li>
+     
         <li class="nav-item menu-items">
             <a class="nav-link" data-bs-toggle="collapse" href="#faulty" aria-expanded="false" aria-controls="faulty">
                 <span class="menu-icon"><i class="mdi mdi-alert-decagram-outline text-danger"></i></span>

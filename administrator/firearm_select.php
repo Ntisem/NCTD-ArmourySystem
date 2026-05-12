@@ -3,6 +3,12 @@ require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
 
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
  if(isset($_POST["query"]))  
  {  
       $output = '';  

@@ -7,39 +7,12 @@ require_once('includes/user_auth.php');
  * Refactored from MySQLi to PDO for enhanced security and performance.
  */
 
-if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
+if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
     header("location: login?status=unauthorized");
     exit();
 }
 
 $timestamp = date("Y-m-d H:i:s");
-
-// --- 1. FIREARM CATEGORIES (MODELS) ---
-if (isset($_POST['add_new_firearm_category'])) {
-    $cat = strtoupper(trim($_POST['new_firearm_category']));
-    $cal = strtoupper(trim($_POST['firearm_caliber']));
-    $man = strtoupper(trim($_POST['firearm_manufacturer']));
-    $adminID = intval($_POST['adminID']);
-    $u_name = $_POST['armourer_admin_name']; // PDO handles escaping automatically
-
-    try {
-        $sql = "INSERT INTO firearm_category (firearm_manufacturer, firearm_caliber, firearm_category, adminID, armourer_admin_name, datetime) 
-                VALUES (:man, :cal, :cat, :adminID, :u_name, :dt)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            'man'     => $man,
-            'cal'     => $cal,
-            'cat'     => $cat,
-            'adminID' => $adminID,
-            'u_name'  => $u_name,
-            'dt'      => $timestamp
-        ]);
-        header("location: add-firearm-categories?status=success");
-    } catch (PDOException $e) {
-        header("location: add-firearm-categories?status=error");
-    }
-    exit();
-}
 
 // --- 2. FIREARM NAMES (NOMENCLATURE) ---
 if (isset($_POST['add_new_firearm_name'])) {

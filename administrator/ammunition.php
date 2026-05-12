@@ -3,7 +3,7 @@ require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
 
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
     header("location: login");
     exit();
 }
@@ -241,7 +241,7 @@ $admin_data = $user_stmt->fetch();
                     <tr><td>NAME:</td><td class="text-info">${data.ammo_name}</td></tr>
                     <tr><td>ROUNDS:</td><td class="text-warning">${data.ammo_rounds}</td></tr>
                     <tr><td>APPLICATION:</td><td>${data.ammo_application}</td></tr>
-                    <tr><td>REGISTRAR:</td><td>${data.administrator_admin_name}</td></tr>
+                    <tr><td>REGISTRAR:</td><td>${data.armourer_admin_name}</td></tr>
                     <tr><td>REMARKS:</td><td>${data.remarks || 'N/A'}</td></tr>
                 </table>`;
             $('#view_content').html(html);

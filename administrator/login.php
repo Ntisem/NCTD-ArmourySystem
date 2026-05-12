@@ -41,7 +41,7 @@ if (isset($_POST['username'])) {
                 $_SESSION['status'] = "UPLINK_RESTORED: RETURNING_TO_STATION";
             } else {
                 $location = "administrator";
-                $_SESSION['status'] = "UPLINK_ESTABLISHED: WELCOME " . strtoupper($row['rank']);
+                $_SESSION['status'] = "UPLINK_ESTABLISHED: WELCOME ". strtoupper($row['rank'])." " . strtoupper($row['fullname']);
             }
 
             $_SESSION['status_code'] = "success";
@@ -66,7 +66,7 @@ if (isset($_POST['username'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="plugins/icon-kit/dist/css/iconkit.min.css">
-    <link rel="shortcut icon" href="assets/images/favicon.png"/>
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         :root {
             --neon-cyan: #00f2ff;

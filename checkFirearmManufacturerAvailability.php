@@ -5,9 +5,9 @@ if (isset($_POST['type']) && isset($_POST['value'])) {
     $column = $_POST['type'];
     $val = strtoupper(trim($_POST['value']));
     
-    if ($column !== 'firearm_category') exit;
+    if ($column !== 'firearm_manufacturer') exit;
 
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM firearm_categories WHERE $column = ?");
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM firearm_manufacturers WHERE $column = ?");
     $stmt->execute([$val]);
     
     if ($stmt->fetchColumn() > 0) {

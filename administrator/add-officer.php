@@ -4,8 +4,8 @@ require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
 // Access Control
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'administrator') {
-    header("location: login.php");
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
     exit();
 }
 
@@ -61,7 +61,7 @@ if (isset($_POST['add_officer'])) {
             $userRole = $_SESSION['user_role'] ?? 'administrator';
 
             $action = "ADD_OFFICER: Added " . $full_name . " (" . $officer_service_no . ")";
-            $log = $pdo->prepare("INSERT INTO daily_activities (adminID, administrator_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
+            $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
             $log->execute([$adminID, $adminName, $action, $userRole]);
 
             $pdo->commit();

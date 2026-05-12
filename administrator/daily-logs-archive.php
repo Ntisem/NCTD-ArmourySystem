@@ -3,8 +3,9 @@ require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
 
-// 1. Authorization Check (Command/Admin Level Only)
-if(!isset($_SESSION["username"]) || !in_array($_SESSION["user_role"], ['administrator', 'Admin'])) {
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
     header("location: login");
     exit();
 }
@@ -83,7 +84,7 @@ $archived_logs = $stmt->fetchAll();
                                     <tr>
                                         <td><span class="text-timestamp">#<?= $log['logID'] ?></span></td>
                                         <td class="text-timestamp"><?= $log['log_time'] ?></td>
-                                        <td><?= htmlspecialchars($log['administrator_admin_name']) ?></td>
+                                        <td><?= htmlspecialchars($log['armourer_admin_name']) ?></td>
                                         <td>
                                             <code class="text-warning bg-transparent"><?= htmlspecialchars($log['action_taken']) ?></code>
                                         </td>

@@ -2,6 +2,12 @@
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
 $id = $_GET['id'] ?? 0;
 $stmt = $pdo->prepare("SELECT * FROM firearms WHERE firearmID = ?");
 $stmt->execute([$id]);

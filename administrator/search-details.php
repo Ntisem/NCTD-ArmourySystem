@@ -2,6 +2,13 @@
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
 // 1. ROUTING LOGIC: Map the 'type' from the search results to specific detail pages or logic
 $type = $_GET['type'] ?? '';
 $id = $_GET['id'] ?? '';
