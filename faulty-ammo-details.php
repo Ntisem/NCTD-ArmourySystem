@@ -10,7 +10,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
 
 $id = $_GET['id'] ?? null;
 if (!$id) {
-    header("location: faulty-ammo.php");
+    header("location: faulty-ammo");
     exit();
 }
 

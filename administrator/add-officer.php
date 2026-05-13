@@ -38,7 +38,7 @@ if (isset($_POST['add_officer'])) {
 
             if (in_array(strtolower($file_ext), $allowed)) {
                 $image_name = uniqid('officer_', true) . '.' . $file_ext;
-                $upload_dir = 'uploads/';
+                $upload_dir = '../assets/images/officer_images/';
                 if (!is_dir($upload_dir)) { mkdir($upload_dir, 0755, true); }
                 move_uploaded_file($_FILES['officer_image']['tmp_name'], $upload_dir . $image_name);
             }
@@ -153,14 +153,13 @@ if (isset($_POST['add_officer'])) {
 </head>
 <body>
     <div id="toast-container"></div>
-
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card tactical-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0 text-white" style="font-family:'Orbitron';">[ ADD_NEW_OFFICER ]</h5>
-                        <a href="officers-list.php" class="btn btn-outline-secondary btn-sm" style="border-radius:0;">BACK_TO_LOG</a>
+                        <a href="officers-list" class="btn btn-outline-secondary btn-sm" style="border-radius:0;">BACK_TO_LOG</a>
                     </div>
                     <div class="card-body">
                         <form action="" method="POST" enctype="multipart/form-data" id="officerForm">
@@ -235,10 +234,11 @@ if (isset($_POST['add_officer'])) {
                         </form>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>
-
+<?php require_once('includes/footer.php'); ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function showToast(message, type = 'success') {

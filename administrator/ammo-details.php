@@ -1,290 +1,118 @@
-<?php  require_once('connections/connect-db.php');?>
-<?php  
-require_once('functions.php');
+<?php 
+require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
-?>
 
-<?php
-    // session_start();
-    if(!isset($_SESSION["username"]) && ($_SESSION["user_role"])=='Administrator') {
-        header("location: login");
-        exit();
-    }
+if(!isset($_GET['id']) || !isset($_SESSION["username"])) {
+    header("location: ammunition");
+    exit();
+}
+
+$ammoID = $_GET['id'];
+
+// Fetch Ammo Details
+$stmt = $pdo->prepare("SELECT * FROM ammunitions WHERE ammoID = ?");
+$stmt->execute([$ammoID]);
+$ammo = $stmt->fetch();
+
+if(!$ammo) { header("location: ammunition"); exit(); }
+
+// Calculate stock percentage for progress bar
+$max_capacity = 5000; // Example threshold for visual scaling
+$stock_percent = ($ammo['ammo_rounds'] / $max_capacity) * 100;
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
+<head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - AMMUNITION DETAILS</title>
-    <!-- plugins:css -->
+    <title>TERMINAL | AMMO_DEEP_SCAN: <?= $ammo['ammo_name'] ?></title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="assets/vendors/jvectormap/jquery-jvectormap.css">
-    <link rel="stylesheet" href="assets/vendors/flag-icon-css/css/flag-icon.min.css">
-    <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.carousel.min.css">
-    <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.theme.default.min.css">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- End layout styles -->
-    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
-* {
-	margin: 0;
-	padding: 0;
-	font-family: 'Poppins', sans-serif;
-}
-
-.calendar-container {
-	background: #fff;
-	width: 450px;
-	border-radius: 10px;
-	box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-}
-
-.calendar-container header {
-	display: flex;
-	align-items: center;
-	padding: 25px 30px 10px;
-	justify-content: space-between;
-}
-
-header .calendar-navigation {
-	display: flex;
-}
-
-header .calendar-navigation span {
-	height: 38px;
-	width: 38px;
-	margin: 0 1px;
-	cursor: pointer;
-	text-align: center;
-	line-height: 38px;
-	border-radius: 50%;
-	user-select: none;
-	color: #aeabab;
-	font-size: 1.9rem;
-}
-
-.calendar-navigation span:last-child {
-	margin-right: -10px;
-}
-
-header .calendar-navigation span:hover {
-	background: #f2f2f2;
-}
-
-header .calendar-current-date {
-	font-weight: 500;
-	font-size: 1.45rem;
-}
-
-.calendar-body {
-	padding: 20px;
-}
-
-.calendar-body ul {
-	list-style: none;
-	flex-wrap: wrap;
-	display: flex;
-	text-align: center;
-}
-
-.calendar-body .calendar-dates {
-	margin-bottom: 20px;
-}
-
-.calendar-body li {
-	width: calc(100% / 7);
-	font-size: 1.07rem;
-	color: #414141;
-}
-
-.calendar-body .calendar-weekdays li {
-	cursor: default;
-	font-weight: 500;
-}
-
-.calendar-body .calendar-dates li {
-	margin-top: 30px;
-	position: relative;
-	z-index: 1;
-	cursor: pointer;
-}
-
-.calendar-dates li.inactive {
-	color: #aaa;
-}
-
-.calendar-dates li.active {
-	color: #fff;
-}
-
-.calendar-dates li::before {
-	position: absolute;
-	content: "";
-	z-index: -1;
-	top: 50%;
-	left: 50%;
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	transform: translate(-50%, -50%);
-}
-
-.calendar-dates li.active::before {
-	background: #6332c5;
-}
-
-.calendar-dates li:not(.active):hover::before {
-	background: #e4e1e1;
-}
-
-
+        :root { --neon-cyan: #00f2ff; --neon-amber: #f9a602; --bg-dark: #05070a; --panel: #0d1117; }
+        body { background: var(--bg-dark); color: #adc4b2; font-family: 'JetBrains Mono', monospace; }
+        .card { background: var(--panel); border: 1px solid #30363d; border-radius: 0; margin-bottom: 20px; }
+        .stat-box { border-left: 3px solid var(--neon-cyan); padding: 15px; background: rgba(0, 242, 255, 0.05); }
+        .progress { background: #161b22; height: 10px; border-radius: 0; border: 1px solid #30363d; }
+        .progress-bar { background: var(--neon-cyan); box-shadow: 0 0 10px var(--neon-cyan); }
+        .spec-label { color: #6c7293; font-size: 10px; text-transform: uppercase; }
+        .spec-value { color: #fff; font-size: 14px; font-weight: bold; }
     </style>
-  </head>
-  <body onload=display_ct();>
-    <div class="container-scroller">
-      <!-- partial:includes/_sidebar.html -->
-      <?php  require_once('includes/sidebar.php');?>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:includes/_navbar.html -->
-        <?php  require_once('includes/navbar.php');?>
-        <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="row">
-              <div class="col-xl-12 col-sm-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                  
-                    <div class="row">
-                      <?php
-                    if(isset($_GET['ammoID']) && $_GET['ammoID']>0){
-
-                        $ammoID=mysqli_real_escape_string($connect_db,$_GET['ammoID']);
-                       
-
-                        $sql="SELECT * FROM `ammunitions` WHERE `ammoID` ='$ammoID'";
-                            $firearm_result=mysqli_query($connect_db,$sql);
-                            if(mysqli_num_rows( $firearm_result)>0){
-                            $row=mysqli_fetch_assoc( $firearm_result);
-                            $output = "";
-                            echo $output .='
-                            <div class="row">
-                            <div class="col-lg-12 grid-margin stretch-card">
-                              <div class="card">
-                                <div class="card-body">
-                                <a href="ammo-bookings-under?ammoID='.$row['ammoID'].'" type="button" class="btn btn-primary btn-lg btn-block" style="margin-bottom:30px;">
-                                <i class="mdi mdi-book"></i> Bookings</a>
-                                  <p class="card-description"><strong>Ammunition-</strong><code>'.$row['ammo_name'].'</code>
-                                  </p>
-                                  <div class="table-responsive">
-                                    <table class="table">
-                                      <tbody>
-                                      <tr>
-                                      <td>Ammo Name</td>
-                                      <td>'.$row['ammo_name'].'</td>
-                                      </tr>
-                                                                    
-                                      <tr>
-                                      <td>Ammo Application</td>
-                                      <td>'.$row['ammo_application'].'</td>
-                                      </tr>
-                                      <tr>
-                                      <tr>
-                                      <td>Quantity</td>
-                                      <td>'.$row['ammo_rounds'].'</td>
-                                      </tr>
-                              
-                                      <tr>
-                                      <td>Brought In Date</td>
-                                      <td>'.$row['datetime'].'</td>
-                                      </tr>
-                                      <tr>
-                                      <td></td>
-                                      <td><a href="ammunition"><button type="button" class="btn btn-outline-danger btn-fw"> <i class="mdi mdi-reply"></i>BACK</button></a></td>
-                                      </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            </div>
-                            ';}
-                            else{
-
-                            }
-                       
-                    }
-                    ?>
-                    </div>
-                  </div>
-                </div>
-              </div>
+</head>
+<body>
+    <div class="container-fluid p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="text-cyan mb-0">[ AMMO_ASSET_DATA_SCAN ]</h2>
+                <small class="text-muted">UUID: <?= bin2hex($ammo['ammoID']) ?> | STATUS: NOMINAL</small>
             </div>
-          </div>
-          <!-- content-wrapper ends -->
-          <!-- partial:includes/_footer.html -->
-          <?php  require_once('includes/footer.php');?>
-          <!-- partial -->
+            <button class="btn btn-outline-warning" onclick="window.history.back()">
+                <i class="mdi mdi-arrow-left"></i> RETURN_TO_LIST
+            </button>
         </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="text-cyan mb-3">CURRENT_STOCK_LEVEL</h5>
+                        <div class="text-center py-4">
+                            <h1 style="font-size: 60px; color: #fff;"><?= number_format($ammo['ammo_rounds']) ?></h1>
+                            <p class="text-muted">REMAINING ROUNDS</p>
+                        </div>
+                        <div class="progress mb-2">
+                            <div class="progress-bar" style="width: <?= $stock_percent ?>%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between small">
+                            <span>MIN: 0</span>
+                            <span>CRITICAL_THRESHOLD: 500</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="text-cyan mb-3">TECHNICAL_SPECIFICATIONS</h5>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <p class="spec-label">MANUFACTURER</p>
+                                <p class="spec-value"><?= $ammo['manufacturer'] ?></p>
+                            </div>
+                            <div class="col-6">
+                                <p class="spec-label">AMMO NAME</p>
+                                <p class="spec-value"><?= $ammo['ammo_name'] ?></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="spec-label">ACQUISITION_DATE</p>
+                                <p class="spec-value"><?= date('d M Y', strtotime($ammo['datetime'])) ?></p>
+                            </div>
+                            <div class="col-6">
+                                <p class="spec-label">BATCH_ID</p>
+                                <p class="spec-value">#BT-<?= $ammo['ammoID'] ?>-NCTD</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="text-cyan mb-3">REMARKS_&_NOTES</h5>
+                        <p class="text-white bg-dark p-3 border border-secondary">
+                            <?= !empty($ammo['remarks']) ? $ammo['remarks'] : "NO ADDITIONAL REMARKS LOGGED FOR THIS ASSET." ?>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="assets/vendors/chart.js/Chart.min.js"></script>
-    <script src="assets/vendors/progressbar.js/progressbar.min.js"></script>
-    <script src="assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
-    <script src="assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-    <script src="assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
-    <script src="assets/js/jquery.cookie.js" type="text/javascript"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page -->
-    <script src="assets/js/dashboard.js"></script>
-    <script src="assets/js/calendar.js"></script>
-    <!-- <script src="assets/js/calendar2.js"></script> -->
-    <!-- End custom js for this page -->
-    <script>
-    setInterval(function() {
-        check_user();
-    }, 2000);
 
-    function check_user() {
-        jQuery.ajax({
-            url: 'includes/user_auth.php',
-            type: 'post',
-            data: 'type=ajax',
-            success: function(result) {
-                if (result == 'logout') {
-                    window.location.href ='logout';
-                }
-            }
-
-        });
-    }
-</script>
-<?php  require_once('includes/google-analytics.php');?>
-  </body>
+    <?php include_once('includes/footer.php'); ?>
+</body>
 </html>

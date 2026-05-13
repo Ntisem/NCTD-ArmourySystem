@@ -1,6 +1,13 @@
 <?php
 require_once('connections/connect-db.php');
-session_start();
+require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+// session_start();
+
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
 
 // CREATE
 if (isset($_POST['add_firearm'])) {
@@ -18,6 +25,8 @@ if (isset($_POST['add_firearm'])) {
         if ($stmt->execute([$name])) {
             $_SESSION['status'] = "SUCCESS: UPLINK_COMMITTED";
             $_SESSION['status_code'] = "success";
+            $action_details = "Added Firearm Name [ " . $name . " ]";
+            logDailyActivity($pdo, $action_details, '', 'Firearm Name Management');
         }
     }
     header("Location: add-firearm-name");
@@ -33,6 +42,8 @@ if (isset($_POST['update_firearm'])) {
     if ($stmt->execute([$name, $id])) {
         $_SESSION['status'] = "SUCCESS: REGISTRY_MODIFIED";
         $_SESSION['status_code'] = "info";
+        $action_details = "Updated Firearm Name [ ID: " . $id . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Firearm Name Management');
     }
     header("Location: add-firearm-name");
     exit();
@@ -46,6 +57,8 @@ if (isset($_POST['delete_firearm'])) {
     if ($stmt->execute([$id])) {
         $_SESSION['status'] = "SUCCESS: DATA_PURGED";
         $_SESSION['status_code'] = "warning";
+        $action_details = "Deleted Firearm Name [ ID: " . $id . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Firearm Name Management');
     }
     header("Location: add-firearm-name");
     exit();

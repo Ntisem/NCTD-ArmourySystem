@@ -1,11 +1,15 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
 
-if (!isset($_SESSION["username"])) {
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
     header("location: login");
     exit();
 }
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
@@ -78,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             $_SESSION['success'] = "Profile details updated successfully.";
-            
+            logDailyActivity($pdo, "Updated Administrator Profile: " . $fullname, '', 'Administrator Management');  
             // Update session if the username was changed
             if ($username !== $_SESSION['username']) {
                 $_SESSION['username'] = $username;

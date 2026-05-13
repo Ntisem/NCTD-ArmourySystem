@@ -376,7 +376,7 @@ $faulty_ammo = $stmt_faulty->fetchAll();
             <li class="list-group-item bg-transparent text-light"><strong>Fault:</strong> ${item.faulty_type}</li>
             <li class="list-group-item bg-transparent text-light"><strong>Remarks:</strong> ${item.faulty_ammo_comment}</li>
             <li class="list-group-item bg-transparent text-light"><strong>Returned By Officer:</strong> ${item.returned_by_officer}</li>
-            <li class="list-group-item bg-transparent"><strong>Faulty Image:</strong><img src="assets/images/faulty_ammo_images/${item.faulty_firearm_image}" alt="" style="height:250px;width:250px;"></li>
+            <li class="list-group-item bg-transparent"><strong>Faulty Image:</strong><img src="../assets/images/faulty_ammo_images/${item.faulty_firearm_image}" alt="" style="height:250px;width:250px;"></li>
             <li class="list-group-item bg-transparent text-light"><strong>Date Added:</strong> ${item.datetime}</li>
           </ul>`;
           $('#viewModalBody').html(content);

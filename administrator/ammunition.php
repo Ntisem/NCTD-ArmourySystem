@@ -66,7 +66,7 @@ $admin_data = $user_stmt->fetch();
                 <div class="content-wrapper">
                     <div class="page-header d-flex justify-content-between">
                         <h3 class="page-title text-info"><i class="mdi mdi-bullet"></i> AMMUNITION_REGISTRY</h3>
-                        <a href="add-new-ammo.php" class="btn btn-tactical"><i class="mdi mdi-plus"></i> NEW_ENTRY</a>
+                        <a href="add-new-ammo" class="btn btn-tactical"><i class="mdi mdi-plus"></i> NEW_ENTRY</a>
                     </div>
 
                     <div class="card table-tactical">
@@ -113,6 +113,7 @@ $admin_data = $user_stmt->fetch();
                         </div>
                     </div>
                 </div>
+                 <?php require_once('includes/footer.php'); ?>
             </div>
         </div>
     </div>
@@ -180,7 +181,6 @@ $admin_data = $user_stmt->fetch();
             </div>
         </div>
     </div>
-
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>

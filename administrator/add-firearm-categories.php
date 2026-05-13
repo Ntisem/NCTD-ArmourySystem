@@ -2,6 +2,8 @@
 require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php');
+
 if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') { // Adjusted to match your usual role
     header("location: login");
     exit();
@@ -185,6 +187,7 @@ $a_id   = $_SESSION['adminID'] ?? 0;
                         </div>
                     </div>
                 </div>
+                 <?php require_once('includes/footer.php'); ?>
             </div>
        </div>
     </div>
@@ -225,6 +228,7 @@ $a_id   = $_SESSION['adminID'] ?? 0;
         </div>
     </div>
 
+</script>
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

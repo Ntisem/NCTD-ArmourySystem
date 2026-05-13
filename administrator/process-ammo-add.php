@@ -1,6 +1,14 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php');
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_ammo'])) {
     
@@ -46,6 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_ammo'])) {
         $log_action = "NEW_AMMO_REGISTERED: " . $name . " [Qty: " . $rounds . "]";
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log->execute([$sessionAdminID, $sessionFullname, $log_action, $sessionUserRole]);
+
+          // ... inside the try{} block ...
+        $action_details = "Added Ammunition [ " . $name . " (" . $rounds . " ) ]";
+        logDailyActivity($pdo, $action_details, '', 'Ammunition Management');
 
         $pdo->commit();
         

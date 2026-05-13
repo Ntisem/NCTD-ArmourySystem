@@ -1,6 +1,11 @@
 <?php 
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php');
+if($_SESSION["user_role"] != 'Administrator') {
+    header("location: login");
+    exit();
+}
 
 $status = '';
 $status_code = '';
@@ -21,6 +26,11 @@ if (isset($_POST['update_password'])) {
             // 2. Update to New Password
             $hashed_new = md5($new_pass);
             $update = $pdo->prepare("UPDATE admin_lists SET password = ? WHERE username = ?");
+
+                // ... inside the try{} block ...
+                    $action_details = "Updated Password [ " . $name . " (" . $rounds . " ) ]";
+                    logDailyActivity($pdo, $action_details, '', 'Credential Management');
+
             if ($update->execute([$hashed_new, $username])) {
                 $status = "CIPHER_UPDATED: Credentials synchronized.";
                 $status_code = "success";
@@ -92,5 +102,11 @@ if (isset($_POST['update_password'])) {
             </div>
         </div>
     </div>
+    </div>
+    </div>
+    <div class="text-center mt-4">
+        <small style="color: #555; font-size: 10px;">COMMAND NCTD // SECURITY_UPDATE_MODULE</small>
+    </div>
+     <?php include_once('includes/footer.php');?>
 </body>
 </html>

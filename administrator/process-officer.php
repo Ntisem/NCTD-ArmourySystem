@@ -1,6 +1,8 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
 
 if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
     header("location: login");
@@ -41,8 +43,7 @@ if (isset($_POST['add_officer'])) {
         $stmt = $pdo->prepare("INSERT INTO officers (officer_status, officer_image, officer_service_no, rank, full_name, gender, dept_unit, phone, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$officer_status, $officer_image, $officer_service_no, $rank, $full_name, $gender, $dept_unit, $phone, $email]);
         
-        $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
-        $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], 'ADDED_OFFICER: ' . $full_name, $_SESSION['user_role']]);
+        logDailyActivity($pdo, "Added Officer: " . $full_name, '', 'Officer Management');
 
         header("Location: officers-list?status=success_add");
         exit();
@@ -86,8 +87,7 @@ if (isset($_POST['update_officer'])) {
         $stmt = $pdo->prepare("UPDATE officers SET officer_image = ?, officer_service_no = ?, rank = ?, full_name = ?, gender = ?, dept_unit = ?, phone = ?, email = ? WHERE officerID = ?");
         $stmt->execute([$officer_image, $officer_service_no, $rank, $full_name, $gender, $dept_unit, $phone, $email, $officerID]);
         
-        $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
-        $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], 'UPDATED_OFFICER: ' . $full_name, $_SESSION['user_role']]);
+        logDailyActivity($pdo, "Updated Officer: " . $full_name, '', 'Officer Management');
 
         header("Location: officers-list?status=success_update");
         exit();
@@ -105,8 +105,7 @@ if (isset($_POST['delete_officer'])) {
         $stmt = $pdo->prepare("DELETE FROM officers WHERE officerID = ?");
         $stmt->execute([$officerID]);
         
-        $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
-        $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], 'DELETED_OFFICER_ID: ' . $officerID, $_SESSION['user_role']]);
+        logDailyActivity($pdo, "Deleted Officer ID: " . $officerID, '', 'Officer Management');
 
         header("Location: officers-list?status=success_delete");
         exit();

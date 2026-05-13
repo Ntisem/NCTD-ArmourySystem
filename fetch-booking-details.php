@@ -1,5 +1,11 @@
 <?php
 require_once('connections/connect-db.php');
+
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
+
 if(isset($_GET['id'])) {
     $id = $_GET['id'];
     $stmt = $pdo->prepare("SELECT * FROM bookings WHERE bookingID = ?");

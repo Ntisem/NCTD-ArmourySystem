@@ -187,6 +187,13 @@ $created_by = $_SESSION['username'];
                                                 <input type="password" id="confirm_password" class="form-control" placeholder="eg: SecurePass123!" required>
                                                 <span id="match-status" class="availability-badge"></span>
                                             </div>
+                                    </div>
+                                         <div class="col-md-4 form-group">
+                                            <label>USER ROLE</label>
+                                            <select name="user_role" class="form-control" required>
+                                                <option value="Administrator">Administrator</option>
+                                                <option value="Armourer">Armourer</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -199,10 +206,11 @@ $created_by = $_SESSION['username'];
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>
-
+ <?php require_once('includes/footer.php'); ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <div id="toast-container"></div>
 

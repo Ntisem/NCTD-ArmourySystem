@@ -1,6 +1,14 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
 
 if (isset($_POST['action']) && $_POST['action'] == 'add') {
     // 1. Capture Inputs
@@ -15,7 +23,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'add') {
     $status       = $_POST['status']; // Active
     $code         = $_POST['code'];   // Random 6-digit
     $created_by   = $_POST['created_by'];
-    $profile_img  = 'avatar_placeholder.png';
+    $user_role    = $_POST['user_role'];
+    $profile_img  = ;
 
     // 2. Final Server-Side Uniqueness Check
     $check = $pdo->prepare("SELECT COUNT(*) FROM admin_lists WHERE service_no=? OR username=? OR admin_email=? OR phone_number=?");
@@ -36,7 +45,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'add') {
         
         if (in_array($ext, $allowed)) {
             $new_name = "ARM_" . time() . "_" . uniqid() . "." . $ext;
-            if (move_uploaded_file($_FILES['profile_image']['tmp_name'], 'assets/images/administrator_images/' . $new_name)) {
+            if (move_uploaded_file($_FILES['profile_image']['tmp_name'], '../assets/images/armourer_images/' . $new_name)) {
                 $profile_img = $new_name;
             }
         }
@@ -48,18 +57,21 @@ if (isset($_POST['action']) && $_POST['action'] == 'add') {
                     profile_image, user_role, service_no, rank, fullname, 
                     admin_email, phone_number, username, password, 
                     unit_dept, code, status, datetime
-                ) VALUES (?, 'administrator', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
         
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
-            $profile_img, $service_no, $rank, $fullname, 
+            $profile_img, $user_role, $service_no, $rank, $fullname, 
             $admin_email, $phone_number, $username, md5($password), 
             $unit_dept, $code, $status
         ]);
 
         $_SESSION['status'] = "UPLINK_SUCCESSFUL: PERSONNEL_ENROLLED";
         $_SESSION['status_code'] = "success";
+
+        logDailyActivity($pdo, "Added Administrator/Armourer [ " . $fullname . " (" . $service_no . " ) ]", '', 'Administrator Management');     
         header("Location: administrators"); // Or your specific list page
+
     } catch (PDOException $e) {
         $_SESSION['status'] = "DATABASE_CRITICAL: " . $e->getMessage();
         $_SESSION['status_code'] = "error";

@@ -122,7 +122,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
                         <label for="faulty_ammo_manufacturer">Manufacturer</label>
                         <input type="text" class="form-control" id="faulty_ammo_manufacturer" name="faulty_ammo_manufacturer" placeholder="Manufacturer" readonly required>
                       </div>
-<!-- 
+                       <!-- 
                       <div class="form-group">
                         <label for="faulty_ammo_type">Ammunition Type/Caliber</label>
                         <input type="text" class="form-control" id="faulty_ammo_type" name="faulty_ammo_type" placeholder="Type or Caliber">

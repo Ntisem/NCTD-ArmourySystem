@@ -1,6 +1,15 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
 
 if (isset($_POST['update_status'])) {
     $id            = (int)$_POST['bookingID'];
@@ -57,8 +66,7 @@ if (isset($_POST['update_status'])) {
         $fullname  = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : 'System Administrator';
         $user_role = isset($_SESSION['user_role']) ? $_SESSION['user_role'] : 'Administrator';
         
-        $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
-        $log->execute([$adminID, $fullname, $log_msg, $user_role]);
+        logDailyActivity($pdo, $log_msg, '', 'Booking Management');
 
         $pdo->commit();
         header("Location: booked-firearms?status=success");

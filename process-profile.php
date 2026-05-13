@@ -1,8 +1,9 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
 
-if (!isset($_SESSION["username"])) {
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
     header("location: login");
     exit();
 }
@@ -84,6 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['username'] = $username;
             }
 
+            $action_details = "Updated Profile [ ID: " . $adminID . " ]";
+            logDailyActivity($pdo, $action_details, '', 'Profile Management');
+            
             header("location: armourer-profile");
             exit();
         } catch (PDOException $e) {
@@ -112,8 +116,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Remove record from Database
             $stmt = $pdo->prepare("DELETE FROM admin_lists WHERE adminID = ?");
             $stmt->execute([$adminID]);
+            
+            $action_details = "Deleted Profile [ ID: " . $adminID . " ]";
+            logDailyActivity($pdo, $action_details, '', 'Profile Management');
 
-            // Log out user
+            // Log out user 
             session_unset();
             session_destroy();
             

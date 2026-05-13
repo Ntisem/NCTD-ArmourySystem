@@ -1,6 +1,14 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
 
 if (isset($_POST['booking_ammo'])) {
     // 1. Capture Inputs
@@ -46,6 +54,10 @@ if (isset($_POST['booking_ammo'])) {
         $action = "AMMO_DEPLOYED: " . $rounds_issued . " rounds of " . $_POST['ammo_name'] . " issued to " . $_POST['to_officer'];
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log->execute([$adminID, $_SESSION['fullname'], $action, $_SESSION['user_role']]);
+
+        // ... inside the try{} block ...
+        $action_details = "Booked Ammunition [ " . $_POST['ammo_name'] . " (" . $rounds_issued . " ) ]";
+        logDailyActivity($pdo, $action_details, '', 'Ammunition Management');
 
         $pdo->commit();
         header("Location: booking-ammo?status=success");

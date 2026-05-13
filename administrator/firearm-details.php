@@ -73,5 +73,9 @@ if (!$asset) { die("[CRITICAL_ERROR]: ASSET_NOT_FOUND"); }
             </div>
         </div>
     </div>
+    <div class="text-center mt-4">
+        <small style="color: #555; font-size: 10px;">COMMAND NCTD // ASSET_DEEP_DIVE_MODULE</small>
+    </div>
+   <?php require_once('includes/footer.php'); ?>
 </body>
 </html>

@@ -15,7 +15,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - ADMINISTRATORS</title>
+    <title>GPS ARMOURY SYSTEM - ARMOURERS</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="dist/css/theme.min.css">
@@ -70,7 +70,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title" style="color:#00f2ff">Administrators Directory</h3>
+              <h3 class="page-title" style="color:#00f2ff">Administrator / Armourers Directory</h3>
             </div>
             
             <?php if(isset($_SESSION['success'])): ?>
@@ -91,25 +91,25 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                     <div class="card">
                       <div class="card-body">
                         <p class="card-description">
-                          <a href="add-new-admin.php">
-                            <i class="mdi mdi-account-plus f-22 text-green" style="color:#00f2ff;" title="Click to Add New Administrator"></i>
+                          <a href="add-new-armourer">
+                            <i class="mdi mdi-account-plus f-22 text-green" style="color:#00f2ff;" title="Click to Add New Armourer"></i>
                           </a>
                         </p>
-                        <table id="administrators-list" class="table table-bordered table-striped">
+                        <table id="armourers-list" class="table table-bordered table-hover">
                           <thead>
                             <tr>
                               <th>#</th>
                               <th>Service Number</th>
                               <th>Rank</th>
                               <th>Full Name</th>
-                              <th>Email</th>
+                              <th>Username</th>
                               <th>Role</th>
                               <th>Action Controls</th>
                             </tr>
                           </thead>
                           <tbody>
                             <?php
-                            $stmt = $pdo->query("SELECT * FROM admin_lists WHERE user_role = 'Administrator' ORDER BY adminID DESC");
+                            $stmt = $pdo->query("SELECT * FROM admin_lists ORDER BY adminID DESC");
                             $i = 1;
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             ?>
@@ -118,16 +118,16 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                                 <td><?php echo htmlspecialchars($row['service_no']); ?></td>
                                 <td><?php echo htmlspecialchars($row['rank']); ?></td>
                                 <td><?php echo htmlspecialchars($row['fullname']); ?></td>
-                                <td><?php echo htmlspecialchars($row['admin_email']); ?></td>
+                                <td><?php echo htmlspecialchars($row['username']); ?></td>
                                 <td><?php echo htmlspecialchars($row['user_role']); ?></td>
                                 <td>
-                                  <button type="button" class="btn btn-sm btn-tactical" data-toggle="modal" data-target="#viewModal<?php echo $row['adminID']; ?>">View</button>
-                                  <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#editModal<?php echo $row['adminID']; ?>">Edit</button>
-                                  <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal<?php echo $row['adminID']; ?>">Delete</button>
+                                  <button type="button" class="btn btn-sm btn-tactical" data-toggle="modal" data-target="#viewModalArmourer<?php echo $row['adminID']; ?>">View</button>
+                                  <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#editModalArmourer<?php echo $row['adminID']; ?>">Edit</button>
+                                  <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModalArmourer<?php echo $row['adminID']; ?>">Delete</button>
                                 </td>
                               </tr>
 
-                              <div class="modal fade" id="viewModal<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                              <div class="modal fade" id="viewModalArmourer<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
                                   <div class="modal-content">
                                     <div class="modal-header">
@@ -160,28 +160,22 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                                 </div>
                               </div>
 
-                              <div class="modal fade" id="editModal<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                              <div class="modal fade" id="editModalArmourer<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                     <div class="modal-header">
-                                      <h5 class="modal-title" style="color:#00f2ff">Edit Administrator Record</h5>
+                                      <h5 class="modal-title" style="color:#00f2ff">Edit Armourer Record</h5>
                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#fff">
                                         <span aria-hidden="true">&times;</span>
                                       </button>
                                     </div>
-                                    <form action="process-administrator.php" method="POST" enctype="multipart/form-data">
+                                    <form action="process-armourer.php" method="POST" enctype="multipart/form-data">
                                       <div class="modal-body">
                                         <input type="hidden" name="action" value="edit">
                                         <input type="hidden" name="adminID" value="<?php echo $row['adminID']; ?>">
                                         <input type="hidden" name="current_image" value="<?php echo $row['profile_image']; ?>">
+                                        <input type="hidden" name="user_role" value="Armourer">
 
-                                        <div class="form-group">
-                                          <label>User Role</label>
-                                          <select name="user_role" class="form-control" required>
-                                            <option value="Administrator" <?php if($row['user_role'] == 'Administrator') echo 'selected';?>>Administrator</option>
-                                            <option value="administrator" <?php if($row['user_role'] == 'administrator') echo 'selected';?>>administrator</option>
-                                          </select>
-                                        </div>
                                         <div class="form-group">
                                           <label>Service Number</label>
                                           <input type="text" name="service_no" class="form-control" value="<?php echo htmlspecialchars($row['service_no']); ?>" required>
@@ -231,7 +225,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                                 </div>
                               </div>
 
-                              <div class="modal fade" id="deleteModal<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                              <div class="modal fade" id="deleteModalArmourer<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                     <div class="modal-header">
@@ -240,7 +234,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                                         <span aria-hidden="true">&times;</span>
                                       </button>
                                     </div>
-                                    <form action="process-administrator.php" method="POST">
+                                    <form action="process-armourer.php" method="POST">
                                       <div class="modal-body">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="adminID" value="<?php echo $row['adminID']; ?>">
@@ -272,22 +266,17 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
     <script src="plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="plugins/jszip/jszip.min.js"></script>
-    <script src="plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="plugins/pdfmake/vfs_fonts.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script>
       $(function () {
-        $("#administrators-list").DataTable({
+        $("#armourers-list").DataTable({
           "responsive": true, 
           "lengthChange": true, 
           "autoWidth": false,
           "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#administrators-list_wrapper .col-md-6:eq(0)');
+        }).buttons().container().appendTo('#armourers-list_wrapper .col-md-6:eq(0)');
       });
     </script>
   </body>

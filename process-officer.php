@@ -1,6 +1,7 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
 
 if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
     header("location: login");
@@ -43,6 +44,9 @@ if (isset($_POST['add_officer'])) {
         
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], 'ADDED_OFFICER: ' . $full_name, $_SESSION['user_role']]);
+       
+        $action_details = "Added Officer [ " . $full_name . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Officer Management');
 
         header("Location: officers-list?status=success_add");
         exit();
@@ -89,6 +93,9 @@ if (isset($_POST['update_officer'])) {
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], 'UPDATED_OFFICER: ' . $full_name, $_SESSION['user_role']]);
 
+        $action_details = "Updated Officer [ ID: " . $officerID . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Officer Management');
+
         header("Location: officers-list?status=success_update");
         exit();
     } catch (Exception $e) {
@@ -107,7 +114,9 @@ if (isset($_POST['delete_officer'])) {
         
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], 'DELETED_OFFICER_ID: ' . $officerID, $_SESSION['user_role']]);
-
+        $action_details = "Deleted Officer [ ID: " . $officerID . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Officer Management');  
+        
         header("Location: officers-list?status=success_delete");
         exit();
     } catch (Exception $e) {

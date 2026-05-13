@@ -2,6 +2,15 @@
 <?php
 require_once('connections/connect-db.php');
 require_once "controllerUserData.php";
+require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
 ?>
 
 <!doctype html>
@@ -25,6 +34,7 @@ require_once "controllerUserData.php";
     <link rel="stylesheet" href="plugins/icon-kit/dist/css/iconkit.min.css">
     <link rel="stylesheet" href="plugins/perfect-scrollbar/css/perfect-scrollbar.css">
     <link rel="stylesheet" href="dist/css/theme.min.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <script src="src/js/vendor/modernizr-2.8.3.min.js"></script>
     <style>
         .btn{

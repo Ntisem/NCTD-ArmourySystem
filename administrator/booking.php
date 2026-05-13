@@ -2,6 +2,7 @@
 require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
 
 
 // Access Control
@@ -165,10 +166,11 @@ $admin = $stmt->fetch();
                         </div>
                     </div>
                 </div>
+                <?php require_once('includes/footer.php'); ?>
             </div>
         </div>
     </div>
-<?php require_once('includes/footer.php'); ?>
+
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>

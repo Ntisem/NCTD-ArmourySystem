@@ -1,6 +1,12 @@
 <?php 
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

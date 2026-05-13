@@ -10,7 +10,7 @@
     <div class="container-fluid">
         <div class="d-sm-flex justify-content-center justify-content-sm-between">
             <span class="text-muted text-center text-sm-left d-block d-sm-inline-block" style="color: #fff !important;">
-                <span style="color: #f9a602;">[SECURE_SYSTEM: <span style="color: #28a745;">ACTIVE</span>]</span> NATIONAL COUNTER TERRORISM DEPT.
+                <span style="color: #f9a602;">[SECURE_SYSTEM: <span style="color: #28a745;">ACTIVE</span>]</span> GPS | NATIONAL COUNTER TERRORISM DEPT.
             </span>
             <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center" style="color: #6c7293;font-size: 0.8rem;">
                 DEV: <span>C/INSPR W. NTISEM</span> | &copy; <?php echo date("Y"); ?>

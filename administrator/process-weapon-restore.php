@@ -1,27 +1,42 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php');
+
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
 
 if (isset($_POST['confirm_restore'])) {
     $id = $_POST['restore_id'];
     try {
         $pdo->beginTransaction();
 
-        // 1. Restore the asset
         $stmt = $pdo->prepare("UPDATE firearms SET is_deleted = 0, booking_status = 'Available' WHERE firearmID = ?");
         $stmt->execute([$id]);
 
-        // 2. Log the restoration
         $log_action = "RESTORED_ASSET: ID " . $id;
-        $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
-        $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], $log_action, $_SESSION['user_role']]);
+        logDailyActivity($pdo, $log_action, '', 'Firearm Management');
 
         $pdo->commit();
-        header("Location: firearm-archive?status=success");
+        $_SESSION['status'] = "REDEPLOYMENT_COMPLETE: ASSET_ACTIVE";
+        $_SESSION['status_code'] = "success";
+        header("Location: firearm-archive");
         exit();
     } catch (Exception $e) {
         $pdo->rollBack();
-        header("Location: firearm-archive?status=error");
+        $_SESSION['status'] = "REDEPLOYMENT_FAILED: SYSTEM_ERROR";
+        $_SESSION['status_code'] = "error";
+        header("Location: firearm-archive");
         exit();
     }
+} else {
+    $_SESSION['status'] = "INVALID_REQUEST: NO_ACTION_TAKEN";
+    $_SESSION['status_code'] = "error";
+    header("Location: firearm-archive");
+    exit();
 }

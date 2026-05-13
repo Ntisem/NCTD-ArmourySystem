@@ -256,6 +256,7 @@ if(!isset($_SESSION["username"])) {
               </div>
             </section>
           </div>
+          <?php require_once('includes/footer.php');?>
         </div>
       </div>
     </div>

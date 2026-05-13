@@ -6,6 +6,7 @@ require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 require_once('includes/NCTD_Base_PDF.php');
 
+
 class FirearmsAudit extends NCTD_Base_PDF {
     function Header() {
         // High-Contrast Tactical Header

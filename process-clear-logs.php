@@ -1,10 +1,12 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
 
-// 1. Authorization Check
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Admin') {
-    die("UNAUTHORIZED_ACCESS: Senior Command clearance required.");
+
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
 }
 
 try {
@@ -33,9 +35,11 @@ try {
         // 5. Create a final log entry in the main table about the purge
         $log_action = "SYSTEM_MAINTENANCE: Moved $moved_count logs to Archive (>90 days old).";
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
+      
         $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], $log_action, $_SESSION['user_role']]);
+        logDailyActivity($pdo, $log_action, '', 'System Maintenance');
     }
-
+    
     $pdo->commit();
     header("Location: daily-logs?status=success&moved=" . $moved_count);
     exit();

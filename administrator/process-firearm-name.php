@@ -1,6 +1,15 @@
 <?php
 require_once('connections/connect-db.php');
-session_start();
+require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+// session_start();
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
 
 // CREATE
 if (isset($_POST['add_firearm'])) {
@@ -16,10 +25,12 @@ if (isset($_POST['add_firearm'])) {
     } else {
         $stmt = $pdo->prepare("INSERT INTO firearm_name (firearm_name) VALUES (?)");
         if ($stmt->execute([$name])) {
+            logDailyActivity($pdo, "Added Firearm Name [ " . $name . " ]", '', 'Firearm Management');
             $_SESSION['status'] = "SUCCESS: UPLINK_COMMITTED";
             $_SESSION['status_code'] = "success";
         }
     }
+
     header("Location: add-firearm-name");
     exit();
 }
@@ -31,6 +42,7 @@ if (isset($_POST['update_firearm'])) {
     
     $stmt = $pdo->prepare("UPDATE firearm_name SET firearm_name = ? WHERE firearm_nameID = ?");
     if ($stmt->execute([$name, $id])) {
+        logDailyActivity($pdo, "Updated Firearm Name [ " . $name . " ]", '', 'Firearm Management');
         $_SESSION['status'] = "SUCCESS: REGISTRY_MODIFIED";
         $_SESSION['status_code'] = "info";
     }
@@ -44,6 +56,7 @@ if (isset($_POST['delete_firearm'])) {
     
     $stmt = $pdo->prepare("DELETE FROM firearm_name WHERE firearm_nameID = ?");
     if ($stmt->execute([$id])) {
+        logDailyActivity($pdo, "Deleted Firearm Name [ " . $name . " ]", '', 'Firearm Management');
         $_SESSION['status'] = "SUCCESS: DATA_PURGED";
         $_SESSION['status_code'] = "warning";
     }

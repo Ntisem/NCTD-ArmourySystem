@@ -1,6 +1,14 @@
 <?php
 require_once('connections/connect-db.php');
-session_start();
+require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
 
 $action = $_POST['action'] ?? '';
 $adminID = $_SESSION['adminID'] ?? 0;
@@ -20,6 +28,10 @@ try {
             $sql = "INSERT INTO firearm_categories (firearm_category, adminID, armourer_admin_name, datetime) VALUES (?, ?, ?, ?)";
         }
         
+                 // ... inside the try{} block ...
+        $action_details = "Added " . ucfirst($action) . "[ " . $_POST['firearm_name'] . " (" . $qty . " ) ]";
+        logDailyActivity($pdo, $action_details, '', 'Firearm Management');
+
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$val, $adminID, $adminName, $datetime]);
         
@@ -40,6 +52,10 @@ try {
         } else {
             $sql = "UPDATE firearm_categories SET firearm_category = ? WHERE firearm_categoryID = ?";
         }
+        
+         // ... inside the try{} block ...
+        $action_details = "Updated " . ucfirst($action) . "[ " . $_POST['firearm_name'] . " (" . $qty . " ) ]";
+        logDailyActivity($pdo, $action_details, '', 'Firearm Management');
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$val, $id]);
@@ -60,7 +76,11 @@ try {
         } else {
             $sql = "DELETE FROM firearm_categories WHERE firearm_categoryID = ?";
         }
-
+        
+            // ... inside the try{} block ...               
+        $action_details = "Deleted " . ucfirst($action) . "[ " . $_POST['firearm_name'] . " (" . $qty . " ) ]";
+        logDailyActivity($pdo, $action_details, '', 'Firearm Management');
+        
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
         

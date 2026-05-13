@@ -110,8 +110,8 @@ $bookings = $stmt_bookings->fetchAll();
                         <div class="col-md-4">
                             <div class="card tactical-card h-100">
                                 <div class="card-body text-center">
-                                    <?php if (!empty($officer['officer_image']) && file_exists('assets/images/officer_images/' . $officer['officer_image'])): ?>
-                                        <img src="assets/images/officer_images/<?= $officer['officer_image'] ?>" width="120" height="120" class="rounded-circle mb-3 border border-info">
+                                    <?php if (!empty($officer['officer_image']) && file_exists('../assets/images/officer_images/' . $officer['officer_image'])): ?>
+                                        <img src="../assets/images/officer_images/<?= $officer['officer_image'] ?>" width="120" height="120" class="rounded-circle mb-3 border border-info">
                                     <?php else: ?>
                                         <i class="mdi mdi-account-circle text-info mb-3" style="font-size: 100px;"></i>
                                     <?php endif; ?>
@@ -174,6 +174,11 @@ $bookings = $stmt_bookings->fetchAll();
                         </div>
                     </div>
                 </div>
+                <div class="text-center mt-4">
+                    <small style="color: #555; font-size: 10px;">COMMAND NCTD // OFFICER_TRACKING_MODULE</small>
+                 
+                    </div>
+                       <?php include_once('includes/footer.php'); ?>
             </div>
         </div>
     </div>

@@ -111,6 +111,10 @@ if($admin_data) {
                     </div>
 
                 </div>
+                <div class="card-footer text-center">
+                    <small class="text-muted">TERMINAL v1.0 | &copy; NCTD ARMORY MANAGEMENT SYSTEM</small>
+                </div>
+                <?php include_once('includes/footer.php'); ?>
             </div>
         </div>
     </div>

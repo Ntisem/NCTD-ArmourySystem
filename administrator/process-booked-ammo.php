@@ -1,6 +1,14 @@
 <?php
 require_once('connections/connect-db.php');
-session_start();
+require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
@@ -14,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
 
             $stmt = $pdo->prepare("UPDATE ammo_bookings SET ammo_rounds = ?, ammo_returns = ?, returned_time = ? WHERE book_ammoID = ?");
             $stmt->execute([$rounds, $status, $returned_time, $id]);
+
+            logDailyActivity($pdo, "Updated Booked Ammunition [ ID: " . $id . " ]", '', 'Ammunition Management');   
             echo json_encode(['status' => 'success']);
         }
 
@@ -21,6 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
             $id = $_POST['book_ammoID'];
             $stmt = $pdo->prepare("DELETE FROM ammo_bookings WHERE book_ammoID = ?");
             $stmt->execute([$id]);
+            
+            logDailyActivity($pdo, "Deleted Booked Ammunition [ ID: " . $id . " ]", '', 'Ammunition Management');
             echo json_encode(['status' => 'success']);
         }
     } catch (PDOException $e) {

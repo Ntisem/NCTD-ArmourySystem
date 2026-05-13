@@ -1,6 +1,7 @@
 <?php 
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
 
 // Ensure only authorised Armourer is interacting with the script
 if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
@@ -68,6 +69,9 @@ if (isset($_POST['add_faulty_weapon'])) {
         ]);
 
         $pdo->commit();
+        $action_details = "Added Faulty Weapon [ ID: " . $faulty_firearm_serial_no . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Weapon Management');           
+
         $_SESSION['status'] = "Added Successfully";
         $_SESSION['status_code'] = "success";
         header('location: add-faulty-weapon?status=success');
@@ -98,6 +102,9 @@ if (isset($_POST['update_faulty_weapon'])) {
         $stmt = $pdo->prepare("UPDATE faulty_weapons SET faulty_firearm_serial_no = ?, faulty_firearm_name = ?, faulty_firearm_type = ?, faulty_firearm_class = ?, faulty_type = ?, faulty_nature = ?, faulty_firearm_comment = ? WHERE faulty_weaponID = ?");
         $stmt->execute([$faulty_firearm_serial_no, $faulty_firearm_name, $faulty_firearm_type, $faulty_firearm_class, $faulty_type, $faulty_nature, $faulty_firearm_comment, $faulty_weaponID]);
         
+        $action_details = "Updated Faulty Weapon [ ID: " . $faulty_firearm_serial_no . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Weapon Management');
+
         $pdo->commit();
         $_SESSION['status'] = "Updated Successfully";
         header('location: faulty-weapon?status=success');
@@ -119,6 +126,9 @@ if (isset($_POST['delete_faulty_weapon'])) {
         $stmt = $pdo->prepare("DELETE FROM faulty_weapons WHERE faulty_weaponID = ?");
         $stmt->execute([$faulty_weaponID]);
         
+        $action_details = "Deleted Faulty Weapon [ ID: " . $faulty_weaponID . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Weapon Management');
+
         $pdo->commit();
         $_SESSION['status'] = "Deleted Successfully";
         header('location: faulty-weapon?status=success');
@@ -140,6 +150,9 @@ if (isset($_POST['mark_weapon_fixed'])) {
         // Remove from the faulty_weapons registry (can be extended to archive or move to service log)
         $stmt = $pdo->prepare("DELETE FROM faulty_weapons WHERE faulty_weaponID = ?");
         $stmt->execute([$faulty_weaponID]);
+        
+        $action_details = "Marked Faulty Weapon as Fixed [ ID: " . $faulty_weaponID . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Weapon Management');
         
         $pdo->commit();
         $_SESSION['status'] = "Fixed and restored successfully";

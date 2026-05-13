@@ -140,7 +140,7 @@ try {
                             $user_role = $row['user_role'];
                             ?>
                             <div class="count-indicator">
-                                <img class="img-xs rounded-circle" src="assets/images/administrator_images/<?= $img ?>" alt="">
+                                <img class="img-xs rounded-circle" src="../assets/images/armourer_images/<?= $img ?>" alt="">
                                 <span class="count bg-success"></span>
                             </div>
                             <div class="profile-name">
@@ -190,6 +190,7 @@ try {
                     <li class="nav-item"> <a class="nav-link" href="firearm-names">Firearms Stock</a></li>
                     <li class="nav-item"> <a class="nav-link" href="ammunition">Munitions Stock</a></li>
                     <li class="nav-item"> <a class="nav-link" href="add-new-weapon">Add Firearm</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="add-new-ammo">Add Ammunition</a></li>
                 </ul>
             </div>
         </li>
@@ -251,7 +252,7 @@ try {
             <div class="collapse" id="administrators">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="administrators">Administrators</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="add-new-administrator">Add Administrators</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="add-new-administrator">Add Admin</a></li>
                 </ul>
             </div>
         </li>
@@ -274,7 +275,27 @@ try {
                 </ul>
             </div>
         </li>
-
+           <li class="nav-item menu-items">
+            <a class="nav-link" data-bs-toggle="collapse" href="#recycle-bin" aria-expanded="false" aria-controls="recycle-bin">
+                <span class="menu-icon"><i class="mdi mdi-delete text-warning"></i></span>
+                <span class="menu-title" style="color: var(--neon-amber);">Recycle Bin</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="recycle-bin">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="firearm-archive">Weapons</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="ammunition-archive">Ammunition</a></li>
+                </ul>
+            </div>
+        </li>
+      <li class="nav-item menu-items">  
+            <a class="nav-link" href="activity-logs">
+                <span class="menu-icon">
+                    <i class="mdi mdi-file-document text-warning"></i>
+                </span>
+                <span class="menu-title">Activity Logs</span>
+            </a>
+        </li>
         <li class="nav-item nav-category">
             <span class="nav-link">REPORTS_CENTER</span>
         </li>

@@ -1,6 +1,8 @@
 <?php 
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
 
 // Ensure only authorised Administrator is interacting with the script
 if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
@@ -66,6 +68,10 @@ if (isset($_POST['add_faulty_weapon'])) {
             $returned_by_officer,
             $faulty_firearm_image
         ]);
+        
+                 // ... inside the try{} block ...
+        $action_details = "Added Faulty Weapon [ " . $_POST['firearm_name'] . " (" . $qty . " ) ]";
+        logDailyActivity($pdo, $action_details, '', 'Faulty Weapon Management');
 
         $pdo->commit();
         $_SESSION['status'] = "Added Successfully";

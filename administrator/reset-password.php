@@ -46,6 +46,7 @@ if (isset($_POST['update_password'])) {
     <meta charset="utf-8">
     <title>RESET_TERMINAL | PALADIN</title>
     <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;500&display=swap" rel="stylesheet">
     <style>
         :root { --neon: #00f2ff; --bg-deep: #05070a; --card-bg: #0d1117; }
@@ -80,5 +81,6 @@ if (isset($_POST['update_password'])) {
             </div>
         <?php endif; ?>
     </div>
+        <?php require_once('includes/footer.php'); ?>
 </body>
 </html>

@@ -136,7 +136,7 @@ body {
 
 <nav class="navbar p-0 fixed-top d-flex flex-row">
     <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo-mini" href="armourer">
+        <a class="navbar-brand brand-logo-mini" href="administrator">
             <img src="assets/images/gps_logo_armory_mini.png" alt="logo" style="height:35px; filter: drop-shadow(0 0 5px var(--neon-cyan));" />
         </a>
     </div>
@@ -207,7 +207,7 @@ body {
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
                     <h6 class="p-3 mb-0" style="color: var(--neon-cyan); font-size: 0.7rem;">ADMIN SETTINGS</h6>
                     <div class="dropdown-divider"></div>
-                    <a href="armourer-profile.php" class="dropdown-item preview-item" style=" background-color: rgba(255,255,255,0.05);">
+                    <a href="administrator-profile" class="dropdown-item preview-item" style=" background-color: rgba(255,255,255,0.05);">
                         <i class="mdi mdi-account-card-details text-info mr-2"></i> Profile  
                     </a>
                     

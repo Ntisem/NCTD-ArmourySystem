@@ -1,11 +1,11 @@
 <?php
 require_once('connections/connect-db.php');
-require_once('functions.php');
 require_once('includes/user_auth.php');
 
 /** * TACTICAL REGISTRY ENGINE - PDO REFACTOR
  * Refactored from MySQLi to PDO for enhanced security and performance.
  */
+
 
 if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
     header("location: login?status=unauthorized");

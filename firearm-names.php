@@ -143,6 +143,7 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
                         </div>
                     </div>
                 </div>
+                <?php require_once('includes/footer.php');?>
             </div>
         </div>
     </div>
@@ -238,7 +239,7 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
     </div>
     </div>
     
- <?php require_once('includes/footer.php'); ?>
+
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>

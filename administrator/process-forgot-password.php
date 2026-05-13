@@ -1,8 +1,11 @@
 <?php
 require_once('connections/connect-db.php');
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+// if (session_status() === PHP_SESSION_NONE) {
+//     session_start();
+// }
 
 // Import PHPMailer classes
 use PHPMailer\PHPMailer\PHPMailer;
@@ -74,7 +77,7 @@ if (isset($_POST['recover_access'])) {
         $_SESSION['status'] = "SIGNAL_DISPATCHED: CHECK_YOUR_COMM_CHANNEL";
         $_SESSION['status_code'] = "success";
     }
-
+   
     header("Location: forgot-password.php");
     exit();
 }

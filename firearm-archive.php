@@ -2,6 +2,11 @@
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
+
 // Fetch ONLY soft-deleted assets
 $stmt = $pdo->query("SELECT * FROM firearms WHERE is_deleted = 1 ORDER BY datetime DESC");
 $archived_assets = $stmt->fetchAll();

@@ -80,6 +80,10 @@ $ammunition = $stmtA->fetchAll();
             </div>
         </div>
     </div>
+    <div class="text-center mt-4">
+        <small style="color: #555; font-size: 10px;">COMMAND NCTD // UNIFIED_STATUS_REPORT_MODULE</small>
+    </div>
+       <?php include_once('includes/footer.php'); ?>
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

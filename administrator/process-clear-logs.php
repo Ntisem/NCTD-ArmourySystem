@@ -1,6 +1,14 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
 
 // 1. Authorization Check
 if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Admin') {
@@ -35,6 +43,9 @@ try {
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], $log_action, $_SESSION['user_role']]);
     }
+             // ... inside the try{} block ...
+    $action_details = "SYSTEM_MAINTENANCE: Cleared logs [ " . $moved_count . " records ]";
+    logDailyActivity($pdo, $action_details, '', 'System Maintenance');
 
     $pdo->commit();
     header("Location: daily-logs?status=success&moved=" . $moved_count);

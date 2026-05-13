@@ -2,6 +2,12 @@
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
+
+
 if (isset($_POST['query']) && !empty(trim($_POST['query']))) {
     $search = "%" . trim($_POST['query']) . "%";
     $output = '<div class="list-group tactical-results-group">';

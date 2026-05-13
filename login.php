@@ -1,6 +1,5 @@
 <?php
 require_once('connections/connect-db.php');
-session_start();
 
 if (isset($_POST['username'])) {
     $username = trim($_POST['username']);

@@ -190,6 +190,7 @@ try {
                     <li class="nav-item"> <a class="nav-link" href="firearm-names">Firearms Stock</a></li>
                     <li class="nav-item"> <a class="nav-link" href="ammunition">Munitions Stock</a></li>
                     <li class="nav-item"> <a class="nav-link" href="add-new-weapon">Add Firearm</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="add-new-ammo">Add Ammunition</a></li>
                 </ul>
             </div>
         </li>

@@ -2,6 +2,11 @@
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
+
 $id = $_GET['id'] ?? 0;
 $stmt = $pdo->prepare("SELECT * FROM firearms WHERE firearmID = ?");
 $stmt->execute([$id]);
@@ -67,5 +72,6 @@ if (!$asset) { die("[CRITICAL_ERROR]: ASSET_NOT_FOUND"); }
             </div>
         </div>
     </div>
+    <?php require_once('includes/footer.php');?>
 </body>
 </html>

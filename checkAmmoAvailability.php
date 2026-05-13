@@ -3,6 +3,8 @@ require_once('connections/connect-db.php');
 require_once("functions.php");
 require_once('includes/user_auth.php');
 
+
+
 if(!empty($_POST["ammo_name"])){
     $name = trim($_POST["ammo_name"]);
     

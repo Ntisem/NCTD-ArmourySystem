@@ -2,6 +2,7 @@
 require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // For logging actions
 
 // Access Control
 if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
@@ -46,8 +47,10 @@ try {
 } catch (PDOException $e) {
     die("CRITICAL_SYSTEM_FAILURE: " . $e->getMessage());
 }
-?>
 
+
+
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -141,7 +144,20 @@ try {
         
         <div class="container-fluid page-body-wrapper">
             <?php include_once('includes/navbar.php');?>
-            
+            <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+                <script>
+                $(document).ready(function() {
+                    // This checks if a deletion just happened
+                    <?php if(isset($_SESSION['archive_alert'])): ?>
+                        const toast = `<div class="t-toast error" style="background:#161b22; border-left:4px solid #ff3e3e; color:#fff; padding:15px; margin-bottom:10px; min-width:300px;">
+                            <i class="mdi mdi-alert"></i> SECURITY_ALERT: ${_SESSION['archive_alert']}
+                        </div>`;
+                        $('#toast-container').append(toast);
+                        <?php unset($_SESSION['archive_alert']); ?>
+                    <?php endif; ?>
+                });
+                </script>
             <div class="main-panel">
                 <div class="content-wrapper">
                     

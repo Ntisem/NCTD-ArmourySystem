@@ -1,6 +1,12 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
 
 if (isset($_POST['soft_delete'])) {
     $id = (int)$_POST['delete_id'];
@@ -28,6 +34,9 @@ if (isset($_POST['soft_delete'])) {
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log_action = "ARCHIVED_BOOKING_RECORD: ID " . $id;
         $log->execute([$adminID, $fullname, $log_action, $user_role]);
+        
+        $action_details = "Archived Booking Record [ ID: " . $id . "]";
+        logDailyActivity($pdo, $action_details, '', 'Booking Management');
 
         $pdo->commit();
         header("Location: booked-firearms?status=success");

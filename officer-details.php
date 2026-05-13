@@ -10,7 +10,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
 
 $officerID = $_GET['officerID'] ?? null;
 if(!$officerID) {
-    header("location: officers-list.php");
+    header("location: officers-list");
     exit();
 }
 
@@ -19,7 +19,7 @@ $stmt->execute([$officerID]);
 $officer = $stmt->fetch();
 
 if(!$officer) {
-    header("location: officers-list.php");
+    header("location: officers-list");
     exit();
 }
 
@@ -174,6 +174,7 @@ $bookings = $stmt_bookings->fetchAll();
                         </div>
                     </div>
                 </div>
+                <?php require_once('includes/foorter.php');?>
             </div>
         </div>
     </div>

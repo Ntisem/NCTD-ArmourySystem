@@ -2,6 +2,11 @@
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
+
 $status = '';
 $status_code = '';
 
@@ -92,5 +97,11 @@ if (isset($_POST['update_password'])) {
             </div>
         </div>
     </div>
+    </div>
+    </div>
+    <div class="text-center mt-4">
+        <small style="color: #555; font-size: 10px;">COMMAND NCTD // SECURITY_UPDATE_MODULE</small>
+    </div>
+     <?php include_once('includes/footer.php');?>
 </body>
 </html>

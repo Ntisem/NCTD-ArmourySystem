@@ -67,7 +67,7 @@ if (isset($_POST['update_officer'])) {
         $allowedExtensions = ['jpg', 'jpeg', 'png'];
         if (in_array($fileExtension, $allowedExtensions)) {
             $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
-            $uploadFileDir = 'uploads/';
+            $uploadFileDir = 'assets/images/officer_images/';
             if(!is_dir($uploadFileDir)) mkdir($uploadFileDir, 0755, true);
             
             if(move_uploaded_file($fileTmpPath, $uploadFileDir . $newFileName)) {
@@ -125,7 +125,7 @@ if (isset($_GET['view_id'])) {
     $off = $stmt->fetch();
     if ($off) {
         echo '<div class="row text-light"><div class="col-md-4 text-center">';
-        echo '<img src="uploads/' . htmlspecialchars($off['officer_image']) . '" style="width: 150px; height: 150px; border-radius: 5px; border: 2px solid var(--neon); object-fit: cover;" class="mb-3">';
+        echo '<img src="assets/images/officer_images/'. htmlspecialchars($off['officer_image']) . '" style="width: 150px; height: 150px; border-radius: 5px; border: 2px solid var(--neon); object-fit: cover;" class="mb-3">';
         echo '</div><div class="col-md-8">';
         echo '<p><strong>Service No:</strong> ' . htmlspecialchars($off['officer_service_no']) . '</p>';
         echo '<p><strong>Rank:</strong> ' . htmlspecialchars($off['rank']) . '</p>';
@@ -277,6 +277,7 @@ if (isset($_GET['view_id'])) {
                         </tbody>
                     </table>
                 </div>
+                <?php include_once('includes/footer.php'); ?>
             </div>
         </div>
     </div>
@@ -325,7 +326,7 @@ if (isset($_GET['view_id'])) {
             </form>
         </div>
     </div>
- <?php require_once('includes/footer.php'); ?>
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

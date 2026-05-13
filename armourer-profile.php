@@ -2,10 +2,10 @@
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
-if(!isset($_SESSION["username"])) {
-    header("location: login");
-    exit();
-}
+      if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+          header("location: login");
+          exit();
+      }
 
 $username = $_SESSION['username'];
 $stmt = $pdo->prepare("SELECT * FROM admin_lists WHERE username = ?");

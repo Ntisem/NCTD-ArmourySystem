@@ -1,4 +1,5 @@
 <?php
+require_once('includes/db_connect.php');
 require_once('includes/user_auth.php');
 
 // Access Control

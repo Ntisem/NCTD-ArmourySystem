@@ -1,6 +1,7 @@
 <?php 
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
 
 if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
     header("location: login");
@@ -48,6 +49,9 @@ if (isset($_POST['add_faulty_ammo'])) {
         $stmt_update = $pdo->prepare("UPDATE ammunitions SET ammo_rounds = ammo_rounds - ? WHERE ammo_name = ?");
         $stmt_update->execute([$faulty_ammo_quantity, $faulty_ammo_serial_no]);
 
+        $action_details = "Added Faulty Ammunition [ ID: " . $faulty_ammo_serial_no . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Ammunition Management');
+
         $pdo->commit();
         $_SESSION['status'] = "Added Successfully";
         header('location: faulty-ammo?status=success');
@@ -86,6 +90,9 @@ if (isset($_POST['update_faulty_ammo'])) {
         $stmt = $pdo->prepare("UPDATE faulty_ammo SET faulty_ammo_serial_no = ?, faulty_ammo_quantity = ?, faulty_type = ?, faulty_ammo_comment = ?, faulty_ammo_type = ? WHERE faulty_ammoID = ?");
         $stmt->execute([$faulty_ammo_serial_no, $faulty_ammo_quantity, $faulty_type, $faulty_ammo_comment, $faulty_ammo_type, $faulty_ammoID]);
         
+        $action_details = "Updated Faulty Ammunition [ ID: " . $faulty_ammo_serial_no . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Ammunition Management');
+
         $pdo->commit();
         $_SESSION['status'] = "Updated Successfully";
         header('location: faulty-ammo?status=success');
@@ -112,6 +119,9 @@ if (isset($_POST['delete_faulty_ammo'])) {
             $stmt_update = $pdo->prepare("UPDATE ammunitions SET ammo_rounds = ammo_rounds + ? WHERE ammo_name = ?");
             $stmt_update->execute([$original['faulty_ammo_quantity'], $original['faulty_ammo_serial_no']]);
         }
+    
+        $action_details = "Deleted Faulty Ammunition [ ID: " . $faulty_ammoID . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Ammunition Management');
 
         $stmt = $pdo->prepare("DELETE FROM faulty_ammo WHERE faulty_ammoID = ?");
         $stmt->execute([$faulty_ammoID]);
@@ -141,7 +151,10 @@ if (isset($_POST['mark_fixed'])) {
             $stmt_update = $pdo->prepare("UPDATE ammunitions SET ammo_rounds = ammo_rounds + ? WHERE ammo_name = ?");
             $stmt_update->execute([$original['faulty_ammo_quantity'], $original['faulty_ammo_serial_no']]);
         }
-
+    
+        $action_details = "Marked Faulty Ammunition as Fixed [ ID: " . $faulty_ammoID . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Ammunition Management');
+            
         $stmt = $pdo->prepare("DELETE FROM faulty_ammo WHERE faulty_ammoID = ?");
         $stmt->execute([$faulty_ammoID]);
 

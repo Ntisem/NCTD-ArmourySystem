@@ -1,6 +1,12 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_weapon'])) {
     // 1. Validate Session Data
@@ -53,6 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_weapon'])) {
         $log_action = "MODIFIED_ASSET: " . $serial . " [" . $name . "]";
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], $log_action, $_SESSION['user_role']]);
+
+        $action_details = "Updated Firearm [ ID: " . $id . " - " . $name . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Firearm Management');
 
         $pdo->commit();
         header("Location: firearm-names?firearm-name=" . urlencode($name) . "&status=success");

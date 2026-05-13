@@ -42,7 +42,7 @@ $records = $history->fetchAll();
     <div class="row">
         <div class="col-md-4">
             <div class="profile-header text-center">
-                <img src="assets/images/officer_images/<?= $officer['officer_image'] ?>" style="width: 150px; border: 3px solid #00f2ff;">
+                <img src="../assets/images/officer_images/<?= $officer['officer_image'] ?>" style="width: 150px; border: 3px solid #00f2ff;">
                 <h3 class="mt-3 text-info"><?= $officer['full_name'] ?></h3>
                 <p>SERVICE_NO: <?= $officer['officer_service_no'] ?></p>
             </div>
@@ -70,5 +70,6 @@ $records = $history->fetchAll();
             <?php endforeach; ?>
         </div>
     </div>
+       <?php include_once('includes/footer.php'); ?>
 </body>
 </html>

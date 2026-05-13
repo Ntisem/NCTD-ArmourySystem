@@ -14,7 +14,7 @@ $a_id   = $_SESSION['adminID'] ?? 0;
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>HQ COMMAND | ASSET ATTRIBUTES</title>
+    <title>NCTD ARMOURY SYSTEM | WEAPON ATTRIBUTES</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -185,6 +185,7 @@ $a_id   = $_SESSION['adminID'] ?? 0;
                         </div>
                     </div>
                 </div>
+                <?php include_once('includes/footer.php'); ?>
             </div>
        </div>
     </div>

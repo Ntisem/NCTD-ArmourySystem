@@ -128,6 +128,7 @@ $admin_data = $stmtAdmin->fetch();
                         </div>
                     </div>
                 </div>
+                 <?php require_once('includes/footer.php'); ?>
             </div>
         </div>
     </div>
@@ -166,7 +167,6 @@ $admin_data = $stmtAdmin->fetch();
             </form>
         </div>
     </div>
-    <?php require_once('includes/footer.php'); ?>
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>

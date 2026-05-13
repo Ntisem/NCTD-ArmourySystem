@@ -207,7 +207,7 @@ body {
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
                     <h6 class="p-3 mb-0" style="color: var(--neon-cyan); font-size: 0.7rem;">ADMIN SETTINGS</h6>
                     <div class="dropdown-divider"></div>
-                    <a href="armourer-profile.php" class="dropdown-item preview-item" style=" background-color: rgba(255,255,255,0.05);">
+                    <a href="armourer-profile" class="dropdown-item preview-item" style=" background-color: rgba(255,255,255,0.05);">
                         <i class="mdi mdi-account-card-details text-info mr-2"></i> Profile  
                     </a>
                     

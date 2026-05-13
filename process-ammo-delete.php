@@ -1,6 +1,12 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
     $id = $_POST['delete_id'] ?? null;
@@ -20,7 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
 
             $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
             $log->execute([$adminID, $adminName, "DELETED_AMMO_ID_" . $id, $role]);
-
+            
+            $action_details = "Deleted Ammunition [ ID: " . $id . " ]";
+            logDailyActivity($pdo, $action_details, '', 'Ammunition Management');
             $pdo->commit();
             header("Location: ammunition?status=success");
             exit();

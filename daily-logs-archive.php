@@ -10,7 +10,7 @@ if(!isset($_SESSION["username"]) || !in_array($_SESSION["user_role"], ['Armourer
 }
 
 // 2. Fetch Archived Activity Stream
-$stmt = $pdo->query("SELECT * FROM daily_activities_archive ORDER BY logID DESC");
+$stmt = $pdo->query("SELECT * FROM daily_activities ORDER BY logID DESC");
 $archived_logs = $stmt->fetchAll();
 ?>
 

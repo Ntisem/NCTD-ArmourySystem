@@ -1,6 +1,15 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+// Access Control
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
+    header("location: login");
+    exit();
+}
+
+
 
 if (isset($_POST['booking_firearm'])) {
     $fID = $_POST['firearmID'];
@@ -31,6 +40,10 @@ if (isset($_POST['booking_firearm'])) {
         if($qty > 0 && !empty($aID)) {
             $pdo->prepare("UPDATE ammunitions SET ammo_rounds = ammo_rounds - ? WHERE ammoID = ?")->execute([$qty, $aID]);
         }
+
+          // ... inside the try{} block ...
+        $action_details = "Booked Firearm [ " . $_POST['firearm_name'] . " (" . $qty . " ) ]";
+        logDailyActivity($pdo, $action_details, '', 'Firearm Deployment Management');
 
         $pdo->commit();
         header("Location: booking?status=success");

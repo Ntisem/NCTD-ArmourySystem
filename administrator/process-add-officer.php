@@ -1,6 +1,7 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php');
 
 // Verify that an Armourer is logged in
 if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
@@ -95,7 +96,9 @@ if (isset($_POST['add_officer'])) {
             $action, 
             $_SESSION['user_role']
         ]);
-
+          // ... inside the try{} block ...
+        $action_details = "Added Officer [ " . $full_name . " (" . $officer_service_no . " ) ]";
+        logDailyActivity($pdo, $action_details, '', 'Officer Management');
         // 5. Commit and Redirect
         $pdo->commit();
         header("Location: officers-list?status=success");

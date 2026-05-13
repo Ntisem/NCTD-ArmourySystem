@@ -10,6 +10,7 @@ require_once('includes/user_auth.php');
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
         :root {
             --neon-cyan: #00f2ff;
@@ -91,7 +92,76 @@ require_once('includes/user_auth.php');
             </div>
         </div>
     </div>
+    <style>
+    /* Fixed Tactical Footer Styling */
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #0a0c10 !important;
+        border-top: 2px solid #f9a602;
+        padding: 15px 0;
+        z-index: 1030; /* Ensures it stays above page content */
+        box-shadow: 0 -5px 20px rgba(249, 166, 2, 0.15);
+    }
 
+    /* Prevent content from being hidden behind the footer */
+    body {
+        padding-bottom: 70px; /* Match this to the footer height */
+    }
+
+    .tactical-alert {
+        background-color: #05070a !important;
+        border: 1px solid var(--neon-cyan) !important;
+    }
+    
+    .swal-title { color: var(--neon-cyan) !important; font-family: 'Orbitron'; }
+    .swal-text { color: #8a8d93 !important; font-family: 'Roboto Mono'; }
+    
+    /* Back to top adjustment for fixed footer */
+    .back-to-top {
+        position: fixed; 
+        bottom: 80px; /* Moved up to sit above the fixed footer */
+        right: 20px;
+        background: #f9a602;
+        padding: 10px;
+        border-radius: 2px;
+        box-shadow: 0 0 10px rgba(249, 166, 2, 0.5);
+        z-index: 1031;
+    }
+</style>
+
+<footer class="footer">
+    <div class="container-fluid">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between align-items-center">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block" style="color: #fff !important;">
+                <span style="color: #f9a602;">[SECURE_SYSTEM: <span style="color: #28a745;">ACTIVE</span>]</span> GPS | NATIONAL COUNTER TERRORISM DEPT.
+            </span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center" style="color: #6c7293; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace;">
+                DEV: <span>C/INSPR W. NTISEM</span> | &copy; <?php echo date("Y"); ?>
+            </span>
+        </div>
+    </div>
+</footer>
+
+<a href="#" class="back-to-top">
+    <i class="mdi mdi-arrow-up-bold"></i>
+</a>
+
+<script src="assets/js/sweetalert.min.js"></script>
+<script src="assets/js/clock.js"></script>
+
+<script>
+<?php if(isset($_SESSION['status']) && $_SESSION['status'] != ''): ?>
+    swal({
+        title: "<?php echo $_SESSION['status'];?>",
+        icon: "<?php echo $_SESSION['status_code'];?>",
+        button: "ACKNOWLEDGE",
+        className: "tactical-alert"
+    });
+<?php unset($_SESSION['status']); endif; ?>
+</script>
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <script>
     $(document).ready(function(){

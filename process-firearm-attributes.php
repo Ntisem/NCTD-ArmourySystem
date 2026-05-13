@@ -1,6 +1,13 @@
 <?php
 require_once('connections/connect-db.php');
-session_start();
+require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
+
 
 $action = $_POST['action'] ?? '';
 $adminID = $_SESSION['adminID'] ?? 0;
@@ -22,7 +29,10 @@ try {
         
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$val, $adminID, $adminName, $datetime]);
-        
+
+        $action_details = "Added " . ucfirst($action) . " [ " . $val . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Firearm Attribute Management');
+
         $_SESSION['status'] = "DATA_ADDED";
         $_SESSION['status_code'] = "success";
     }
@@ -44,6 +54,9 @@ try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$val, $id]);
         
+        $action_details = "Updated " . ucfirst($type) . " [ ID: " . $id . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Firearm Attribute Management');
+
         $_SESSION['status'] = "DATA_MODIFIED";
         $_SESSION['status_code'] = "success";
     }
@@ -64,6 +77,9 @@ try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
         
+        $action_details = "Deleted " . ucfirst($type) . " [ ID: " . $id . " ]";
+        logDailyActivity($pdo, $action_details, '', 'Firearm Attribute Management');
+                    
         $_SESSION['status'] = "DATA_DELETED";
         $_SESSION['status_code'] = "error"; // Using error color for deletion theme
     }

@@ -38,7 +38,7 @@ session_start();
             </div>
         </form>
     </div>
-
+     <?php require_once('includes/footer.php'); ?>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <?php if(isset($_SESSION['status'])): ?>
     <script>

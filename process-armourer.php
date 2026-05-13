@@ -1,6 +1,12 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
+require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+    header("location: login");
+    exit();
+}
 
 if (isset($_POST['action']) && $_POST['action'] == 'add') {
     // 1. Capture Inputs
@@ -57,6 +63,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'add') {
             $unit_dept, $code, $status
         ]);
 
+        $action_details = "Added Armourer [ " . $fullname . " (" . $service_no . " ) ]";
+        logDailyActivity($pdo, $action_details, '', 'Armourer Management');
+    
         $_SESSION['status'] = "UPLINK_SUCCESSFUL: PERSONNEL_ENROLLED";
         $_SESSION['status_code'] = "success";
         header("Location: armourers"); // Or your specific list page

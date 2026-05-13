@@ -67,7 +67,7 @@ if (isset($_POST['update_officer'])) {
         $allowedExtensions = ['jpg', 'jpeg', 'png'];
         if (in_array($fileExtension, $allowedExtensions)) {
             $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
-            $uploadFileDir = 'uploads/';
+            $uploadFileDir = '../assets/images/officer_images/';
             if(!is_dir($uploadFileDir)) mkdir($uploadFileDir, 0755, true);
             
             if(move_uploaded_file($fileTmpPath, $uploadFileDir . $newFileName)) {
@@ -87,11 +87,11 @@ if (isset($_POST['update_officer'])) {
         $log->execute([$admin['adminID'], $admin['fullname'], $log_action, $_SESSION['user_role']]);
 
         $pdo->commit();
-        header("Location: officers-list.php?status=success");
+        header("Location: officers-list?status=success");
         exit();
     } catch (Exception $e) {
         $pdo->rollBack();
-        header("Location: officers-list.php?status=error");
+        header("Location: officers-list?status=error");
         exit();
     }
 }
@@ -108,11 +108,11 @@ if (isset($_POST['delete_officer'])) {
         $log->execute([$admin['adminID'], $admin['fullname'], "DELETED_OFFICER_ID_" . $id, $_SESSION['user_role']]);
 
         $pdo->commit();
-        header("Location: officers-list.php?status=success");
+        header("Location: officers-list?status=success");
         exit();
     } catch (Exception $e) {
         $pdo->rollBack();
-        header("Location: officers-list.php?status=error");
+        header("Location: officers-list?status=error");
         exit();
     }
 }
@@ -125,7 +125,7 @@ if (isset($_GET['view_id'])) {
     $off = $stmt->fetch();
     if ($off) {
         echo '<div class="row text-light"><div class="col-md-4 text-center">';
-        echo '<img src="uploads/' . htmlspecialchars($off['officer_image']) . '" style="width: 150px; height: 150px; border-radius: 5px; border: 2px solid var(--neon); object-fit: cover;" class="mb-3">';
+        echo '<img src="../assets/images/officer_images/' . htmlspecialchars($off['officer_image']) . '" style="width: 150px; height: 150px; border-radius: 5px; border: 2px solid var(--neon); object-fit: cover;" class="mb-3">';
         echo '</div><div class="col-md-8">';
         echo '<p><strong>Service No:</strong> ' . htmlspecialchars($off['officer_service_no']) . '</p>';
         echo '<p><strong>Rank:</strong> ' . htmlspecialchars($off['rank']) . '</p>';
@@ -204,23 +204,23 @@ if (isset($_GET['view_id'])) {
                         <div class="dropdown-menu dropdown-menu-right landscape-dropdown-menu">
                             <h6 class="dropdown-header text-info mb-3">[ PERSONNEL_HIERARCHY_LEVELS ]</h6>
                             <div class="tactical-grid">
-                                <a href="officers-list.php?Rank=COP" class="dropdown-item">COP</a>
-                                <a href="officers-list.php?Rank=DCOP" class="dropdown-item">DCOP</a>
-                                <a href="officers-list.php?Rank=ACP" class="dropdown-item">ACP</a>
-                                <a href="officers-list.php?Rank=C/SUPT" class="dropdown-item">C/SUPT</a>
-                                <a href="officers-list.php?Rank=SUPT" class="dropdown-item">SUPT</a>
-                                <a href="officers-list.php?Rank=DSP" class="dropdown-item">DSP</a>
-                                <a href="officers-list.php?Rank=ASP" class="dropdown-item">ASP</a>
-                                <a href="officers-list.php?Rank=C/INSPR" class="dropdown-item">C/INSPR</a>
-                                <a href="officers-list.php?Rank=INSPR" class="dropdown-item">INSPECTOR</a>
-                                <a href="officers-list.php?Rank=SGT" class="dropdown-item">SERGEANT</a>
-                                <a href="officers-list.php?Rank=CPL" class="dropdown-item">CORPORAL</a>
-                                <a href="officers-list.php?Rank=L/CPL" class="dropdown-item">L/CORPORAL</a>
-                                <a href="officers-list.php?Rank=CONST" class="dropdown-item">CONSTABLE</a>
+                                <a href="officers-list?Rank=COP" class="dropdown-item">COP</a>
+                                <a href="officers-list?Rank=DCOP" class="dropdown-item">DCOP</a>
+                                <a href="officers-list?Rank=ACP" class="dropdown-item">ACP</a>
+                                <a href="officers-list?Rank=C/SUPT" class="dropdown-item">C/SUPT</a>
+                                <a href="officers-list?Rank=SUPT" class="dropdown-item">SUPT</a>
+                                <a href="officers-list?Rank=DSP" class="dropdown-item">DSP</a>
+                                <a href="officers-list?Rank=ASP" class="dropdown-item">ASP</a>
+                                <a href="officers-list?Rank=C/INSPR" class="dropdown-item">C/INSPR</a>
+                                <a href="officers-list?Rank=INSPR" class="dropdown-item">INSPECTOR</a>
+                                <a href="officers-list?Rank=SGT" class="dropdown-item">SERGEANT</a>
+                                <a href="officers-list?Rank=CPL" class="dropdown-item">CORPORAL</a>
+                                <a href="officers-list?Rank=L/CPL" class="dropdown-item">L/CORPORAL</a>
+                                <a href="officers-list?Rank=CONST" class="dropdown-item">CONSTABLE</a>
                             </div>
                         </div>
                     </div>
-                    <a href="officers-list.php" class="btn btn-danger-tactical ml-2"><i class="mdi mdi-refresh"></i> RESET</a>
+                    <a href="officers-list" class="btn btn-danger-tactical ml-2"><i class="mdi mdi-refresh"></i> RESET</a>
                       <a href="administrator" class="btn btn-tactical ml-2">
                         <i class="mdi mdi-arrow-left mr-1"></i>BACK
                     </a>
@@ -257,7 +257,7 @@ if (isset($_GET['view_id'])) {
                             <?php $n=1; foreach($officers as $row): ?>
                             <tr>
                                 <td><?php echo $n++; ?></td>
-                                <td><img src="assets/images/officer_images/<?php echo $row['officer_image']; ?>" style="width:35px; height:35px; border-radius:3px; border:1px solid var(--neon);"></td>
+                                <td><img src="../assets/images/officer_images/<?php echo $row['officer_image']; ?>" style="width:35px; height:35px; border-radius:3px; border:1px solid var(--neon);"></td>
                                 <td class="text-info font-weight-bold"><?php echo $row['officer_service_no']; ?></td>
                                 <td><?php echo $row['rank']; ?></td>
                                 <td><?php echo $row['full_name']; ?></td>
@@ -278,6 +278,7 @@ if (isset($_GET['view_id'])) {
                         </tbody>
                     </table>
                 </div>
+                <?php include_once('includes/footer.php'); ?>
             </div>
         </div>
     </div>

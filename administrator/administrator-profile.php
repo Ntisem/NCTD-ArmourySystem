@@ -109,7 +109,7 @@ $unit_dept    = $row['unit_dept'] ?? '';
                       <div class="card-body">
                         <div class="row">
                           <div class="col-md-4 text-center">
-                            <img src="assets/images/administrator_images/<?php echo htmlspecialchars($profile_image ?: 'default.png'); ?>" alt="Profile" class="img-profile mb-3">
+                            <img src="../assets/images/armourer_images/<?php echo htmlspecialchars($profile_image ?: 'default.png'); ?>" alt="Profile" class="img-profile mb-3">
                             <h4 style="color:#00f2ff;"><?php echo htmlspecialchars($fullname); ?></h4>
                             <p class="text-muted"><?php echo htmlspecialchars($user_role); ?></p>
                           </div>
@@ -158,6 +158,7 @@ $unit_dept    = $row['unit_dept'] ?? '';
               </div>
             </section>
           </div>
+          <?php require_once('includes/footer.php'); ?>
         </div>
       </div>
     </div>

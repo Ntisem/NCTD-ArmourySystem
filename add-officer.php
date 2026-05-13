@@ -238,7 +238,10 @@ if (isset($_POST['add_officer'])) {
             </div>
         </div>
     </div>
- <?php require_once('includes/footer.php'); ?>
+     <?php require_once('includes/footer.php'); ?>
+    </div>
+    
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function showToast(message, type = 'success') {
