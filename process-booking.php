@@ -45,7 +45,7 @@ if (isset($_POST['booking_firearm'])) {
 
         // 4. [ SYSTEM LOGGING TRIGGER ]
         // Format matches your existing logs: "Issued a Firearm [ AK47(with number of Rounds: 15 ]"
-        $action_details = "Issued a Firearm [ " . $firearm_name . "-" . $firearm_serial_no . "(with number of Rounds: " . $qty . " ]";
+        $action_details = "Issued a Firearm [ " . $firearm_name . "-" . $firearm_serial_no . "(with number of Rounds: " . $qty . " ] to ".$to_officer;
         logDailyActivity($pdo, $action_details, '', 'Deployments');
 
         $pdo->commit();

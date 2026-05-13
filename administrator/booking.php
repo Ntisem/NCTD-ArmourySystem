@@ -2,10 +2,7 @@
 require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
-require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
 
-
-// Access Control
 if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
     header("location: login");
     exit();
@@ -70,9 +67,9 @@ $admin = $stmt->fetch();
                                             <input type="hidden" name="officerID" id="officerID">
                                         </div>
                                         <div class="col-md-6">
-                                            <label>ISSUING_administrator</label>
+                                            <label>ISSUING_ARMOURER</label>
                                             <input type="text" class="form-control" value="<?php echo $admin['fullname']; ?>" readonly>
-                                            <input type="hidden" name="administrator_issuer" value="<?php echo $admin['fullname']; ?>">
+                                            <input type="hidden" name="armourer_issuer" value="<?php echo $admin['fullname']; ?>">
                                         </div>
                                     </div>
                                 </div>
