@@ -138,7 +138,7 @@ if ($report_type == 'master' || $report_type == 'faulty') {
 
     $sql_faulty = "SELECT faulty_firearm_serial_no AS serial, faulty_firearm_name AS item, faulty_type, faulty_nature FROM faulty_weapons
     UNION ALL
-    SELECT faulty_ammo_serial_no AS serial, faulty_ammo_manufacturer AS item, faulty_type, 'N/A' FROM faulty_ammo";
+    SELECT faulty_ammo_serial_no AS serial, faulty_ammo_quantity AS item, faulty_type, 'N/A' FROM faulty_ammo";
     
     $stmt_faulty = $pdo->query($sql_faulty);
     while($row = $stmt_faulty->fetch(PDO::FETCH_ASSOC)) {
