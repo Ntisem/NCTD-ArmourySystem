@@ -20,7 +20,7 @@ $logs = $stmt->fetchAll();
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
-    
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
     <style>
         :root {
             --neon-cyan: #00f2ff;
