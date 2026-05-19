@@ -190,7 +190,7 @@ $faulty_weapons = $stmt_faulty->fetchAll();
                       <i class="mdi mdi-arrow-left"></i> Back
                     </a>
                       <a href="faulty-ammo" class="btn btn-outline-danger btn-sm mr-3">
-                      <i class="mdi mdi-ammunition"></i> FAULTY AMMO
+                      <i class="mdi mdi-ammunition"></i> BLANK/FAULTY AMMO
                     </a>
                     <h4 class="card-title text-uppercase mb-0">
                       <i class="mdi mdi-alert-circle text-danger mr-2"></i>Faulty Firearms Registry

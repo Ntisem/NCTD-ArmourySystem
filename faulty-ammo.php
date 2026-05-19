@@ -29,7 +29,7 @@ $faulty_ammo = $stmt_faulty->fetchAll();
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - FAULTY AMMUNITION</title>
+    <title>GPS ARMOURY SYSTEM - BLANK/FAULTY AMMUNITION</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -123,10 +123,10 @@ $faulty_ammo = $stmt_faulty->fetchAll();
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header">
-              <h3 class="page-title text-light">FAULTY AMMUNITION</h3>
+              <h3 class="page-title text-light">BLANK/FAULTY AMMUNITION</h3>
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="add-faulty-ammo.php" style="color:var(--neon);">Add Faulty Ammunition</a></li>
+                  <li class="breadcrumb-item"><a href="add-faulty-ammo.php" style="color:var(--neon);">Add Blank Ammo</a></li>
                   <li class="breadcrumb-item active text-light" aria-current="page">Faulty Ammunitions</li>
                 </ol>
               </nav>
@@ -136,7 +136,7 @@ $faulty_ammo = $stmt_faulty->fetchAll();
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title text-light">Faulty Ammunition List</h4>
+                    <!-- <h4 class="card-title text-light">Faulty Ammunition List</h4> -->
                    <div class="table-responsive">
                     <table class="table table-dark table-striped table-hover align-middle" style="width: 100%; border-color: #2b3036;">
                         <thead>

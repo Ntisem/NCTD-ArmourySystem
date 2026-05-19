@@ -23,7 +23,7 @@ $row = $stmt->fetch();
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - FAULTY AMMUNITION DETAILS</title>
+    <title>GPS ARMOURY SYSTEM - BLANK/FAULTY AMMUNITION DETAILS</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -67,12 +67,12 @@ $row = $stmt->fetch();
               <div class="col-md-8 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title text-uppercase" style="color:var(--neon);"><i class="mdi mdi-information-outline"></i> Faulty Item Details</h4>
+                    <h4 class="card-title text-uppercase" style="color:var(--neon);"><i class="mdi mdi-information-outline"></i> Blank/Faulty Item Details</h4>
                     <?php if ($row): ?>
                       <div class="table-responsive">
                         <table class="table table-bordered">
                           <tr>
-                            <th>Faulty ID</th>
+                            <th>Blank/Faulty ID</th>
                             <td><?= htmlspecialchars($row['faulty_ammoID']) ?></td>
                           </tr>
                           <tr>

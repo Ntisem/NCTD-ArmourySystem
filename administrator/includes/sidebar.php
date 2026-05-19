@@ -271,7 +271,8 @@ try {
             <div class="collapse" id="faulty">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="add-faulty-weapon">Report Damage</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="faulty-weapon">Maintenance List</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="faulty-weapon">Faulty Weapons</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="faulty-ammo">Blank/Faulty Ammo</a></li>
                 </ul>
             </div>
         </li>
