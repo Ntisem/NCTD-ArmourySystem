@@ -177,9 +177,6 @@ $faulty_ammo = $stmt_faulty->fetchAll();
                                         <button class="btn btn-outline-warning btn-sm" onclick="openUpdateModal(<?= htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8') ?>)" title="Update Record">
                                             <i class="mdi mdi-pencil"></i>
                                         </button>
-                                        <button class="btn btn-outline-danger btn-sm" onclick="confirmDelete(<?= htmlspecialchars($row['faulty_ammoID']) ?>)" title="Delete Record">
-                                            <i class="mdi mdi-delete"></i>
-                                        </button>
                                         <button class="btn btn-outline-success btn-sm" onclick="openFixModal(<?= htmlspecialchars($row['faulty_ammoID']) ?>)" title="Mark Fixed">
                                             <i class="mdi mdi-checkbox-marked-circle"></i>
                                         </button>

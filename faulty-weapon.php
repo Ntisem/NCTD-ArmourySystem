@@ -243,9 +243,6 @@ $faulty_weapons = $stmt_faulty->fetchAll();
                               <button class="btn btn-warning-tactical btn-sm" onclick="openUpdateModal(<?= htmlspecialchars(json_encode($weapon)) ?>)" title="Edit">
                                 <i class="mdi mdi-pencil"></i>
                               </button>
-                              <button class="btn btn-danger-tactical btn-sm" onclick="confirmDelete(<?= $weapon['faulty_weaponID'] ?>)" title="Delete">
-                                <i class="mdi mdi-delete"></i>
-                              </button>
                               <button class="btn btn-success-tactical btn-sm" onclick="openFixModal(<?= htmlspecialchars(json_encode($weapon)) ?>)" title="Fix">
                                 <i class="mdi mdi-check"></i>
                               </button>
