@@ -171,10 +171,10 @@ $faulty_ammo = $stmt_faulty->fetchAll();
                                 <td><small class="text-muted"><?= htmlspecialchars($row['datetime']) ?></small></td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group" aria-label="Action Controls">
-                                        <button class="btn btn-outline-info btn-sm" onclick='viewDetails(<?= htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8') ?>)' title="View Details">
+                                        <button class="btn btn-outline-info btn-sm" onclick="viewDetails(<?= htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8') ?>)" title="View Details">
                                             <i class="mdi mdi-eye"></i>
                                         </button>
-                                        <button class="btn btn-outline-warning btn-sm" onclick='openUpdateModal(<?= htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8') ?>)' title="Update Record">
+                                        <button class="btn btn-outline-warning btn-sm" onclick="openUpdateModal(<?= htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8') ?>)" title="Update Record">
                                             <i class="mdi mdi-pencil"></i>
                                         </button>
                                         <button class="btn btn-outline-danger btn-sm" onclick="confirmDelete(<?= htmlspecialchars($row['faulty_ammoID']) ?>)" title="Delete Record">
