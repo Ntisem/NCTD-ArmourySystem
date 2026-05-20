@@ -50,7 +50,7 @@ if($admin_data) {
                       <div class="d-flex justify-content-between align-items-center mb-4">
                         <h4 class="card-title text-info mb-0">[ASSET_INDUCTION_PROTOCOL]: AMMUNITION</h4>
                         <a href="ammunition.php" class="btn btn-sm btn-back">
-                            <i class="mdi mdi-arrow-left"></i> BACK_TO_REGISTRY
+                            <i class="mdi mdi-arrow-left"></i> BACK
                         </a>
                     </div>
                     <div class="row justify-content-center">
