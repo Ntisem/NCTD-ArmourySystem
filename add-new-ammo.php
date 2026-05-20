@@ -56,18 +56,16 @@ if($admin_data) {
                     <div class="row justify-content-center">
                         <div class="col-md-8 grid-margin stretch-card">
                             <div class="card tactical-card">
-                                <div class="card-body">
-                                  
-                                    
+                                <div class="card-body"> 
                                     <form class="forms-sample" action="process-ammo-add.php" method="POST">
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
-                                                <label>AMMO_NAME (e.g. 9MM, 7.62x39)</label>
-                                                <input type="text" name="ammo_name" class="form-control" placeholder="REQUIRED" required>
+                                                <label>AMMO_NAME</label>
+                                                <input type="text" name="ammo_name" class="form-control" placeholder="e.g. 9MM, 7.62x39" required>
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label>MANUFACTURER</label>
-                                                <input type="text" name="manufacturer" class="form-control" placeholder="REQUIRED" required>
+                                                <input type="text" name="manufacturer" class="form-control" placeholder="e.g. Smith & Wesson, AK" required>
                                             </div>
                                         </div>
 

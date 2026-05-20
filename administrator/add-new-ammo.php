@@ -49,7 +49,7 @@ if($admin_data) {
                 <div class="content-wrapper">
                       <div class="d-flex justify-content-between align-items-center mb-4">
                         <h4 class="card-title text-info mb-0">[ASSET_INDUCTION_PROTOCOL]: AMMUNITION</h4>
-                        <a href="ammunition" class="btn btn-sm btn-back">
+                        <a href="ammunition.php" class="btn btn-sm btn-back">
                             <i class="mdi mdi-arrow-left"></i> BACK_TO_REGISTRY
                         </a>
                     </div>
@@ -57,17 +57,15 @@ if($admin_data) {
                         <div class="col-md-8 grid-margin stretch-card">
                             <div class="card tactical-card">
                                 <div class="card-body">
-                                  
-                                    
                                     <form class="forms-sample" action="process-ammo-add.php" method="POST">
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
-                                                <label>AMMO_NAME (e.g. 9MM, 7.62x39)</label>
-                                                <input type="text" name="ammo_name" class="form-control" placeholder="REQUIRED" required>
+                                                <label>AMMO_NAME</label>
+                                                <input type="text" name="ammo_name" class="form-control" placeholder="e.g. 9MM, 7.62x39" required>
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label>MANUFACTURER</label>
-                                                <input type="text" name="manufacturer" class="form-control" placeholder="REQUIRED" required>
+                                                <input type="text" name="manufacturer" class="form-control" placeholder="e.g. Smith & Wesson, AK" required>
                                             </div>
                                         </div>
 
@@ -111,7 +109,10 @@ if($admin_data) {
                     </div>
 
                 </div>
-                 <?php require_once('includes/footer.php'); ?>
+                <div class="card-footer text-center">
+                    <small class="text-muted">TERMINAL v1.0 | &copy; NCTD ARMORY MANAGEMENT SYSTEM</small>
+                </div>
+                <?php include_once('includes/footer.php'); ?>
             </div>
         </div>
     </div>
