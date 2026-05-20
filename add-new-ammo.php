@@ -49,7 +49,7 @@ if($admin_data) {
                 <div class="content-wrapper">
                       <div class="d-flex justify-content-between align-items-center mb-4">
                         <h4 class="card-title text-info mb-0">[ASSET_INDUCTION_PROTOCOL]: AMMUNITION</h4>
-                        <a href="ammunition.php" class="btn btn-sm btn-back">
+                        <a href="ammunition.php" class="btn btn-sm btn-back btn-dark">
                             <i class="mdi mdi-arrow-left"></i> BACK
                         </a>
                     </div>
