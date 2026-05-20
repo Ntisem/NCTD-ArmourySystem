@@ -14,7 +14,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - ADD FAULTY ASSET/ WEAPON</title>
+    <title>GPS ARMOURY SYSTEM - ADD FAULTY FIREARM / WEAPON</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
@@ -102,7 +102,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                       <h4 class="card-title text-uppercase">[SCAN] ADD FAULTY FIREARM</h4>
                       <div>
                         <a href="add-faulty-ammo.php" class="btn btn-tactical">
-                          <i class="mdi mdi-ammunition"></i> ADD FAULTY AMMO
+                          <i class="mdi mdi-ammunition"></i> ADD BLANK / FAULTY AMMO
                         </a>
                       </div>
                     </div>
