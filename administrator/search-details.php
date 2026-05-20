@@ -19,17 +19,17 @@ if (empty($type) || empty($id)) {
 // Define destination mapping
 // Ensure 'officer' points to the correct file name
 $redirect_map = [
-    'firearm'       => 'firearm-details.php',
-    'ammunition'    => 'ammo-details.php',
-    'officer'       => 'searched-officer-details.php', 
-    'admin'         => 'admin-details.php',
-    'faulty_weapon' => 'faulty-firearm-details.php',
-    'faulty_ammo'   => 'faulty-ammo-details.php'
+    'firearm'       => 'firearm-details',
+    'ammunition'    => 'ammo-details',
+    'officer'       => 'searched-officer-details', 
+    'admin'         => 'admin-details',
+    'faulty_weapon' => 'faulty-firearm-details',
+    'faulty_ammo'   => 'faulty-ammo-details'
 ];
 
 // If the type is officer, we must pass it as 'officerID' to match your page logic
 if ($type === 'officer') {
-    header("Location: searched-officer-details.php?officerID=" . $id);
+    header("Location: searched-officer-details?officerID=" . $id);
     exit();
 }
 

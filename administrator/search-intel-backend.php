@@ -24,8 +24,8 @@ if (isset($_POST['query']) && !empty(trim($_POST['query']))) {
             (SELECT 'faulty_weapon' as type, faulty_weaponID as id, faulty_firearm_name as title, faulty_firearm_serial_no as subtitle, faulty_nature as status 
              FROM faulty_weapons WHERE faulty_firearm_name LIKE ? OR faulty_firearm_serial_no LIKE ?)
             UNION ALL
-            (SELECT 'faulty_ammo' as type, faulty_ammoID as id, faulty_type as title, faulty_ammo_serial_no as subtitle, 'FAULTY' as status 
-             FROM faulty_ammo WHERE faulty_ammo_serial_no LIKE ? OR faulty_type LIKE ?)
+            (SELECT 'faulty_ammo' as type, faulty_ammoID as id, faulty_type as title, faulty_ammo_name as subtitle, 'FAULTY' as status 
+             FROM faulty_ammo WHERE faulty_ammo_name LIKE ? OR faulty_type LIKE ?)
             LIMIT 15
         ";
 
