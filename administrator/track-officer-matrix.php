@@ -27,6 +27,7 @@ if(!$officer) {
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="../assets/images/favicon.png" type="image/png">
     <style>
         :root { --neon: #00f2ff; --bg-deep: #020408; --card-bg: #0a0d12; --danger: #ff3333; --success: #00ff88; }
         body { background: var(--bg-deep); font-family: 'Roboto Mono', monospace; color: #e0e0e0; }
@@ -56,7 +57,7 @@ if(!$officer) {
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-md-2 text-center">
-                        <img src="assets/images/officer_images/<?= !empty($officer['officer_image']) ? htmlspecialchars($officer['officer_image']) : 'profile_placeholder.jpg' ?>" class="img-fluid" style="border: 2px solid var(--neon); max-height: 130px; object-fit: cover;">
+                        <img src="../assets/images/officer_images/<?= !empty($officer['officer_image']) ? htmlspecialchars($officer['officer_image']) : 'profile_placeholder.jpg' ?>" class="img-fluid" style="border: 2px solid var(--neon); max-height: 130px; object-fit: cover;">
                     </div>
                     <div class="col-md-10">
                         <div class="row">
