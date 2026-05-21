@@ -22,6 +22,7 @@ $faulty_ammo = $stmt_faulty->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
     <style>
       :root {
         --bg-tactical: #0d0f12; --panel-bg: #15181f;
@@ -52,9 +53,9 @@ $faulty_ammo = $stmt_faulty->fetchAll(PDO::FETCH_ASSOC);
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header d-flex justify-content-between align-items-center">
-              <h3 class="page-title text-light">[SECURITY MODULE] // BLANK_AMMO</h3>
-              <a href="add-faulty-ammo.php" class="btn btn-tactical"><i class="mdi mdi-plus-box"></i> INTIALIZE BLANK/FAULTY AMMO</a>
-            </div>
+            <h3 class="page-title text-light">[SECURITY MODULE] // BLANK_AMMO</h3>
+            <a href="add-faulty-ammo" class="btn btn-tactical"><i class="mdi mdi-plus-box"></i> INTIALIZE BLANK AMMO</a>
+            <a href="booking-blank-ammo" class="btn btn-outline-primary"><i class="mdi mdi-file"></i> DEPLOY BLANK/FAULTY AMMO</a>            </div>
             <div class="row">
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
@@ -88,7 +89,7 @@ $faulty_ammo = $stmt_faulty->fetchAll(PDO::FETCH_ASSOC);
                                 <button class="btn btn-outline-info btn-sm" onclick='viewDetails(<?= json_encode($row, JSON_HEX_APOS | JSON_HEX_QUOT); ?>)'><i class="mdi mdi-eye"></i></button>
                                 <button class="btn btn-outline-warning btn-sm" onclick='openUpdateModal(<?= json_encode($row, JSON_HEX_APOS | JSON_HEX_QUOT); ?>)'><i class="mdi mdi-pencil-box-outline"></i></button>
                                 <button class="btn btn-outline-success btn-sm" onclick="openFixModal(<?= $row['faulty_ammoID'] ?>)"><i class="mdi mdi-check-circle-outline"></i></button>
-                                <button class="btn btn-outline-danger btn-sm" onclick="confirmDelete(<?= $row['faulty_ammoID'] ?>)"><i class="mdi mdi-delete-forever"></i></button>
+                                <button class="btn btn-outline-danger btn-sm" onclick="confirmDelete(<?= $row['faulty_ammoID'] ?>)"><i class="mdi mdi-close-circle-outline"></i></button>
                               </div>
                             </td>
                           </tr>
@@ -169,15 +170,15 @@ $faulty_ammo = $stmt_faulty->fetchAll(PDO::FETCH_ASSOC);
         <div class="modal-content" style="border-color: var(--danger);">
           <form action="process-faulty-ammo.php" method="POST">
             <div class="modal-header">
-              <h5 class="modal-title text-danger">[ALERT]: SYSTEM_LEDGER_PURGE</h5>
+              <h5 class="modal-title text-danger">[ALERT]: SYSTEM_LEDGER_DELETE</h5>
             </div>
             <div class="modal-body">
               <input type="hidden" name="faulty_ammoID" id="delete_id">
               <p>Warning: This will clear this entry from active analytics logs. Proceed?</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-tactical" data-bs-dismiss="modal">STAND DOWN</button>
-              <button type="submit" name="delete_faulty_ammo" class="btn btn-danger-tactical">EXECUTE PURGE</button>
+              <button type="button" class="btn btn-tactical" data-bs-dismiss="modal">CANCEL</button>
+              <button type="submit" name="delete_faulty_ammo" class="btn btn-danger-tactical">EXECUTE DELETE</button>
             </div>
           </form>
         </div>

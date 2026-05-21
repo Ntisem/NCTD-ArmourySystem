@@ -53,7 +53,7 @@ try {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>COMMAND_OS | ARMORY_UNIT</title>
+    <title>COMMAND_OS |NCTD ARMORY_UNIT</title>
     
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -200,7 +200,7 @@ try {
                                         <div class="stat-value text-danger"><?= $faultyWeapons ?> <small style="font-size: 12px;">WPN</small></div>
                                         <i class="mdi mdi-alert-decagram text-danger blink" style="font-size: 2rem;"></i>
                                     </div>
-                                    <div class="text-muted small mt-1"><?= $faultyAmmo ?> Rounds Compromised</div>
+                                    <div class="text-muted small mt-1">[ <strong class="text-light"><?= $faultyAmmo ?></strong> Rounds ]<strong class="text-danger"> Blank-Ammo</strong></div>
                                 </div>
                             </div>
                         </div>

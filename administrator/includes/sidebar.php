@@ -205,8 +205,10 @@ try {
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="booking">Issue Firearm</a></li>
                     <li class="nav-item"> <a class="nav-link" href="booking-ammo">Issue Ammo</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="booked-firearms?firearm-name=AK47">Firearm Log</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="booking-blank-ammo">Issue Blank Ammo</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="booked-firearms">Firearm Log</a></li>
                     <li class="nav-item"> <a class="nav-link" href="booked-ammo">Ammo Log</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="booked-blank-ammo">Blank Ammo Log</a></li>
                     <li class="nav-item">
                         <span id="overdue-counter" class="badge badge-pill badge-danger ml-auto" style="display:none; box-shadow: 0 0 10px #ff3e3e;">
                             0

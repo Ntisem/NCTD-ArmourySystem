@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     try {
         // --- HANDLE UPDATE & INVENTORY RESTORATION ---
         if ($action === 'update') {
+            // Address POST arrays correctly from sanitized values
             $id = isset($_POST['book_ammoID']) ? (int)$_POST['book_ammoID'] : 0;
             $rounds_issued = isset($_POST['ammo_rounds']) ? (int)$_POST['ammo_rounds'] : 0;
             $rounds_returned = isset($_POST['ammo_returned']) ? (int)$_POST['ammo_returned'] : 0;
@@ -50,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
                 if ($net_restock_qty > 0) {
                     // Update main inventory stock pool dynamically based on ammunition name
+                    // NOTE: Uses ammo_rounds column pattern as specified in your base layout
                     $updateStock = $pdo->prepare("UPDATE ammunitions SET ammo_rounds = ammo_rounds + ? WHERE ammo_name = ?");
                     $updateStock->execute([$net_restock_qty, $currentBooking['ammo_name']]);
                 }
@@ -64,25 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             logDailyActivity($pdo, $action_details, '', 'Ammunition Management');
 
             $pdo->commit();
-            echo json_encode(['status' => 'success']);
-            exit();
-        }
-
-        // --- HANDLE PURGE / DELETE ---
-        if ($action === 'delete') {
-            $id = isset($_POST['book_ammoID']) ? (int)$_POST['book_ammoID'] : 0;
-
-            if ($id <= 0) {
-                echo json_encode(['status' => 'error', 'message' => 'MISSING_TARGET_IDENTIFIER']);
-                exit();
-            }
-
-            $stmt = $pdo->prepare("DELETE FROM ammo_bookings WHERE book_ammoID = ?");
-            $stmt->execute([$id]);
-
-            $action_details = "PURGE_LOG: Permanently deleted deployment log Entry [ ID: " . $id . " ] from the system.";
-            logDailyActivity($pdo, $action_details, '', 'Ammunition Management');
-
             echo json_encode(['status' => 'success']);
             exit();
         }

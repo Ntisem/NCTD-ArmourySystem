@@ -166,7 +166,7 @@ $bookings = $stmt->fetchAll();
                                         <tr>
                                             <td><?= $i++ ?></td> 
                                             <td>
-                                                <a href="officer-profile.php?id=<?= $row['officerID'] ?>" class="text-info font-weight-bold" style="text-decoration:none;">
+                                                <a href="officer-details?officerID=<?= $row['officerID'] ?>" class="text-info font-weight-bold" style="text-decoration:none;">
                                                     <?= htmlspecialchars($row['to_officer']) ?>
                                                 </a>
                                             </td>
@@ -180,7 +180,7 @@ $bookings = $stmt->fetchAll();
                                             <td style="font-size:11px;"><?= $row['booking_time'] ?></td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <button onclick="viewDetails(<?= $row['bookingID'] ?>)" class="btn btn-tactical py-1">VIEW</button>
+                                                    <button onclick="viewDetails(<?= $row['bookingID'] ?>)" class="btn btn-tactical py-1"><i class="mdi mdi-eye"></i></button>
                                                     <button onclick="confirmArchive(<?= $row['bookingID'] ?>)" class="btn btn-outline-danger py-1" style="border-radius:0; border-left:none;"><i class="mdi mdi-delete"></i></button>
                                                 </div>
                                             </td>

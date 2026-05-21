@@ -174,7 +174,11 @@ $bookings = $stmt_bookings->fetchAll();
                         </div>
                     </div>
                 </div>
-                <?php require_once('includes/foorter.php');?>
+                  <div class="text-center mt-4">
+                    <small style="color: #555; font-size: 10px;">COMMAND NCTD // OFFICER_TRACKING_MODULE</small>
+                 
+                    </div>
+                       <?php include_once('includes/footer.php'); ?>
             </div>
         </div>
     </div>
