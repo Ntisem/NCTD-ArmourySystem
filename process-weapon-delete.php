@@ -1,39 +1,45 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
-require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+require_once('central-logging-engine.php');
+
+header('Content-Type: application/json');
 
 if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
-    header("location: login");
+    echo json_encode(['status' => 'error', 'message' => 'UNAUTHORIZED_ACCESS_DENIED']);
     exit();
 }
 
-if (isset($_POST['confirm_delete'])) {
-    $id = $_POST['delete_id'] ?? null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
+    $id = isset($_POST['delete_id']) ? (int)$_POST['delete_id'] : 0;
 
-    if ($id) {
-        try {
-            $pdo->beginTransaction();
+    if ($id <= 0) {
+        echo json_encode(['status' => 'error', 'message' => 'PURGE_REJECTED: Missing asset identifier.']);
+        exit();
+    }
 
-            // 1. SOFT DELETE: Update the status instead of deleting
-            $stmt = $pdo->prepare("UPDATE firearms SET is_deleted = 1, booking_status = 'Archived' WHERE firearmID = ?");
-            $stmt->execute([$id]);
+    try {
+        $pdo->beginTransaction();
 
-            // 2. AUDIT LOG: Always log who performed the removal
-            $log_action = "SOFT_DELETE_PERFORMED on Asset ID: " . $id;
-            $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
-            $log->execute([$_SESSION['adminID'], $_SESSION['fullname'], $log_action, $_SESSION['user_role']]);
+        // Soft delete update deployment map
+        $stmt = $pdo->prepare("UPDATE firearms SET is_deleted = 1 WHERE firearmID = ?");
+        $stmt->execute([$id]);
 
-            $action_details = "Archived Firearm [ ID: " . $id . " ]";
-            logDailyActivity($pdo, $action_details, '', 'Firearm Management');
-    
-            $pdo->commit();
-            header("Location: firearm-names?status=success&msg=Asset_Archived");
-            exit();
-        } catch (Exception $e) {
+        $action_details = "ASSET_PURGED_FROM_ACTIVE_REGISTRY: Record ID [ " . $id . " ] dropped from inventory view metrics.";
+        logDailyActivity($pdo, $action_details, '', 'Firearm Management');
+
+        $pdo->commit();
+        echo json_encode([
+            'status' => 'success', 
+            'message' => 'SYS_SIGNAL: ASSET_PURGED_SUCCESSFULLY'
+        ]);
+        exit();
+
+    } catch (Exception $e) {
+        if ($pdo->inTransaction()) {
             $pdo->rollBack();
-            header("Location: firearm-names?status=error");
-            exit();
         }
+        echo json_encode(['status' => 'error', 'message' => 'PURGE_ABORTED: ' . $e->getMessage()]);
+        exit();
     }
 }

@@ -15,11 +15,11 @@ $stmt = $pdo->prepare("SELECT adminID, fullname, service_no, rank FROM admin_lis
 $stmt->execute([$username]);
 $admin_data = $stmt->fetch();
 
-// ... after fetching $admin_data
 if ($admin_data) {
     $_SESSION['adminID'] = $admin_data['adminID'];
     $_SESSION['fullname'] = $admin_data['service_no'] . ' ' . $admin_data['rank'] . ' ' . $admin_data['fullname'];
-    $_SESSION['user_role'] = 'Armourer'; // Ensure this matches your login logic
+    $_SESSION['user_role'] = 'Armourer'; 
+    $armourer_admin_name = $_SESSION['fullname'];
 }
 
 // 3. Handle Weapon Selection
@@ -52,11 +52,14 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
     <link rel="shortcut icon" href="assets/images/favicon.png" />
 
     <style>
-        :root { --neon-cyan: #00f2ff; --neon-amber: #f9a602; --panel-dark: #05070a; --neon-red: #ff4b2b; }
+        :root { --neon-cyan: #00f2ff; --neon-amber: #f9a602; --panel-dark: #05070a; --neon-red: #ff4b2b; --neon-green: #00ffa3; }
         body { background-color: var(--panel-dark); font-family: 'JetBrains Mono', monospace; color: #e0e0e0; }
         
-        .t-toast { position: fixed; top: 20px; right: 20px; padding: 15px 25px; z-index: 10000; border-left: 5px solid; background: #1a1f2b; display: none; box-shadow: 0 0 20px rgba(0,0,0,0.5); font-size: 0.8rem; }
-        .t-success { border-color: #00ffa3; } .t-error { border-color: var(--neon-red); }
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 1055; }
+        .t-toast { padding: 15px 25px; margin-bottom: 10px; min-width: 300px; border-left: 5px solid; background: #1a1f2b; box-shadow: 0 0 20px rgba(0,0,0,0.5); font-size: 0.8rem; letter-spacing: 1px; display: none; }
+        .t-success { border-color: var(--neon-green); color: #fff; } 
+        .t-error { border-color: var(--neon-red); color: #fff; }
+        .t-warning { border-color: var(--neon-amber); color: #fff; }
 
         .table-tactical { background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(0, 242, 255, 0.1); }
         .btn-tactical { 
@@ -70,6 +73,9 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
 
         .clickable-asset { color: var(--neon-cyan); text-decoration: none; transition: 0.2s; border-bottom: 1px dashed transparent; }
         .clickable-asset:hover { color: #fff; text-shadow: 0 0 5px var(--neon-cyan); border-bottom-color: var(--neon-cyan); }
+        
+        .form-control, .form-select { background-color: #0d1117 !important; color: #fff !important; border: 1px solid rgba(0, 242, 255, 0.2) !important; border-radius: 0; }
+        .form-control:focus, .form-select:focus { border-color: var(--neon-cyan) !important; box-shadow: 0 0 8px rgba(0, 242, 255, 0.4); }
     </style>
 </head>
 <body>
@@ -82,7 +88,7 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
                 <div class="content-wrapper">
                     
                     <div class="page-header">
-                        <h3 class="page-title text-cyan"><i class="mdi mdi-pistol"></i> INVENTORY // <span class="text-amber"><?= $current_firearm ?></span></h3>
+                        <h3 class="page-title text-cyan"><i class="mdi mdi-pistol"></i> INVENTORY // <span class="text-amber"><?= htmlspecialchars($current_firearm) ?></span></h3>
                         <div class="d-flex align-items-center">
                             <div class="dropdown me-2">
                                 <button class="btn btn-tactical dropdown-toggle" id="weaponDropdown" data-bs-toggle="dropdown" aria-expanded="false">SELECT::WEAPON_TYPE</button>
@@ -124,16 +130,16 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
                                         $i = 1;
                                         while($row = $stmt->fetch()):
                                         ?>
-                                        <tr>
+                                        <tr id="asset-row-<?= $row['firearmID'] ?>">
                                             <td><?= $i++ ?></td>
-                                            <td><a href="firearm-details?id=<?= $row['firearmID'] ?>" class="clickable-asset font-weight-bold"><?= $row['firearm_serial_no'] ?></a></td>
-                                            <td><a href="firearm-details?id=<?= $row['firearmID'] ?>" class="clickable-asset"><?= $row['firearm_name'] ?></a></td>
-                                            <td><?= $row['firearm_type'] ?></td>
-                                            <td><span class="badge border border-info text-info">[<?= $row['firearm_caliber'] ?>] / [<?= $row['firearm_capacity'] ?>]</span></td>
-                                            <td class="small"><?= $row['datetime'] ?></td>
+                                            <td><a href="firearm-details?id=<?= $row['firearmID'] ?>" class="clickable-asset font-weight-bold"><?= htmlspecialchars($row['firearm_serial_no']) ?></a></td>
+                                            <td><a href="firearm-details?id=<?= $row['firearmID'] ?>" class="clickable-asset"><?= htmlspecialchars($row['firearm_name']) ?></a></td>
+                                            <td><?= htmlspecialchars($row['firearm_type']) ?></td>
+                                            <td><span class="badge border border-info text-info">[<?= htmlspecialchars($row['firearm_caliber']) ?>] / [<?= htmlspecialchars($row['firearm_capacity']) ?>]</span></td>
+                                            <td class="small"><?= htmlspecialchars($row['datetime']) ?></td>
                                             <td class="text-center">
-                                                <button class="btn btn-xs btn-outline-info" onclick='openEditModal(<?= json_encode($row) ?>)'><i class="mdi mdi-pencil"></i></button>
-                                                
+                                                <button class="btn btn-xs btn-outline-info" onclick='openEditModal(<?= json_encode($row, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)'><i class="mdi mdi-pencil"></i></button>
+                                                <button class="btn btn-xs btn-outline-danger ms-1" onclick="openDeleteModal(<?= $row['firearmID'] ?>, '<?= htmlspecialchars($row['firearm_serial_no'], ENT_QUOTES) ?>')"><i class="mdi mdi-delete"></i></button>
                                             </td>
                                         </tr>
                                         <?php endwhile; ?>
@@ -148,97 +154,100 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
         </div>
     </div>
     
-<div class="modal fade" id="editModal" tabindex="-1">
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
-        <div class="modal-content bg-dark border border-info text-white">
-            <form action="process-weapon-update.php" method="POST">
+        <div class="modal-content bg-dark border border-info text-white" style="border-radius: 0;">
+            <form id="editWeaponForm">
                 <div class="modal-header border-info">
-                    <h5 class="modal-title">[COMMAND]: UPDATE_ASSET_DATA</h5>
+                    <h5 class="modal-title">[COMMAND]: UPDATE_FIREARM_DATA</h5>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="f_id" id="edit_id">
+                    <input type="hidden" name="update_weapon" value="1">
                     
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label>SERIAL_NO</label>
-                            <input type="text" name="f_serial" id="edit_serial" class="form-control bg-dark text-white border-secondary" required>
+                            <label class="small text-info mb-1">SERIAL_NO</label>
+                            <input type="text" name="f_serial" id="edit_serial" class="form-control" required>
+                            <input type="hidden" name="armourer_admin_name" id="edit_armourer_admin_name" value="<?= htmlspecialchars($armourer_admin_name, ENT_QUOTES) ?>"  >
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label>FIREARM_TYPE</label>
-                            <input type="text" name="f_type" id="edit_type" class="form-control bg-dark text-white border-secondary">
+                            <label class="small text-info mb-1">FIREARM_TYPE</label>
+                            <input type="text" name="f_type" id="edit_type" class="form-control">
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label>MANUFACTURER</label>
-                            <input type="text" name="f_manufacturer" id="edit_manufacturer" class="form-control bg-dark text-white border-secondary">
+                            <label class="small text-info mb-1">MANUFACTURER</label>
+                            <input type="text" name="f_manufacturer" id="edit_manufacturer" class="form-control">
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label>FIREARM_NAME</label>
-                            <input type="text" name="f_name" id="edit_name" class="form-control bg-dark text-white border-secondary">
+                            <label class="small text-info mb-1">FIREARM_NAME</label>
+                            <input type="text" name="f_name" id="edit_name" class="form-control">
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label>CALIBRE</label>
-                            <input type="text" name="f_caliber" id="edit_caliber" class="form-control bg-dark text-white">
+                            <label class="small text-info mb-1">CALIBRE</label>
+                            <input type="text" name="f_caliber" id="edit_caliber" class="form-control">
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label>CAPACITY</label>
-                            <input type="text" name="f_capacity" id="edit_capacity" class="form-control bg-dark text-white">
+                            <label class="small text-info mb-1">CAPACITY</label>
+                            <input type="text" name="f_capacity" id="edit_capacity" class="form-control">
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label>CLASS</label>
-                            <select name="f_class" id="edit_class" class="form-control bg-dark text-white">
+                            <label class="small text-info mb-1">CLASS</label>
+                            <select name="f_class" id="edit_class" class="form-select">
                                 <option value="Duty-Weapon">Duty-Weapon</option>
                                 <option value="Spare-Weapon">Spare-Weapon</option>
                             </select>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label>STATE</label>
-                            <select name="f_state" id="edit_state" class="form-control bg-dark text-white">
+                            <label class="small text-info mb-1">STATE</label>
+                            <select name="f_state" id="edit_state" class="form-select">
                                 <option value="Not-Faulty">Not-Faulty</option>
                                 <option value="Faulty">Faulty</option>
                             </select>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label>AVAILABILITY</label>
-                            <select name="f_booking_status" id="edit_booking" class="form-control bg-dark text-white">
+                            <label class="small text-info mb-1">AVAILABILITY</label>
+                            <select name="f_booking_status" id="edit_booking" class="form-select">
                                 <option value="Available">Available</option>
                                 <option value="Booked">Booked</option>
                             </select>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label>REMARKS</label>
-                            <textarea name="f_remarks" id="edit_remarks" class="form-control bg-dark text-white" rows="3"></textarea>
+                            <label class="small text-info mb-1">REMARKS</label>
+                            <textarea name="f_remarks" id="edit_remarks" class="form-control" rows="3"></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ABORT</button>
-                    <button type="submit" name="update_weapon" class="btn btn-info">COMMIT_CHANGES</button>
+                    <button type="button" class="btn btn-secondary" style="border-radius:0;" data-bs-dismiss="modal">ABORT</button>
+                    <button type="submit" id="btnEditSubmit" class="btn btn-info" style="border-radius:0;">COMMIT_CHANGES</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<div class="modal fade" id="deleteModal" tabindex="-1">
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-sm">
-        <div class="modal-content bg-dark border border-danger text-center">
-            <form action="process-weapon-delete.php" method="POST">
-                <div class="modal-header border-danger">
+        <div class="modal-content bg-dark border border-danger text-center" style="border-radius: 0;">
+            <form id="deleteWeaponForm">
+                <div class="modal-header border-danger justify-content-center">
                     <h5 class="modal-title text-danger">CONFIRM PURGE</h5>
                 </div>
                 <div class="modal-body">
                     <p class="small">REMOVE SERIAL:</p>
                     <h4 id="del_label" class="text-warning"></h4>
                     <input type="hidden" name="delete_id" id="del_id">
+                    <input type="hidden" name="confirm_delete" value="1">
                 </div>
                 <div class="modal-footer border-0 justify-content-center">
-                    <button type="button" class="btn btn-xs btn-light" data-bs-dismiss="modal">ABORT</button>
-                    <button type="submit" name="confirm_delete" class="btn btn-xs btn-danger">PURGE</button>
+                    <button type="button" class="btn btn-xs btn-light" style="border-radius:0;" data-bs-dismiss="modal">ABORT</button>
+                    <button type="submit" id="btnDeleteSubmit" class="btn btn-xs btn-danger" style="border-radius:0;">PURGE</button>
                 </div>
             </form>
         </div>
     </div>
-    </div>
-    
+</div>
 
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -254,7 +263,7 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
 
     <script>
         $(document).ready(function() {
-            $('#assets_weapon').DataTable({
+            var table = $('#assets_weapon').DataTable({
                 "dom": 'Bfrtip',
                 "buttons": [
                     { extend: 'excel', text: '<i class="mdi mdi-file-excel"></i> EXCEL', className: 'btn-tactical mx-1' },
@@ -264,42 +273,90 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
                 "language": { "search": "[SCAN_DATABASE]:" }
             });
 
-            // Handle custom dropdown mechanism
-            $('#weaponDropdown').on('click', function(e) {
+            // AJAX Handler for Form Submissions (Update Weapon)
+            $('#editWeaponForm').on('submit', function(e) {
                 e.preventDefault();
-                e.stopPropagation();
-                
-                // Close all other dropdown menus
+                var btn = $('#btnEditSubmit');
+                btn.prop('disabled', true).text('PROCESSING...');
+
+                $.ajax({
+                    url: 'process-weapon-update.php',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function(res) {
+                        if(res.status === 'success') {
+                            showToast(res.message, 't-success');
+                            $('#editModal').modal('hide');
+                            setTimeout(function() { location.reload(); }, 1500);
+                        } else {
+                            showToast('[ERROR]: ' + res.message, 't-error');
+                        }
+                    },
+                    error: function() {
+                        showToast('[FAULT]: LINK TO LOGIC SERVER SEVERED', 't-error');
+                    },
+                    complete: function() {
+                        btn.prop('disabled', false).text('COMMIT_CHANGES');
+                    }
+                });
+            });
+
+            // AJAX Handler for Deletions
+            $('#deleteWeaponForm').on('submit', function(e) {
+                e.preventDefault();
+                var btn = $('#btnDeleteSubmit');
+                var targetId = $('#del_id').val();
+                btn.prop('disabled', true).text('PURGING...');
+
+                $.ajax({
+                    url: 'process-weapon-delete.php',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function(res) {
+                        if(res.status === 'success') {
+                            showToast(res.message, 't-warning');
+                            $('#deleteModal').modal('hide');
+                            $(`#asset-row-${targetId}`).fadeOut(500);
+                        } else {
+                            showToast('[ERROR]: ' + res.message, 't-error');
+                        }
+                    },
+                    error: function() {
+                        showToast('[FAULT]: CRITICAL ERROR DURING DATA PURGE', 't-error');
+                    },
+                    complete: function() {
+                        btn.prop('disabled', false).text('PURGE');
+                    }
+                });
+            });
+
+            // Dropdown Intercept Logic
+            $('#weaponDropdown').on('click', function(e) {
+                e.preventDefault(); e.stopPropagation();
                 $('.dropdown-menu').not($(this).next('.dropdown-menu')).removeClass('show');
-                
-                // Toggle current dropdown menu
                 $(this).next('.dropdown-menu').toggleClass('show');
             });
 
-            // Close when clicking outside of the dropdown area
             $(document).on('click', function(e) {
                 if (!$(e.target).closest('.dropdown').length) {
                     $('.dropdown-menu').removeClass('show');
                 }
             });
-
-            const urlParams = new URLSearchParams(window.location.search);
-            if(urlParams.has('status')) {
-                showToast(urlParams.get('status') === 'success' ? '[SIGNAL]: OPERATION_COMPLETE' : '[SIGNAL]: ERROR', urlParams.get('status') === 'success' ? 't-success' : 't-error');
-            }
         });
 
         function showToast(msg, css) {
             const t = $(`<div class="t-toast ${css}">${msg}</div>`);
             $('#toast-container').append(t);
-            t.fadeIn().delay(3000).fadeOut();
+            t.fadeIn(300).delay(3500).fadeOut(400, function() { $(this).remove(); });
         }
 
         function openEditModal(data) {
             $('#edit_id').val(data.firearmID);
             $('#edit_serial').val(data.firearm_serial_no);
             $('#edit_type').val(data.firearm_type);
-            $('#edit_manufacturer').val(data.manufacturer);
+            $('#edit_manufacturer').val(data.firearm_manufacturer || data.manufacturer);
             $('#edit_name').val(data.firearm_name);
             $('#edit_caliber').val(data.firearm_caliber);
             $('#edit_capacity').val(data.firearm_capacity);
