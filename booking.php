@@ -8,7 +8,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
     exit();
 }
 
-$stmt = $pdo->prepare("SELECT adminID, fullname FROM admin_lists WHERE username = ?");
+$stmt = $pdo->prepare("SELECT adminID, fullname, rank FROM admin_lists WHERE username = ?");
 $stmt->execute([$_SESSION['username']]);
 $admin = $stmt->fetch();
 ?>
@@ -68,8 +68,8 @@ $admin = $stmt->fetch();
                                         </div>
                                         <div class="col-md-6">
                                             <label>ISSUING_ARMOURER</label>
-                                            <input type="text" class="form-control" value="<?php echo $admin['fullname']; ?>" readonly>
-                                            <input type="hidden" name="armourer_issuer" value="<?php echo $admin['fullname']; ?>">
+                                            <input type="text" class="form-control" value="<?php echo $admin['rank'] . ' ' . $admin['fullname']?>" readonly>
+                                            <input type="hidden" name="armourer_issuer" value="<?php echo $admin['rank'] . ' ' . $admin['fullname']?>">
                                         </div>
                                     </div>
                                 </div>
