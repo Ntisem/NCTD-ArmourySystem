@@ -45,16 +45,16 @@ if(!$row) { die("RECORDS_NOT_FOUND: ACCESS_DENIED"); }
                         <div class="card-body">
                             <h4 class="card-title text-center" style="color: var(--neon-amber)">FIREARM_DATA_REVISION</h4>
                             <form class="forms-sample" action="code.php" method="POST">
-                                <input type="hidden" name="firearmID" value="<?= $row['firearmID'] ?>">
+                                <input type="text" name="firearmID" value="<?= $row['firearmID'] ?>">
                                 
                                 <div class="form-group mb-3">
                                     <label class="cmd-label">WEAPON_SERIAL</label>
-                                    <input type="text" name="serial_no" class="form-control" value="<?= $row['serial_no'] ?>">
+                                    <input type="text" name="firearm_serial_no" class="form-control" value="<?= $row['firearm_serial_no'] ?>">
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label class="cmd-label">IDENTIFICATION_NAME</label>
-                                    <select name="firearm_name" class="form-control">
+                                    <select name="firearm_name" class="form-control" style="background: black !important; border: 1px solid rgba(0, 242, 255, 0.3) !important; color: #fff !important;">
                                         <?php
                                         // Dynamic Dropdown from database
                                         $f_stmt = $pdo->query("SELECT firearm_name FROM firearm_name ORDER BY firearm_name ASC");
@@ -68,7 +68,7 @@ if(!$row) { die("RECORDS_NOT_FOUND: ACCESS_DENIED"); }
 
                                 <div class="d-flex justify-content-between mt-4">
                                     <button type="submit" name="update_firearm" class="btn btn-tactical px-5">EXECUTE_UPDATE</button>
-                                    <a href="firearms-list" class="btn btn-outline-danger px-5">ABORT</a>
+                                    <a href="firearm-names" class="btn btn-outline-danger px-5">ABORT</a>
                                 </div>
                             </form>
                         </div>
