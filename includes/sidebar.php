@@ -182,7 +182,7 @@ try {
         <li class="nav-item menu-items">
             <a class="nav-link" data-bs-toggle="collapse" href="#weapon" aria-expanded="false" aria-controls="weapon">
                 <span class="menu-icon"><i class="mdi mdi-pistol"></i></span>
-                <span class="menu-title">Armory Intel</span>
+                <span class="menu-title">Armoury Stock</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="weapon">
