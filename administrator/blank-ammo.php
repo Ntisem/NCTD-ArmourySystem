@@ -3,7 +3,7 @@ require_once('connections/connect-db.php');
 require_once('functions.php');
 require_once('includes/user_auth.php');
 
-if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
+if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
     header("location: login");
     exit();
 }
@@ -18,7 +18,7 @@ $admin_data = $user_stmt->fetch();
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>NCTD ARMOURY SYSTEM | AMMO_INVENTORY</title>
+    <title>NCTD ARMOURY SYSTEM | BLANK_AMMUNITION_REGISTRY</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -64,10 +64,22 @@ $admin_data = $user_stmt->fetch();
             <?php include_once('includes/navbar.php');?>
             <div class="main-panel">
                 <div class="content-wrapper">
-                    <div class="page-header d-flex justify-content-between">
-                        <h3 class="page-title text-info"><i class="mdi mdi-bullet"></i> AMMUNITION_REGISTRY</h3>
-                        <a href="add-new-ammo" class="btn btn-tactical"><i class="mdi mdi-plus"></i> ADD_NEW_AMMO</a>
-                        <a href="blank-ammo" class="btn btn-outline-warning"><i class="mdi mdi-ammunition"></i> BLANK_AMMO</a>
+                    <div class="page-header d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="page-title text-info mb-0">
+                            <i class="mdi mdi-bullet"></i> BLANK_AMMUNITION_REGISTRY
+                        </h3>
+                        
+                        <div class="d-flex align-items-center style-gap" style="gap: 10px;">
+                            <a href="ammunition" class="btn btn-outline-warning">
+                                <i class="mdi mdi-ammunition"></i> LIVE_AMMO
+                            </a>
+                            <a href="booking-blank-ammo" class="btn btn-outline-primary">
+                                <i class="mdi mdi-file"></i> DEPLOY_BLANK_AMMO
+                            </a>
+                            <a href="add-new-blank-ammo" class="btn btn-tactical">
+                                <i class="mdi mdi-plus"></i> ADD_NEW_AMMO
+                            </a>
+                        </div>
                     </div>
 
                     <div class="card table-tactical">
@@ -87,7 +99,7 @@ $admin_data = $user_stmt->fetch();
                                     <tbody>
                                         <?php
                                         // CRITICAL FIX: Added 'WHERE is_deleted = 0'
-                                        $sql = "SELECT * FROM ammunitions WHERE ammo_type='Live-Ammo' AND is_deleted = 0 ORDER BY ammoID DESC";
+                                        $sql = "SELECT * FROM ammunitions WHERE ammo_type='Blank-Ammo' AND is_deleted = 0 ORDER BY ammoID DESC";
                                         $stmt = $pdo->query($sql);
                                         $i = 1;
                                         while($row = $stmt->fetch()):
@@ -132,7 +144,7 @@ $admin_data = $user_stmt->fetch();
     <div class="modal fade" id="editAmmoModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-dark border-info text-white">
-                <form action="process-ammo-update.php" method="POST">
+                <form action="process-blank-ammo-update.php" method="POST">
                     <div class="modal-header border-info">
                         <h5 class="modal-title">MOD_AMMO_DATA</h5>
                     </div>
@@ -164,7 +176,7 @@ $admin_data = $user_stmt->fetch();
     <div class="modal fade" id="deleteModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content bg-dark border-danger text-white">
-                <form action="process-ammo-delete.php" method="POST">
+                <form action="process-blank-ammo-delete.php" method="POST">
                     <div class="modal-header border-danger">
                         <h5 class="modal-title">CONFIRM_DELETION</h5>
                     </div>

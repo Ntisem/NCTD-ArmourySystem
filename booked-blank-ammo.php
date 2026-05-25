@@ -4,11 +4,11 @@ require_once('functions.php');
 require_once('includes/user_auth.php');
 
 if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
-    header("location: login.php");
+    header("location: login");
     exit();
 }
 
-$overdueStmt = $pdo->query("SELECT COUNT(*) FROM blank_ammo_bookings WHERE faulty_returns_state = 'Not-Return'");
+$overdueStmt = $pdo->query("SELECT COUNT(*) FROM blank_ammo_bookings WHERE returns_state = 'Not-Return'");
 $overdueCount = $overdueStmt->fetchColumn();
 ?>
 <!DOCTYPE html>
@@ -105,7 +105,7 @@ $overdueCount = $overdueStmt->fetchColumn();
                         <?php
                         $stmt = $pdo->query("SELECT * FROM blank_ammo_bookings ORDER BY blank_ammoID DESC");
                         while($row = $stmt->fetch()) {
-                            $is_overdue = ($row['faulty_returns_state'] == 'Not-Return');
+                            $is_overdue = ($row['returns_state'] == 'Not-Return');
                         ?>
                         <tr id="log-row-<?= $row['blank_ammoID'] ?>" data-overdue="<?= $is_overdue ? '1' : '0' ?>">
                             <td class="index-cell"></td>
@@ -114,9 +114,9 @@ $overdueCount = $overdueStmt->fetchColumn();
                                     <?= strtoupper(htmlspecialchars($row['to_officer'])) ?>
                                 </a>
                             </td>
-                            <td><?= htmlspecialchars($row['faulty_ammo_name']) ?></td>
-                            <td><code style="color: #fff;"><?= htmlspecialchars($row['faulty_ammo_rounds']) ?> RDS</code></td>
-                            <td><code style="color: var(--success);"><?= htmlspecialchars($row['faulty_ammo_returned']) ?> RDS</code></td>
+                            <td><?= htmlspecialchars($row['ammo_name']) ?></td>
+                            <td><code style="color: #fff;"><?= htmlspecialchars($row['ammo_rounds']) ?> RDS</code></td>
+                            <td><code style="color: var(--success);"><?= htmlspecialchars($row['ammo_returned']) ?> RDS</code></td>
                             <td class="<?= $is_overdue ? 'status-overdue' : 'text-success' ?>">
                                 <?= $is_overdue ? '[ OUT_STANDING ]' : '[ RETURNED ]' ?>
                             </td>
@@ -173,7 +173,7 @@ $overdueCount = $overdueStmt->fetchColumn();
                         <h5 class="header-title mb-4">[ SECURE_RETURN_DECLARATION ]</h5>
                         <input type="hidden" name="blank_ammoID" id="edit_id">
                         <input type="hidden" name="action" value="update">
-                        <input type="hidden" name="faulty_ammoID" id="edit_faulty_ammoID">
+                        <input type="hidden" name="ammoID" id="edit_ammoID">
                         
                         <div class="form-group">
                             <label class="small text-info font-weight-bold">AMMO_CLASSIFICATION</label>
@@ -183,11 +183,11 @@ $overdueCount = $overdueStmt->fetchColumn();
                         <div class="row">
                             <div class="col-md-6">
                                 <label class="small text-info font-weight-bold">ROUNDS_ISSUED (INITIAL)</label>
-                                <input type="number" name="faulty_ammo_rounds" id="edit_rounds" class="form-control mb-3" readonly>
+                                <input type="number" name="ammo_rounds" id="edit_rounds" class="form-control mb-3" readonly>
                             </div>
                             <div class="col-md-6">
                                 <label class="small text-info font-weight-bold">RETURN_STATUS_MATRIX</label>
-                                <select name="faulty_returns_state" id="edit_status" class="form-control">
+                                <select name="returns_state" id="edit_status" class="form-control">
                                     <option value="Not-Return">Not-Return (Outstanding)</option>
                                     <option value="Returned">Returned (Asset Accounted For)</option>
                                 </select>
@@ -195,7 +195,7 @@ $overdueCount = $overdueStmt->fetchColumn();
                         </div>
 
                         <label class="small text-info font-weight-bold">ROUNDS_RETURNED (RE-COUNT RESTOCK QUANTITY)</label>
-                        <input type="number" name="faulty_ammo_returned" id="edit_returned_rounds" class="form-control" min="0" required>
+                        <input type="number" name="ammo_returned" id="edit_returned_rounds" class="form-control" min="0" required>
                         <small class="form-text text-muted mb-3">This quantity will dynamically update the main stockpile inventory.</small>
                     </div>
                     <div class="modal-footer border-0">
@@ -330,9 +330,9 @@ $overdueCount = $overdueStmt->fetchColumn();
     function viewDetails(data) {
         $('#v_image').attr('src', data.officer_image ? data.officer_image : 'assets/images/faces/profile_placeholder.jpg');
         $('#v_officer').text(data.to_officer.toUpperCase());
-        $('#v_name').text(data.faulty_ammo_name);
-        $('#v_issued').text(data.faulty_ammo_rounds + ' RDS');
-        $('#v_returned').text(data.faulty_ammo_returned + ' RDS');
+        $('#v_name').text(data.ammo_name);
+        $('#v_issued').text(data.ammo_rounds + ' RDS');
+        $('#v_returned').text(data.ammo_returned + ' RDS');
         $('#v_issuer').text(data.armourer_issuer);
         $('#v_rtime').text(data.returned_time.trim() ? data.returned_time : 'CRADLED IN FIELD');
         $('#viewModal').modal('show');
@@ -340,15 +340,15 @@ $overdueCount = $overdueStmt->fetchColumn();
 
     function editBooking(data) {
         $('#edit_id').val(data.blank_ammoID);
-        $('#edit_faulty_ammoID').val(data.faulty_ammoID); // Safely sets target reference
-        $('#edit_ammo_name').val(data.faulty_ammo_name);
-        $('#edit_rounds').val(data.faulty_ammo_rounds);
-        $('#edit_returned_rounds').val(data.faulty_ammo_returned).attr('max', data.faulty_ammo_rounds);
-        $('#edit_status').val(data.faulty_returns_state);
+        $('#edit_ammoID').val(data.ammoID); // Safely sets target reference
+        $('#edit_ammo_name').val(data.ammo_name);
+        $('#edit_rounds').val(data.ammo_rounds);
+        $('#edit_returned_rounds').val(data.ammo_returned).attr('max', data.ammo_rounds);
+        $('#edit_status').val(data.returns_state);
         
-        if(parseInt(data.faulty_ammo_returned, 10) === 0) {
+        if(parseInt(data.ammo_returned, 10) === 0) {
             $('#edit_status').val('Returned');
-            $('#edit_returned_rounds').val(data.faulty_ammo_rounds);
+            $('#edit_returned_rounds').val(data.ammo_rounds);
         }
         $('#updateModal').modal('show');
     }

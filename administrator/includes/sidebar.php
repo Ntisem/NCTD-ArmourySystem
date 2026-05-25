@@ -203,7 +203,7 @@ try {
             </a>
             <div class="collapse" id="booking">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="booking">Issue Firearm</a></li>
+                   <li class="nav-item"> <a class="nav-link" href="booking">Issue Firearm</a></li>
                     <li class="nav-item"> <a class="nav-link" href="booking-ammo">Issue Ammo</a></li>
                     <li class="nav-item"> <a class="nav-link" href="booking-blank-ammo">Issue Blank Ammo</a></li>
                     <li class="nav-item"> <a class="nav-link" href="booked-firearms">Firearm Log</a></li>
@@ -274,7 +274,7 @@ try {
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="add-faulty-weapon">Report Damage</a></li>
                     <li class="nav-item"> <a class="nav-link" href="faulty-weapon">Faulty Weapons</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="faulty-ammo">Blank/Faulty Ammo</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="faulty-ammo">Faulty Ammo</a></li>
                 </ul>
             </div>
         </li>

@@ -3,7 +3,6 @@ require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
 
-
 if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
     header("location: login");
     exit();
@@ -18,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_ammo'])) {
     $app          = $_POST['ammo_application'];
     $status       = $_POST['booking_status'];
     $remarks      = trim($_POST['remarks']);
+    $ammo_type    = $_POST['ammo_type'];
 
     // 2. CRITICAL FIX FOR ERROR 1048
     // If the session is empty, we use a fallback ID (e.g., 0 or 1) 
@@ -30,16 +30,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_ammo'])) {
         $pdo->beginTransaction();
 
         // 3. Insert into ammunitions table
-        // Included ammo_type as empty string to match your SQL structure requirement
         $sql = "INSERT INTO ammunitions (
                     manufacturer, ammo_type, ammo_name, ammo_application, 
                     ammo_rounds, booking_status, adminID, 
                     armourer_admin_name, remarks, is_deleted
-                ) VALUES (?, '', ?, ?, ?, ?, ?, ?, ?, 0)";
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
         
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             $manufacturer, 
+            $ammo_type,
             $name, 
             $app, 
             $rounds, 
@@ -50,23 +50,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_ammo'])) {
         ]);
 
         // 4. Create Audit Log Entry
-        $log_action = "NEW_AMMO_REGISTERED: " . $name . " [Qty: " . $rounds . "]";
+        $log_action = "NEW_AMMO_REGISTERED: " . $name . " [Qty: " . $rounds . "] [" . $ammo_type . "]";
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log->execute([$sessionAdminID, $sessionFullname, $log_action, $sessionUserRole]);
         
-        $action_details = "Added Ammunition [ " . $name . "  ".$manufacturer." (" . $rounds . " ) ]";
+        $action_details = "Added Ammunition [ " . $name . "  ".$manufacturer." (" . $rounds . " ) ] Type: " . $ammo_type;
         logDailyActivity($pdo, $action_details, '', 'Ammunition Management');
 
         $pdo->commit();
         
-        // Success Redirect
-        header("Location: ammunition?status=success");
+        // 5. DYNAMIC TARGET ROUTING BASED ON ASSET TYPE MATCHING
+        if (strcasecmp($ammo_type, 'Live-Ammo') === 0) {
+            header("Location: ammunition?status=success");
+        } elseif (strcasecmp($ammo_type, 'Blank-Ammo') === 0) {
+            header("Location: blank-ammo?status=success");
+        } else {
+            // Standard fallback fallback route if type mismatch occurs
+            header("Location: ammunition?status=success");
+        }
         exit();
 
     } catch (Exception $e) {
         $pdo->rollBack();
-        // This will now show the specific SQL error in your toast alert for debugging
-        header("Location: ammunition?status=error&msg=" . urlencode($e->getMessage()));
+        // Displays the exact SQL exception diagnostics inside tactical toast panels
+        if (strcasecmp($ammo_type, 'Blank-Ammo') === 0) {
+            header("Location: blank-ammo?status=error&msg=" . urlencode($e->getMessage()));
+        } else {
+            header("Location: ammunition?status=error&msg=" . urlencode($e->getMessage()));
+        }
         exit();
     }
 } else {

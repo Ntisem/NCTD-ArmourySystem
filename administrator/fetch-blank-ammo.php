@@ -12,15 +12,15 @@ if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator')
 if (isset($_POST['search']) && trim($_POST['search']) !== '') {
     $search = "%" . trim($_POST['search']) . "%";
     try {
-        $stmt = $pdo->prepare("SELECT faulty_ammoID, faulty_ammo_name, faulty_ammo_quantity, faulty_ammo_manufacturer FROM faulty_ammo WHERE faulty_ammo_name LIKE ? AND is_deleted = 0 LIMIT 10");
+        $stmt = $pdo->prepare("SELECT ammoID, ammo_name, ammo_rounds, manufacturer FROM ammunitions WHERE ammo_name LIKE ? AND ammo_type = 'Blank-Ammo' AND is_deleted = 0 LIMIT 10");
         $stmt->execute([$search]);
         
         $response = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $response[] = [
-                "value" => $row['faulty_ammoID'],
-                "label" => $row['faulty_ammo_name'] . " (" . $row['faulty_ammo_manufacturer'] . ")",
-                "stock" => $row['faulty_ammo_quantity']
+                "value" => $row['ammoID'],
+                "label" => $row['ammo_name'] . " (" . $row['manufacturer'] . ")",
+                "stock" => $row['ammo_rounds']
             ];
         }
         echo json_encode($response);

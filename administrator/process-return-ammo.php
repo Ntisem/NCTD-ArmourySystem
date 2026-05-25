@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 if ($net_restock_qty > 0) {
                     // Update main inventory stock pool dynamically based on ammunition name
                     // NOTE: Uses ammo_rounds column pattern as specified in your base layout
-                    $updateStock = $pdo->prepare("UPDATE ammunitions SET ammo_rounds = ammo_rounds + ? WHERE ammo_name = ?");
+                    $updateStock = $pdo->prepare("UPDATE ammunitions SET ammo_rounds = ammo_rounds + ? WHERE ammo_name = ? AND ammo_type = 'Live-Ammo' AND is_deleted = 0");
                     $updateStock->execute([$net_restock_qty, $currentBooking['ammo_name']]);
                 }
             }

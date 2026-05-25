@@ -18,7 +18,7 @@ $admin_data = $user_stmt->fetch();
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>HQ COMMAND | AMMO_INVENTORY</title>
+    <title>NCTD ARMOURY SYSTEM | AMMO_INVENTORY</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -66,7 +66,8 @@ $admin_data = $user_stmt->fetch();
                 <div class="content-wrapper">
                     <div class="page-header d-flex justify-content-between">
                         <h3 class="page-title text-info"><i class="mdi mdi-bullet"></i> AMMUNITION_REGISTRY</h3>
-                        <a href="add-new-ammo" class="btn btn-tactical"><i class="mdi mdi-plus"></i> NEW_ENTRY</a>
+                        <a href="add-new-ammo" class="btn btn-tactical"><i class="mdi mdi-plus"></i> ADD_NEW_AMMO</a>
+                        <a href="blank-ammo" class="btn btn-outline-warning"><i class="mdi mdi-ammunition"></i> BLANK_AMMO</a>
                     </div>
 
                     <div class="card table-tactical">
@@ -80,14 +81,13 @@ $admin_data = $user_stmt->fetch();
                                             <th>MANUFACTURER</th>
                                             <th>ROUNDS</th>
                                             <th>APPLICATION</th>
-                                            <th>STATUS</th>
                                             <th>OPERATIONS</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                         // CRITICAL FIX: Added 'WHERE is_deleted = 0'
-                                        $sql = "SELECT * FROM ammunitions WHERE is_deleted = 0 ORDER BY ammoID DESC";
+                                        $sql = "SELECT * FROM ammunitions WHERE ammo_type='Live-Ammo' AND is_deleted = 0 ORDER BY ammoID DESC";
                                         $stmt = $pdo->query($sql);
                                         $i = 1;
                                         while($row = $stmt->fetch()):
@@ -99,11 +99,11 @@ $admin_data = $user_stmt->fetch();
                                             <td><?= htmlspecialchars($row['manufacturer']) ?></td>
                                             <td class="text-warning"><?= number_format($row['ammo_rounds']) ?></td>
                                             <td><?= htmlspecialchars($row['ammo_application']) ?></td>
-                                            <td><span class="badge btn-outline-info"><?= $row['booking_status'] ?></span></td>
+                                  
                                             <td>
                                                 <button class="btn btn-xs btn-outline-success" onclick='viewDetails(<?= $jsData ?>)' title="View"><i class="mdi mdi-eye"></i></button>
                                                 <button class="btn btn-xs btn-outline-info" onclick='openEditModal(<?= $jsData ?>)' title="Edit"><i class="mdi mdi-pencil"></i></button>
-                                                <button class="btn btn-xs btn-outline-danger" onclick='openDeleteModal(<?= $row['ammoID'] ?>, "<?= htmlspecialchars($row['ammo_name']) ?>")' title="Delete"><i class="mdi mdi-trash-can"></i></button>
+                                                <button class="btn btn-xs btn-outline-danger" onclick="openDeleteModal(<?= $row['ammoID'] ?>, '<?= htmlspecialchars($row['ammo_name']) ?>')" title="Archive"><i class="mdi mdi-archive"></i></button>    
                                             </td>
                                         </tr>
                                         <?php endwhile; ?>
@@ -113,7 +113,6 @@ $admin_data = $user_stmt->fetch();
                         </div>
                     </div>
                 </div>
-                 <?php require_once('includes/footer.php'); ?>
             </div>
         </div>
     </div>
@@ -181,6 +180,9 @@ $admin_data = $user_stmt->fetch();
             </div>
         </div>
     </div>
+ </div>
+ </div>
+<?php require_once('includes/footer.php'); ?>
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
@@ -199,17 +201,17 @@ $admin_data = $user_stmt->fetch();
         buttons: [
             { 
                 extend: 'excel', 
-                text: '<i class="mdi mdi-file-excel"></i> EXCEL_EXPORT', 
+                text: '<i class="mdi mdi-file-excel"></i> EXCEL', 
                 className: 'btn-tactical-export' 
             },
             { 
                 extend: 'pdf', 
-                text: '<i class="mdi mdi-file-pdf"></i> PDF_GENERATE', 
+                text: '<i class="mdi mdi-file-pdf"></i> PDF', 
                 className: 'btn-tactical-export' 
             },
             { 
                 extend: 'print', 
-                text: '<i class="mdi mdi-printer"></i> PRINT_HARDCOPY', 
+                text: '<i class="mdi mdi-printer"></i> PRINT', 
                 className: 'btn-tactical-export' 
             }
         ],

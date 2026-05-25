@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
             $pdo->beginTransaction();
 
             // 1. Soft Delete
-            $stmt = $pdo->prepare("UPDATE ammunitions SET is_deleted = 1 WHERE ammoID = ? AND ammo_type = 'Live-Ammo'");
+            $stmt = $pdo->prepare("UPDATE ammunitions SET is_deleted = 1 WHERE ammoID = ? AND ammo_type = 'Blank-Ammo'");
             $stmt->execute([$id]);
 
             // 2. Audit Log - Using fallback values to prevent errors
@@ -30,14 +30,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
             $action_details = "Deleted Ammunition [ ID: " . $id . " ]";
             logDailyActivity($pdo, $action_details, '', 'Ammunition Management');
             $pdo->commit();
-            header("Location: ammunition?status=success");
+            header("Location: blank-ammo?status=success");
             exit();
         } catch (Exception $e) {
             $pdo->rollBack();
-            header("Location: ammunition?status=error&msg=" . urlencode($e->getMessage()));
+            header("Location: blank-ammo?status=error&msg=" . urlencode($e->getMessage()));
             exit();
         }
     }
 }
-header("Location: ammunition?status=error");
+header("Location: blank-ammo?status=error");
 exit();

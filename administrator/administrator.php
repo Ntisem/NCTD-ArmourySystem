@@ -14,12 +14,16 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
  */
 try {
     // 1. Total Firearm Inventory
-    $stmtFirearms = $pdo->query("SELECT COUNT(*) FROM firearms WHERE is_deleted = 0");
+   $stmtFirearms = $pdo->query("SELECT COUNT(*) FROM firearms WHERE is_deleted = 0");
     $totalFirearms = $stmtFirearms->fetchColumn();
 
     // 2. Live Munition Rounds (Sum of all rounds)
-    $stmtAmmo = $pdo->query("SELECT SUM(ammo_rounds) FROM ammunitions WHERE is_deleted = 0");
+    $stmtAmmo = $pdo->query("SELECT SUM(ammo_rounds) FROM ammunitions WHERE is_deleted = 0 AND ammo_type = 'Live-Ammo'");
     $totalAmmoRounds = $stmtAmmo->fetchColumn() ?: 0;
+
+     // 2. Blank Munition Rounds (Sum of all rounds)
+    $stmtBlankAmmo = $pdo->query("SELECT SUM(ammo_rounds) FROM ammunitions WHERE is_deleted = 0 AND ammo_type = 'Blank-Ammo'");
+    $totalBlankAmmoRounds = $stmtBlankAmmo->fetchColumn() ?: 0;
 
     // 3. Active Deployments (Not Returned)
     $stmtActive = $pdo->query("SELECT COUNT(*) FROM bookings WHERE TRIM(returns) = 'Not-Return' AND is_deleted = 0");
@@ -194,6 +198,21 @@ try {
                                         <div class="stat-value text-warning"><?= number_format($totalAmmoRounds) ?></div>
                                         <i class="mdi mdi-ammunition text-warning" style="font-size: 2rem;"></i>
                                     </div>
+                                    <hr>
+                                     <div class="text-muted small mt-1">[<strong class="text-light"><?= $totalBlankAmmoRounds ?></strong> Rds]<strong class="text-warning">Blank-Ammo</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                           <div class="col-md-3 grid-margin">
+                            <div class="card tactical-card" style="border-color: var(--neon-red);">
+                                <div class="card-body">
+                                    <h6 class="text-muted small mb-3">HARDWARE_FAULTS</h6>
+                                    <div class="d-flex justify-content-between align-items-end">
+                                        <div class="stat-value text-danger"><?= $faultyWeapons ?> <small style="font-size: 12px;">WPN</small></div>
+                                        <i class="mdi mdi-alert-decagram text-danger blink" style="font-size: 2rem;"></i>
+                                    </div>
+                                        <hr>
+                                    <div class="text-muted small mt-1">[<strong class="text-light"><?= $faultyAmmo ?></strong> Rds]<strong class="text-danger">Faulty-Ammo</strong></div>
                                 </div>
                             </div>
                         </div>
@@ -208,20 +227,8 @@ try {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 grid-margin">
-                            <div class="card tactical-card" style="border-color: var(--neon-red);">
-                                <div class="card-body">
-                                    <h6 class="text-muted small mb-3">HARDWARE_FAULTS</h6>
-                                    <div class="d-flex justify-content-between align-items-end">
-                                        <div class="stat-value text-danger"><?= $faultyWeapons ?> <small style="font-size: 12px;">WPN</small></div>
-                                        <i class="mdi mdi-alert-decagram text-danger blink" style="font-size: 2rem;"></i>
-                                    </div>
-                                   <div class="text-muted small mt-1">[ <strong class="text-light"><?= $faultyAmmo ?></strong> Rounds ]<strong class="text-danger"> Blank-Ammo</strong></div>
-                                </div>
-                            </div>
-                        </div>
+                     
                     </div>
-
                     <div class="row">
                         <div class="col-lg-7 grid-margin stretch-card">
                             <div class="card tactical-card">

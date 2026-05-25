@@ -144,16 +144,16 @@ $_SESSION['adminName'] = $adminName; // Store admin name in session for later us
                                     <div class="row mb-3">
                                         <div class="col-md-4">
                                             <label>AMMO_TYPE_NAME</label>
-                                            <input type="text" id="faulty_ammo_name" name="faulty_ammo_name" class="form-control" placeholder="CALIBER..." autocomplete="off" required>
-                                            <input type="hidden" name="faulty_ammoID" id="faulty_ammoID">
+                                            <input type="text" id="ammo_name" name="ammo_name" class="form-control" placeholder="CALIBER..." autocomplete="off" required>
+                                            <input type="hidden" name="ammoID" id="ammoID">
                                         </div>
                                         <div class="col-md-4">
                                             <label>CURRENT_STOCK_LEVEL</label>
-                                            <input type="text" id="faulty_ammo_stock" class="form-control" readonly placeholder="0">
+                                            <input type="text" id="ammo_stock" class="form-control" readonly placeholder="0">
                                         </div>
                                         <div class="col-md-4">
                                             <label>QUANTITY_TO_ISSUE</label>
-                                            <input type="number" name="faulty_ammo_rounds" id="faulty_ammo_rounds" class="form-control" min="1" required>
+                                            <input type="number" name="ammo_rounds" id="ammo_rounds" class="form-control" min="1" required>
                                         </div>
                                     </div>
                                 </div>
@@ -191,7 +191,7 @@ $_SESSION['adminName'] = $adminName; // Store admin name in session for later us
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label>POST_ORDERS_REMARKS</label>
-                                            <textarea name="faulty_ammo_comment" class="form-control" rows="4"></textarea>
+                                            <textarea name="ammo_comment" class="form-control" rows="4"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -226,12 +226,12 @@ $_SESSION['adminName'] = $adminName; // Store admin name in session for later us
             }
         });
 
-        $("#faulty_ammo_name").autocomplete({
+        $("#ammo_name").autocomplete({
             source: function(req, res) { $.post("fetch-blank-ammo.php", { search: req.term }, res, "json"); },
             select: function(event, ui) {
-                $("#faulty_ammo_name").val(ui.item.label);
-                $("#faulty_ammoID").val(ui.item.value);
-                $("#faulty_ammo_stock").val(ui.item.stock); 
+                $("#ammo_name").val(ui.item.label);
+                $("#ammoID").val(ui.item.value);
+                $("#ammo_stock").val(ui.item.stock); 
                 return false;
             }
         });

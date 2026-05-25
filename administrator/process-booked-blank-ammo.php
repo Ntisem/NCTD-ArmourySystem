@@ -18,8 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
         // --- HANDLE STOCK METRIC UPDATE & RESTOCK OPERATIONS ---
         if ($action == 'update') {
             $id = isset($_POST['blank_ammoID']) ? (int)$_POST['blank_ammoID'] : 0; 
-            $rounds_returned = isset($_POST['faulty_ammo_returned']) ? (int)$_POST['faulty_ammo_returned'] : 0;
-            $status = $_POST['faulty_returns_state'] ?? 'Not-Return'; 
+            $rounds_returned = isset($_POST['ammo_returned']) ? (int)$_POST['ammo_returned'] : 0;
+            $status = $_POST['returns_state'] ?? 'Not-Return'; 
             $returned_time = ($status == 'Returned') ? date("F j, Y, g:i a") : ' ';
 
             if ($id <= 0) {
@@ -30,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
             // Begin safe database transaction block
             $pdo->beginTransaction();
 
-            // Step 1: Fetch state and pull faulty_ammoID directly from database row as priority safety option
-            $checkState = $pdo->prepare("SELECT faulty_ammoID, faulty_returns_state, faulty_ammo_name, faulty_ammo_rounds, faulty_ammo_returned FROM blank_ammo_bookings WHERE blank_ammoID = ?");
+            // Step 1: Fetch state and pull ammoID directly from database row as priority safety option
+            $checkState = $pdo->prepare("SELECT ammoID, returns_state, ammo_name, ammo_rounds, ammo_returned FROM blank_ammo_bookings WHERE blank_ammoID = ?");
             $checkState->execute([$id]);
             $currentLog = $checkState->fetch(PDO::FETCH_ASSOC);
 
@@ -42,25 +42,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
             }
 
             // Core safety resolution hierarchy for index reference keys
-            $faulty_ammoID = isset($_POST['faulty_ammoID']) && (int)$_POST['faulty_ammoID'] > 0 
-                ? (int)$_POST['faulty_ammoID'] 
-                : (int)$currentLog['faulty_ammoID'];
+            $ammoID = isset($_POST['ammoID']) && (int)$_POST['ammoID'] > 0 
+                ? (int)$_POST['ammoID'] 
+                : (int)$currentLog['ammoID'];
 
             // Automated Fallback: Query mapping via asset classification string name if key is still missing
-            if ($faulty_ammoID <= 0) {
-                $lookUp = $pdo->prepare("SELECT faulty_ammoID FROM faulty_ammo WHERE faulty_ammo_name = ? LIMIT 1");
-                $lookUp->execute([$currentLog['faulty_ammo_name']]);
-                $faulty_ammoID = (int)$lookUp->fetchColumn();
+            if ($ammoID <= 0) {
+                $lookUp = $pdo->prepare("SELECT ammoID FROM ammunitions WHERE ammo_name = ? LIMIT 1");
+                $lookUp->execute([$currentLog['ammo_name']]);
+                $ammoID = (int)$lookUp->fetchColumn();
             }
 
-            if ($faulty_ammoID <= 0) {
+            if ($ammoID <= 0) {
                 $pdo->rollBack();
-                echo json_encode(['status' => 'error', 'message' => 'STOCK_LINK_FAILURE: Reference identifier key for faulty_ammo table line could not be resolved.']);
+                echo json_encode(['status' => 'error', 'message' => 'STOCK_LINK_FAILURE: Reference identifier key for ammo table line could not be resolved.']);
                 exit();
             }
 
-            $rounds_issued = (int)$currentLog['faulty_ammo_rounds'];
-            $previous_returned = (int)$currentLog['faulty_ammo_returned'];
+            $rounds_issued = (int)$currentLog['ammo_rounds'];
+            $previous_returned = (int)$currentLog['ammo_returned'];
 
             if ($rounds_returned > $rounds_issued) {
                 $pdo->rollBack();
@@ -68,26 +68,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
                 exit();
             }
 
-            // Step 2: Calculate Delta Adjustments for the faulty_ammo table stockpile
+            // Step 2: Calculate Delta Adjustments for the ammo table stockpile
             if ($status === 'Returned') {
                 // Determine true delta modifications accurately (handles modification edits perfectly)
                 $net_stock_delta = $rounds_returned - $previous_returned;
 
                 if ($net_stock_delta != 0) {
-                    $restock = $pdo->prepare("UPDATE faulty_ammo SET faulty_ammo_quantity = faulty_ammo_quantity + ? WHERE faulty_ammoID = ?");
-                    $restock->execute([$net_stock_delta, $faulty_ammoID]);
+                    $restock = $pdo->prepare("UPDATE ammunitions SET ammo_rounds = ammo_rounds + ? WHERE ammoID = ?");
+                    $restock->execute([$net_stock_delta, $ammoID]);
                 }
             } 
             elseif ($status === 'Not-Return' && $previous_returned > 0) {
                 // Reverse previous return declarations if status is shifted back to outstanding/unreturned
-                $deduct = $pdo->prepare("UPDATE faulty_ammo SET faulty_ammo_quantity = faulty_ammo_quantity - ? WHERE faulty_ammoID = ?");
-                $deduct->execute([$previous_returned, $faulty_ammoID]);
+                $deduct = $pdo->prepare("UPDATE ammunitions SET ammo_rounds = ammo_rounds - ? WHERE ammoID = ?");
+                $deduct->execute([$previous_returned, $ammoID]);
                 $rounds_returned = 0; 
             }
 
             // Step 3: Run primary update statement
-            $stmt = $pdo->prepare("UPDATE blank_ammo_bookings SET faulty_ammoID = ?, faulty_ammo_returned = ?, faulty_returns_state = ?, returned_time = ? WHERE blank_ammoID = ?");
-            $stmt->execute([$faulty_ammoID, $rounds_returned, $status, $returned_time, $id]);
+            $stmt = $pdo->prepare("UPDATE blank_ammo_bookings SET ammoID = ?, ammo_returned = ?, returns_state = ?, returned_time = ? WHERE blank_ammoID = ?");
+            $stmt->execute([$ammoID, $rounds_returned, $status, $returned_time, $id]);
             
             // System Audit Log entry creation
             $action_details = "Updated Booked Ammunition Entry [ ID: " . $id . " ] to state [" . $status . "] with " . $rounds_returned . " rounds returned and restocked.";

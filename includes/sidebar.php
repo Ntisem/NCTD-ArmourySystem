@@ -273,7 +273,7 @@ try {
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="add-faulty-weapon">Report Damage</a></li>
                     <li class="nav-item"> <a class="nav-link" href="faulty-weapon">Faulty Weapons</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="faulty-ammo">Blank/Faulty Ammo</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="faulty-ammo">Faulty Ammo</a></li>
                 </ul>
             </div>
         </li>
@@ -289,8 +289,8 @@ try {
             </a>
             <div class="collapse" id="audit-reports">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" target="_blank" href="audit_engine.php?type=master">Full Master Audit</a></li>
-                    <li class="nav-item"> <a class="nav-link" target="_blank" href="report-unified.php">Unified Report</a></li>
+                    <li class="nav-item"> <a class="nav-link" target="_blank" href="audit_engine?type=master">Full Master Audit</a></li>
+                    <li class="nav-item"> <a class="nav-link" target="_blank" href="report-unified">Unified Report</a></li>
                 </ul>
             </div>
         </li>
@@ -299,7 +299,7 @@ try {
             <span class="nav-link">SYSTEM_ADMIN</span>
         </li>
         <li class="nav-item menu-items">
-            <a class="nav-link" href="export-db.php">
+            <a class="nav-link" href="export-db">
                 <span class="menu-icon">
                     <i class="mdi mdi-database-export text-warning"></i>
                 </span>

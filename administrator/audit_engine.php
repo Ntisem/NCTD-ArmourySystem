@@ -5,9 +5,12 @@ if (ob_get_length()) ob_end_clean();
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
 
+if(!isset($_SESSION["username"]) || ($_SESSION["user_role"] !== 'Armourer' && $_SESSION["user_role"] !== 'Administrator')) {
+    header("location: login");
+    exit();
+}
 
-
-if($_SESSION["user_role"] != 'Administrator') {
+if($_SESSION["user_role"] != 'Armourer' && $_SESSION["user_role"] != 'Administrator') {
     die("UNAUTHORIZED_ACCESS_EXCEPTION: AUDIT_CLEARANCE_REQUIRED");
 }
 
@@ -135,7 +138,7 @@ if ($report_type == 'master' || $report_type == 'faulty') {
 
     $sql_faulty = "SELECT faulty_firearm_serial_no AS serial, faulty_firearm_name AS item, faulty_type, faulty_nature FROM faulty_weapons
     UNION ALL
-    SELECT faulty_ammo_serial_no AS serial, faulty_ammo_quantity AS item, faulty_type, 'N/A' FROM faulty_ammo";
+    SELECT faulty_ammo_name AS serial, faulty_ammo_quantity AS item, faulty_type, 'N/A' FROM faulty_ammo";
     
     $stmt_faulty = $pdo->query($sql_faulty);
     while($row = $stmt_faulty->fetch(PDO::FETCH_ASSOC)) {

@@ -10,19 +10,19 @@ if (!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['booking_blank_ammo'])) {
     // 1. Capture and Sanitize Inputs
-    $faulty_ammoID  = $_POST['faulty_ammoID'];
+    $ammoID  = $_POST['ammoID'];
     $officerID      = $_POST['officerID'];
-    $rounds_issued  = (int)$_POST['faulty_ammo_rounds'];
+    $rounds_issued  = (int)$_POST['ammo_rounds'];
     $booking_time   = date("F j, Y, g:i a");
 
     $to_officer          = $_POST['to_officer'] ?? '';
     $armourer_issuer     = $_POST['armourer_issuer'] ?? '';
     $officer_image       = $_POST['officer_image'] ?? '';
-    $faulty_ammo_name    = $_POST['faulty_ammo_name'] ?? '';
+    $ammo_name           = $_POST['ammo_name'] ?? '';
     $duty_type           = $_POST['duty_type'] ?? '';
     $duty_location       = $_POST['duty_location'] ?? '';
     $duty_duration       = $_POST['duty_duration'] ?? '';
-    $faulty_ammo_comment = $_POST['faulty_ammo_comment'] ?? '';
+    $ammo_comment = $_POST['ammo_comment'] ?? '';
 
     // Secure Verification: Retrieve adminID directly via current session user to prevent Null Constraint Violations
     $adminID = $_SESSION['adminID'] ?? null;
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['booking_blank_ammo'])
         exit();
     }
 
-    if ($rounds_issued <= 0 || empty($faulty_ammoID) || empty($officerID)) {
+    if ($rounds_issued <= 0 || empty($ammoID) || empty($officerID)) {
         header("Location: booking-blank-ammo?status=error&msg=" . urlencode("INVALID_INPUT_PARAMETERS"));
         exit();
     }
@@ -47,8 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['booking_blank_ammo'])
         $pdo->beginTransaction();
 
         // 2. Structural Stock Audit Check
-        $stockCheck = $pdo->prepare("SELECT faulty_ammo_quantity FROM faulty_ammo WHERE faulty_ammoID = ? FOR UPDATE");
-        $stockCheck->execute([$faulty_ammoID]);
+        $stockCheck = $pdo->prepare("SELECT ammo_rounds FROM ammunitions WHERE ammoID = ? AND ammo_type = 'Blank-Ammo' FOR UPDATE");
+        $stockCheck->execute([$ammoID]);
         $current_stock = $stockCheck->fetchColumn();
 
         if ($current_stock === false || $current_stock < $rounds_issued) {
@@ -59,41 +59,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['booking_blank_ammo'])
 
         // 3. Complete Field Data Sync Execution
         $sql = "INSERT INTO blank_ammo_bookings (
-                    officerID, faulty_ammoID, armourer_issuer, officer_image, to_officer, 
-                    booking_time, faulty_ammo_name, faulty_ammo_rounds, faulty_ammo_returned, 
-                    duty_type, duty_location, duty_duration, faulty_ammo_comment, 
-                    faulty_returns_state, returned_time
+                    officerID, ammoID, armourer_issuer, officer_image, to_officer, 
+                    booking_time, ammo_name, ammo_rounds, ammo_returned, 
+                    duty_type, duty_location, duty_duration, ammo_comment, 
+                    returns_state, returned_time
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, 'Not-Return', ' ')";
         
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             $officerID,
-            $faulty_ammoID,
+            $ammoID,
             $armourer_issuer,
             $officer_image,
             $to_officer,
             $booking_time,
-            $faulty_ammo_name,
+            $ammo_name,
             $rounds_issued,
             $duty_type,
             $duty_location,
             $duty_duration,
-            $faulty_ammo_comment
+            $ammo_comment
         ]);
 
         $last_inserted_id = $pdo->lastInsertId();
 
         // 4. Deduct Stock safely from Inventory
-        $updateStock = $pdo->prepare("UPDATE faulty_ammo SET faulty_ammo_quantity = faulty_ammo_quantity - ? WHERE faulty_ammoID = ?");
-        $updateStock->execute([$rounds_issued, $faulty_ammoID]);
+        $updateStock = $pdo->prepare("UPDATE ammunitions SET ammo_rounds = ammo_rounds - ? WHERE ammoID = ? AND ammo_type = 'Blank-Ammo'");
+        $updateStock->execute([$rounds_issued, $ammoID]);
 
         // 5. Create Audit Log Entries with valid resolved adminID
-        $action_summary = "AMMO_DEPLOYED: " . $rounds_issued . " rounds of " . $faulty_ammo_name . " issued to " . $to_officer;
+        $action_summary = "AMMO_DEPLOYED: " . $rounds_issued . " rounds of " . $ammo_name . " issued to " . $to_officer;
         
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log->execute([$adminID, $_SESSION['fullname'] ?? $armourer_issuer, $action_summary, $_SESSION['user_role']]);
 
-        $action_details = "Booked Blank Ammunition [ Log ID: " . $last_inserted_id . " ] - " . $rounds_issued . " rounds of " . $faulty_ammo_name . " issued to " . $to_officer;
+        $action_details = "Booked Blank Ammunition [ Log ID: " . $last_inserted_id . " ] - " . $rounds_issued . " rounds of " . $ammo_name . " issued to " . $to_officer;
         logDailyActivity($pdo, $action_details, '', 'Ammunition Management');
 
         $pdo->commit();

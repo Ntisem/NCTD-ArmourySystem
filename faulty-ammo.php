@@ -16,7 +16,7 @@ $faulty_ammo = $stmt_faulty->fetchAll(PDO::FETCH_ASSOC);
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>[GPS COMMAND] - FAULTY MATERIAL CONTROL TERMINAL</title>
+    <title>NCTD ARMOURY SYSTEM - FAULTY MATERIAL CONTROL TERMINAL</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
@@ -53,9 +53,9 @@ $faulty_ammo = $stmt_faulty->fetchAll(PDO::FETCH_ASSOC);
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="page-header d-flex justify-content-between align-items-center">
-            <h3 class="page-title text-light">[SECURITY MODULE] // BLANK_AMMO</h3>
-            <a href="add-faulty-ammo" class="btn btn-tactical"><i class="mdi mdi-plus-box"></i> INTIALIZE BLANK AMMO</a>
-            <a href="booking-blank-ammo" class="btn btn-outline-primary"><i class="mdi mdi-file"></i> DEPLOY BLANK/FAULTY AMMO</a>            </div>
+            <h3 class="page-title text-light">[SECURITY MODULE] // FAULTY_AMMO</h3>
+            <a href="add-faulty-ammo" class="btn btn-tactical"><i class="mdi mdi-plus-box"></i> INTIALIZE FAULTY AMMO</a>
+         </div>
             <div class="row">
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
@@ -89,7 +89,7 @@ $faulty_ammo = $stmt_faulty->fetchAll(PDO::FETCH_ASSOC);
                                 <button class="btn btn-outline-info btn-sm" onclick='viewDetails(<?= json_encode($row, JSON_HEX_APOS | JSON_HEX_QUOT); ?>)'><i class="mdi mdi-eye"></i></button>
                                 <button class="btn btn-outline-warning btn-sm" onclick='openUpdateModal(<?= json_encode($row, JSON_HEX_APOS | JSON_HEX_QUOT); ?>)'><i class="mdi mdi-pencil-box-outline"></i></button>
                                 <button class="btn btn-outline-success btn-sm" onclick="openFixModal(<?= $row['faulty_ammoID'] ?>)"><i class="mdi mdi-check-circle-outline"></i></button>
-                                <button class="btn btn-outline-danger btn-sm" onclick="confirmDelete(<?= $row['faulty_ammoID'] ?>)"><i class="mdi mdi-close-circle-outline"></i></button>
+                               
                               </div>
                             </td>
                           </tr>
