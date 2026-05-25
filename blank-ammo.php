@@ -77,7 +77,7 @@ $admin_data = $user_stmt->fetch();
                                 <i class="mdi mdi-file"></i> DEPLOY_BLANK_AMMO
                             </a>
                             <a href="add-new-blank-ammo" class="btn btn-tactical">
-                                <i class="mdi mdi-plus"></i> ADD_NEW_AMMO
+                                <i class="mdi mdi-plus"></i> ADD_NEW_BLANK-AMMO
                             </a>
                         </div>
                     </div>

@@ -102,7 +102,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                       <h4 class="card-title text-uppercase">[SCAN] ADD FAULTY FIREARM</h4>
                       <div>
                         <a href="add-faulty-ammo.php" class="btn btn-tactical">
-                          <i class="mdi mdi-ammunition"></i> ADD BLANK / FAULTY AMMO
+                          <i class="mdi mdi-ammunition"></i> ADD FAULTY AMMO
                         </a>
                       </div>
                     </div>
