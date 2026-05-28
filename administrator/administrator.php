@@ -41,7 +41,7 @@ try {
     $faultyAmmo = $stmtFaultyA->fetchColumn() ?: 0;
 
     // 6. Active Personnel (Total Officers)
-    $stmtOfficers = $pdo->query("SELECT COUNT(*) FROM officers WHERE officer_status = 'Active' OR officer_status = 'Active In Service'");
+    $stmtOfficers = $pdo->query("SELECT COUNT(*) FROM officers WHERE officer_status = 'Active In Service'");
     $activeOfficers = $stmtOfficers->fetchColumn();
 
     // 7. Firearm Distribution (Analytical Chart Data)
