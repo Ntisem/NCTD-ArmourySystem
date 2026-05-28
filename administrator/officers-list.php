@@ -48,6 +48,7 @@ $officers = $stmt->fetchAll();
 // 1. Handle Officer Update
 if (isset($_POST['update_officer'])) {
     $officerID          = (int)$_POST['edit_officerID'];
+    $officer_status     = trim($_POST['edit_officer_status']);
     $officer_service_no = trim($_POST['edit_officer_service_no']);
     $rank               = trim($_POST['edit_rank']);
     $full_name          = trim($_POST['edit_full_name']);
@@ -56,7 +57,6 @@ if (isset($_POST['update_officer'])) {
     $phone_no              = trim($_POST['edit_phone_no']);
     $officer_email              = trim($_POST['edit_officer_email']);
     $current_image      = $_POST['edit_current_image'];
-
     $officer_image = $current_image;
 
     if (isset($_FILES['officer_image']) && $_FILES['officer_image']['error'] === UPLOAD_ERR_OK) {
@@ -78,9 +78,9 @@ if (isset($_POST['update_officer'])) {
 
     try {
         $pdo->beginTransaction();
-        $sql = "UPDATE officers SET officer_service_no = ?, rank = ?, full_name = ?, gender = ?, dept_unit = ?, phone_no = ?, officer_email = ?, officer_image = ? WHERE officerID = ?";
+        $sql = "UPDATE officers SET officer_status = ?, officer_service_no = ?, rank = ?, full_name = ?, gender = ?, dept_unit = ?, phone_no = ?, officer_email = ?, officer_image = ? WHERE officerID = ?";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$officer_service_no, $rank, $full_name, $gender, $dept_unit, $phone_no, $officer_email, $officer_image, $officerID]);
+        $stmt->execute([$officer_status, $officer_service_no, $rank, $full_name, $gender, $dept_unit, $phone_no, $officer_email, $officer_image, $officerID]);
 
         $log = $pdo->prepare("INSERT INTO daily_activities (adminID, armourer_admin_name, action_taken, user_role) VALUES (?, ?, ?, ?)");
         $log_action = "UPDATED_OFFICER: " . $full_name . " (SN: " . $officer_service_no . ")";
@@ -195,7 +195,7 @@ if (isset($_GET['view_id'])) {
                     <?php if($officer_rank): ?> <span class="badge badge-outline-info ml-2">[<?php echo $officer_rank; ?>]</span><?php endif; ?>
                 </h4>
                 <div class="d-flex">
-                    <a href="add-officer.php" class="btn btn-tactical mr-2"><i class="mdi mdi-plus"></i> ADD_NEW</a>
+                    <a href="add-officer" class="btn btn-tactical mr-2"><i class="mdi mdi-plus"></i> ADD_NEW</a>
                     
                     <div class="dropdown">
                         <button class="btn btn-tactical dropdown-toggle" type="button" data-toggle="dropdown">
@@ -263,9 +263,19 @@ if (isset($_GET['view_id'])) {
                                 <td><?php echo $row['full_name']; ?></td>
                                 <td><?php echo $row['dept_unit']; ?></td>
                                 <td>
-                                    <span class="badge <?php echo ($row['officer_status']=='Active') ? 'badge-success' : 'badge-primary'; ?>">
-                                        <?php echo strtoupper($row['officer_status']); ?>
-                                    </span>
+                                    <?php 
+                                    switch ($row['officer_status']) {
+                                        case 'Active In Service':
+                                            echo '<span class="badge badge-primary">Active In Service</span>';
+                                            break;
+                                        case 'Transferred':
+                                            echo '<span class="badge badge-danger">Transferred</span>';
+                                            break;
+                                        default:
+                                            echo '<span class="badge badge-secondary">Retired</span>';
+                                            break;
+                                    }
+                                    ?>
                                 </td>
                                 <td>
                                     <button class="btn btn-tactical btn-sm" onclick="viewDetails(<?php echo $row['officerID']; ?>)"><i class="mdi mdi-eye"></i></button>
@@ -292,7 +302,7 @@ if (isset($_GET['view_id'])) {
                 <div class="modal-body">
                     <input type="hidden" name="edit_officerID" id="edit_officerID">
                     <input type="hidden" name="edit_current_image" id="edit_current_image">
-                    <div class="form-group"><label>SERVICE NO</label><input type="text" name="edit_officer_service_no" id="edit_officer_service_no" class="form-control" required></div>
+                    <div class="form-group"><label>SERVICE NO</label><input type="text" name="edit_officer_service_no" id="edit_officer_service_no" class="form-control"></div>
                     <div class="form-group"><label>RANK</label><input type="text" name="edit_rank" id="edit_rank" class="form-control" required></div>
                     <div class="form-group"><label>FULL NAME</label><input type="text" name="edit_full_name" id="edit_full_name" class="form-control" required></div>
                     <div class="form-group"><label>DEPT/UNIT</label><input type="text" name="edit_dept_unit" id="edit_dept_unit" class="form-control" required></div>

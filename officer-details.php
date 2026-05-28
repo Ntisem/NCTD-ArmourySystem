@@ -100,7 +100,7 @@ $bookings = $stmt_bookings->fetchAll();
                             <div class="card tactical-card">
                                 <div class="card-body d-flex justify-content-between align-items-center">
                                     <h3><i class="mdi mdi-account-card-details text-info"></i> OFFICER_BOOKING_TRACKING</h3>
-                                    <a href="officers-list.php" class="btn btn-tactical"><i class="mdi mdi-arrow-left"></i> BACK_TO_DIRECTORY</a>
+                                    <a href="officers-list" class="btn btn-tactical"><i class="mdi mdi-arrow-left"></i> BACK</a>
                                 </div>
                             </div>
                         </div>
@@ -121,6 +121,12 @@ $bookings = $stmt_bookings->fetchAll();
                                     <p><strong>Dept:</strong> <?= htmlspecialchars($officer['dept_unit']) ?></p>
                                     <p><strong>Phone:</strong> <?= htmlspecialchars($officer['phone_no']) ?></p>
                                     <p><strong>Email:</strong> <?= htmlspecialchars($officer['officer_email']) ?></p>
+                                    <p><strong>Status:</strong> 
+                                        <?php if ($officer['officer_status'] === 'Active In Service'): ?>
+                                            <span class="badge badge-success">Active In Service</span>
+                                        <?php else: ?>
+                                            <span class="badge badge-danger">Transferred</span>
+                                        <?php endif; ?></p>
                                 </div>
                             </div>
                         </div>
