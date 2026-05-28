@@ -7,35 +7,32 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
     exit();
 }
 
-// Fetch current admin details
 $stmt = $pdo->prepare("SELECT adminID, fullname, service_no, rank FROM admin_lists WHERE username = ?");
 $stmt->execute([$_SESSION['username']]);
 $admin = $stmt->fetch();
 
-// --- START DATABASE LOGIC FOR FILTERING ---
+// --- DATABASE LOGIC ---
 $officer_rank = $_GET['Rank'] ?? null;
 $startDate = $_GET['start_date'] ?? null;
 $endDate = $_GET['end_date'] ?? null;
 
-$query = "SELECT * FROM officers WHERE 1=1";
+// Base query: All logic now defaults to 'Active In Service'
+$query = "SELECT * FROM officers WHERE officer_status = 'Active In Service'";
 $params = [];
 
-// Apply Rank and Status Filter if Rank is selected
-if (!empty($officer_rank)) {
-    $query .= " AND (
-        (`rank` = ? AND `officer_status` = 'Active') 
-        OR 
-        (`rank` = ? AND `officer_status` = 'Active In Service')
-    )";
-    $params[] = $officer_rank;
+// Apply Rank Filter (if not 'all' or empty)
+if (!empty($officer_rank) && $officer_rank !== 'all') {
+    $query .= " AND `rank` = ?";
     $params[] = $officer_rank;
 }
 
-// Apply Date Range Filter if provided
+// Apply Date Range Filter with logical validation
 if (!empty($startDate) && !empty($endDate)) {
-    $query .= " AND DATE(created_at) BETWEEN ? AND ?";
-    $params[] = $startDate;
-    $params[] = $endDate;
+    if (strtotime($startDate) <= strtotime($endDate)) {
+        $query .= " AND DATE(created_at) BETWEEN ? AND ?";
+        $params[] = $startDate;
+        $params[] = $endDate;
+    }
 }
 
 $query .= " ORDER BY officer_service_no ASC";
@@ -43,7 +40,6 @@ $query .= " ORDER BY officer_service_no ASC";
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
 $officers = $stmt->fetchAll();
-// --- END DATABASE LOGIC ---
 
 // 1. Handle Officer Update
 if (isset($_POST['update_officer'])) {
@@ -67,7 +63,7 @@ if (isset($_POST['update_officer'])) {
         $allowedExtensions = ['jpg', 'jpeg', 'png'];
         if (in_array($fileExtension, $allowedExtensions)) {
             $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
-            $uploadFileDir = '../assets/images/officer_images/';
+            $uploadFileDir = 'assets/images/officer_images/';
             if(!is_dir($uploadFileDir)) mkdir($uploadFileDir, 0755, true);
             
             if(move_uploaded_file($fileTmpPath, $uploadFileDir . $newFileName)) {
@@ -125,7 +121,7 @@ if (isset($_GET['view_id'])) {
     $off = $stmt->fetch();
     if ($off) {
         echo '<div class="row text-light"><div class="col-md-4 text-center">';
-        echo '<img src="../assets/images/officer_images/' . htmlspecialchars($off['officer_image']) . '" style="width: 150px; height: 150px; border-radius: 5px; border: 2px solid var(--neon); object-fit: cover;" class="mb-3">';
+        echo '<img src="assets/images/officer_images/'. htmlspecialchars($off['officer_image']) . '" style="width: 150px; height: 150px; border-radius: 5px; border: 2px solid var(--neon); object-fit: cover;" class="mb-3">';
         echo '</div><div class="col-md-8">';
         echo '<p><strong>Service No:</strong> ' . htmlspecialchars($off['officer_service_no']) . '</p>';
         echo '<p><strong>Rank:</strong> ' . htmlspecialchars($off['rank']) . '</p>';
@@ -144,7 +140,7 @@ if (isset($_GET['view_id'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>COMMAND_TERMINAL | OFFICERS_DIRECTORY</title>
+    <title>NCTD ARMOURY SYSTEM | OFFICERS_DIRECTORY</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -166,6 +162,18 @@ if (isset($_GET['view_id'])) {
             width: 90vw !important; max-width: 1100px;
             background: #06090e !important; border: 1px solid var(--neon) !important;
             padding: 20px !important; left: 50% !important; transform: translateX(-50%) !important;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+
+            /* Centering Logic */
+            position: fixed !important; /* Forces it to center relative to the viewport */
+            top: 150px;                 /* Adjust this based on your header height */
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            
+            /* Sizing */
+            width: 90vw !important;
+            max-width: 1100px !important;
+            z-index: 1050 !important;
             box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
         }
         .tactical-grid {
@@ -195,33 +203,35 @@ if (isset($_GET['view_id'])) {
                     <?php if($officer_rank): ?> <span class="badge badge-outline-info ml-2">[<?php echo $officer_rank; ?>]</span><?php endif; ?>
                 </h4>
                 <div class="d-flex">
-                    <a href="add-officer" class="btn btn-tactical mr-2"><i class="mdi mdi-plus"></i> ADD_NEW</a>
+                    <a href="add-officer" class="btn btn-tactical mr-2"><i class="mdi mdi-plus"></i> ADD_NEW_OFFICER</a>
                     
                     <div class="dropdown">
                         <button class="btn btn-tactical dropdown-toggle" type="button" data-toggle="dropdown">
                             <<< SELECT_RANK_FILTER >>>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right landscape-dropdown-menu">
-                            <h6 class="dropdown-header text-info mb-3">[ PERSONNEL_HIERARCHY_LEVELS ]</h6>
+                            <h6 class="dropdown-header text-info mb-3">[ PERSONNEL_RANK_LEVELS ]</h6>
                             <div class="tactical-grid">
-                                <a href="officers-list?Rank=COP" class="dropdown-item">COP</a>
-                                <a href="officers-list?Rank=DCOP" class="dropdown-item">DCOP</a>
-                                <a href="officers-list?Rank=ACP" class="dropdown-item">ACP</a>
-                                <a href="officers-list?Rank=C/SUPT" class="dropdown-item">C/SUPT</a>
-                                <a href="officers-list?Rank=SUPT" class="dropdown-item">SUPT</a>
-                                <a href="officers-list?Rank=DSP" class="dropdown-item">DSP</a>
-                                <a href="officers-list?Rank=ASP" class="dropdown-item">ASP</a>
-                                <a href="officers-list?Rank=C/INSPR" class="dropdown-item">C/INSPR</a>
-                                <a href="officers-list?Rank=INSPR" class="dropdown-item">INSPECTOR</a>
-                                <a href="officers-list?Rank=SGT" class="dropdown-item">SERGEANT</a>
-                                <a href="officers-list?Rank=CPL" class="dropdown-item">CORPORAL</a>
-                                <a href="officers-list?Rank=L/CPL" class="dropdown-item">L/CORPORAL</a>
+                                <a href="officers-list?all" class="dropdown-item">ALL_OFFICERS</a>
                                 <a href="officers-list?Rank=CONST" class="dropdown-item">CONSTABLE</a>
+                                <a href="officers-list?Rank=L/CPL" class="dropdown-item">L/CORPORAL</a>
+                                <a href="officers-list?Rank=CPL" class="dropdown-item">CORPORAL</a>
+                                <a href="officers-list?Rank=SGT" class="dropdown-item">SERGEANT</a>
+                                <a href="officers-list?Rank=INSPR" class="dropdown-item">INSPECTOR</a>
+                                <a href="officers-list?Rank=CHIEF INSPR" class="dropdown-item">CHIEF INSPR</a>
+                                <a href="officers-list?Rank=ASP" class="dropdown-item">ASP</a>
+                                <a href="officers-list?Rank=DSP" class="dropdown-item">DSP</a>
+                                <a href="officers-list?Rank=SUPT" class="dropdown-item">SUPT</a>
+                                <a href="officers-list?Rank=C/SUPT" class="dropdown-item">C/SUPT</a>
+                                <a href="officers-list?Rank=ACP" class="dropdown-item">ACP</a>
+                                <a href="officers-list?Rank=DCOP" class="dropdown-item">DCOP</a>
+                                <a href="officers-list?Rank=COP" class="dropdown-item">COP</a>
+                              
                             </div>
                         </div>
                     </div>
-                    <a href="officers-list" class="btn btn-danger-tactical ml-2"><i class="mdi mdi-refresh"></i> RESET</a>
-                      <a href="administrator" class="btn btn-tactical ml-2">
+                    <a href="officers-list.php" class="btn btn-danger-tactical ml-2"><i class="mdi mdi-refresh"></i> RESET</a>
+                      <a href="armourer" class="btn btn-tactical ml-2">
                         <i class="mdi mdi-arrow-left mr-1"></i>BACK
                     </a>
                 </div>
@@ -257,12 +267,12 @@ if (isset($_GET['view_id'])) {
                             <?php $n=1; foreach($officers as $row): ?>
                             <tr>
                                 <td><?php echo $n++; ?></td>
-                                <td><img src="../assets/images/officer_images/<?php echo $row['officer_image']; ?>" style="width:35px; height:35px; border-radius:3px; border:1px solid var(--neon);"></td>
+                                <td><img src="assets/images/officer_images/<?php echo $row['officer_image']; ?>" style="width:35px; height:35px; border-radius:3px; border:1px solid var(--neon);"></td>
                                 <td class="text-info font-weight-bold"><?php echo $row['officer_service_no']; ?></td>
                                 <td><?php echo $row['rank']; ?></td>
                                 <td><?php echo $row['full_name']; ?></td>
                                 <td><?php echo $row['dept_unit']; ?></td>
-                                <td>
+                               <td>
                                     <?php 
                                     switch ($row['officer_status']) {
                                         case 'Active In Service':
@@ -280,8 +290,7 @@ if (isset($_GET['view_id'])) {
                                 <td>
                                     <button class="btn btn-tactical btn-sm" onclick="viewDetails(<?php echo $row['officerID']; ?>)"><i class="mdi mdi-eye"></i></button>
                                     <button class="btn btn-tactical btn-sm" onclick='openEditModal(<?php echo json_encode($row); ?>)'><i class="mdi mdi-pencil"></i></button>
-                                    <a href="officer-details.php?officerID=<?php echo $row['officerID']; ?>" class="btn btn-tactical btn-sm"><i class="mdi mdi-radar"></i></a>
-                                    <button class="btn btn-danger-tactical btn-sm" onclick="confirmDelete(<?php echo $row['officerID']; ?>)"><i class="mdi mdi-delete"></i></button>
+                                    <a href="officer-details?officerID=<?php echo $row['officerID']; ?>" class="btn btn-tactical btn-sm"><i class="mdi mdi-radar"></i></a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -302,13 +311,21 @@ if (isset($_GET['view_id'])) {
                 <div class="modal-body">
                     <input type="hidden" name="edit_officerID" id="edit_officerID">
                     <input type="hidden" name="edit_current_image" id="edit_current_image">
+                    <div class="form-group"><label>STATUS</label>
+                        <select name="edit_officer_status" id="edit_officer_status" class="form-control">
+                            <option value="Transferred">Transferred</option>
+                            <option value="Active In Service">Active In Service</option>
+                            <option value="Retired">Retired</option>
+                        </select>
+                    </div>
                     <div class="form-group"><label>SERVICE NO</label><input type="text" name="edit_officer_service_no" id="edit_officer_service_no" class="form-control"></div>
                     <div class="form-group"><label>RANK</label><input type="text" name="edit_rank" id="edit_rank" class="form-control" required></div>
                     <div class="form-group"><label>FULL NAME</label><input type="text" name="edit_full_name" id="edit_full_name" class="form-control" required></div>
                     <div class="form-group"><label>DEPT/UNIT</label><input type="text" name="edit_dept_unit" id="edit_dept_unit" class="form-control" required></div>
                     <div class="form-group"><label>GENDER</label>
                         <select name="edit_gender" id="edit_gender" class="form-control">
-                            <option value="Male">Male</option><option value="Female">Female</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
                         </select>
                     </div>
                     <div class="form-group"><label>PHONE</label><input type="text" name="edit_phone_no" id="edit_phone_no" class="form-control"></div>
@@ -381,7 +398,7 @@ if (isset($_GET['view_id'])) {
             $('#edit_officer_service_no').val(off.officer_service_no);
             $('#edit_rank').val(off.rank);
             $('#edit_full_name').val(off.full_name);
-            $('#edit_gender').val(off.gender);
+            $('#edit_officer_status').val(off.officer_status);
             $('#edit_dept_unit').val(off.dept_unit);
             $('#edit_phone_no').val(off.phone_no);
             $('#edit_officer_email').val(off.officer_email);

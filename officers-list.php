@@ -7,35 +7,32 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
     exit();
 }
 
-// Fetch current admin details
 $stmt = $pdo->prepare("SELECT adminID, fullname, service_no, rank FROM admin_lists WHERE username = ?");
 $stmt->execute([$_SESSION['username']]);
 $admin = $stmt->fetch();
 
-// --- START DATABASE LOGIC FOR FILTERING ---
+// --- DATABASE LOGIC ---
 $officer_rank = $_GET['Rank'] ?? null;
 $startDate = $_GET['start_date'] ?? null;
 $endDate = $_GET['end_date'] ?? null;
 
-$query = "SELECT * FROM officers WHERE 1=1";
+// Base query: All logic now defaults to 'Active In Service'
+$query = "SELECT * FROM officers WHERE officer_status = 'Active In Service'";
 $params = [];
 
-// Apply Rank and Status Filter if Rank is selected
-if (!empty($officer_rank)) {
-    $query .= " AND (
-        (`rank` = ? AND `officer_status` = 'Active') 
-        OR 
-        (`rank` = ? AND `officer_status` = 'Active In Service')
-    )";
-    $params[] = $officer_rank;
+// Apply Rank Filter (if not 'all' or empty)
+if (!empty($officer_rank) && $officer_rank !== 'all') {
+    $query .= " AND `rank` = ?";
     $params[] = $officer_rank;
 }
 
-// Apply Date Range Filter if provided
+// Apply Date Range Filter with logical validation
 if (!empty($startDate) && !empty($endDate)) {
-    $query .= " AND DATE(created_at) BETWEEN ? AND ?";
-    $params[] = $startDate;
-    $params[] = $endDate;
+    if (strtotime($startDate) <= strtotime($endDate)) {
+        $query .= " AND DATE(created_at) BETWEEN ? AND ?";
+        $params[] = $startDate;
+        $params[] = $endDate;
+    }
 }
 
 $query .= " ORDER BY officer_service_no ASC";
@@ -43,7 +40,6 @@ $query .= " ORDER BY officer_service_no ASC";
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
 $officers = $stmt->fetchAll();
-// --- END DATABASE LOGIC ---
 
 // 1. Handle Officer Update
 if (isset($_POST['update_officer'])) {
@@ -144,7 +140,7 @@ if (isset($_GET['view_id'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>COMMAND_TERMINAL | OFFICERS_DIRECTORY</title>
+    <title>NCTD ARMOURY SYSTEM | OFFICERS_DIRECTORY</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -166,6 +162,18 @@ if (isset($_GET['view_id'])) {
             width: 90vw !important; max-width: 1100px;
             background: #06090e !important; border: 1px solid var(--neon) !important;
             padding: 20px !important; left: 50% !important; transform: translateX(-50%) !important;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+
+            /* Centering Logic */
+            position: fixed !important; /* Forces it to center relative to the viewport */
+            top: 150px;                 /* Adjust this based on your header height */
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            
+            /* Sizing */
+            width: 90vw !important;
+            max-width: 1100px !important;
+            z-index: 1050 !important;
             box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
         }
         .tactical-grid {
@@ -195,28 +203,30 @@ if (isset($_GET['view_id'])) {
                     <?php if($officer_rank): ?> <span class="badge badge-outline-info ml-2">[<?php echo $officer_rank; ?>]</span><?php endif; ?>
                 </h4>
                 <div class="d-flex">
-                    <a href="add-officer" class="btn btn-tactical mr-2"><i class="mdi mdi-plus"></i> ADD_NEW</a>
+                    <a href="add-officer" class="btn btn-tactical mr-2"><i class="mdi mdi-plus"></i> ADD_NEW_OFFICER</a>
                     
                     <div class="dropdown">
                         <button class="btn btn-tactical dropdown-toggle" type="button" data-toggle="dropdown">
                             <<< SELECT_RANK_FILTER >>>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right landscape-dropdown-menu">
-                            <h6 class="dropdown-header text-info mb-3">[ PERSONNEL_HIERARCHY_LEVELS ]</h6>
+                            <h6 class="dropdown-header text-info mb-3">[ PERSONNEL_RANK_LEVELS ]</h6>
                             <div class="tactical-grid">
-                                <a href="officers-list?Rank=COP" class="dropdown-item">COP</a>
-                                <a href="officers-list?Rank=DCOP" class="dropdown-item">DCOP</a>
-                                <a href="officers-list?Rank=ACP" class="dropdown-item">ACP</a>
-                                <a href="officers-list?Rank=C/SUPT" class="dropdown-item">C/SUPT</a>
-                                <a href="officers-list?Rank=SUPT" class="dropdown-item">SUPT</a>
-                                <a href="officers-list?Rank=DSP" class="dropdown-item">DSP</a>
-                                <a href="officers-list?Rank=ASP" class="dropdown-item">ASP</a>
-                                <a href="officers-list?Rank=C/INSPR" class="dropdown-item">C/INSPR</a>
-                                <a href="officers-list?Rank=INSPR" class="dropdown-item">INSPECTOR</a>
-                                <a href="officers-list?Rank=SGT" class="dropdown-item">SERGEANT</a>
-                                <a href="officers-list?Rank=CPL" class="dropdown-item">CORPORAL</a>
-                                <a href="officers-list?Rank=L/CPL" class="dropdown-item">L/CORPORAL</a>
+                                <a href="officers-list?all" class="dropdown-item">ALL_OFFICERS</a>
                                 <a href="officers-list?Rank=CONST" class="dropdown-item">CONSTABLE</a>
+                                <a href="officers-list?Rank=L/CPL" class="dropdown-item">L/CORPORAL</a>
+                                <a href="officers-list?Rank=CPL" class="dropdown-item">CORPORAL</a>
+                                <a href="officers-list?Rank=SGT" class="dropdown-item">SERGEANT</a>
+                                <a href="officers-list?Rank=INSPR" class="dropdown-item">INSPECTOR</a>
+                                <a href="officers-list?Rank=CHIEF INSPR" class="dropdown-item">CHIEF INSPR</a>
+                                <a href="officers-list?Rank=ASP" class="dropdown-item">ASP</a>
+                                <a href="officers-list?Rank=DSP" class="dropdown-item">DSP</a>
+                                <a href="officers-list?Rank=SUPT" class="dropdown-item">SUPT</a>
+                                <a href="officers-list?Rank=C/SUPT" class="dropdown-item">C/SUPT</a>
+                                <a href="officers-list?Rank=ACP" class="dropdown-item">ACP</a>
+                                <a href="officers-list?Rank=DCOP" class="dropdown-item">DCOP</a>
+                                <a href="officers-list?Rank=COP" class="dropdown-item">COP</a>
+                              
                             </div>
                         </div>
                     </div>

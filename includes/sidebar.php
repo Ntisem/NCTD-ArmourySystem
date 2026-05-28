@@ -240,7 +240,7 @@ try {
             </a>
             <div class="collapse" id="officer">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="officers-list?Rank=CONST">Officers-List</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="officers-list?Rank=all">Officers-List</a></li>
                     <li class="nav-item"> <a class="nav-link" href="add-officer">Add Personnel</a></li>
                 </ul>
             </div>
