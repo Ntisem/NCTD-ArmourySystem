@@ -4,7 +4,7 @@ require_once('functions.php');
 require_once('includes/user_auth.php');
 
 if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
-    header("location: login.php");
+    header("location: login");
     exit();
 }
 

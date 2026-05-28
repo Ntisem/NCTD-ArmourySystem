@@ -4,13 +4,13 @@ require_once('functions.php');
 require_once('includes/user_auth.php');
 
 if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') {
-    header("location: login.php");
+    header("location: login");
     exit();
 }
 
 $officerID = $_GET['officerID'] ?? null;
 if(!$officerID) {
-    header("location: officers-list.php");
+    header("location: officers-list");
     exit();
 }
 
@@ -19,7 +19,7 @@ $stmt->execute([$officerID]);
 $officer = $stmt->fetch();
 
 if(!$officer) {
-    header("location: officers-list.php");
+    header("location: officers-list");
     exit();
 }
 
