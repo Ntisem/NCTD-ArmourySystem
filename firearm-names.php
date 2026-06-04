@@ -139,7 +139,7 @@ if (isset($_GET['firearm-name']) && !empty($_GET['firearm-name'])) {
                                             <td class="small"><?= htmlspecialchars($row['datetime']) ?></td>
                                             <td class="text-center">
                                                 <button class="btn btn-xs btn-outline-info" onclick='openEditModal(<?= json_encode($row, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)'><i class="mdi mdi-pencil"></i></button>
-                                                <button class="btn btn-xs btn-outline-danger ms-1" onclick="openDeleteModal(<?= $row['firearmID'] ?>, '<?= htmlspecialchars($row['firearm_serial_no'], ENT_QUOTES) ?>')"><i class="mdi mdi-delete"></i></button>
+                                                
                                             </td>
                                         </tr>
                                         <?php endwhile; ?>
