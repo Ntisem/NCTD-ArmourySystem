@@ -268,6 +268,10 @@ if(!isset($_SESSION["username"])) {
     <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="dist/js/theme.min.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <script src="plugins/toastr/toastr.min.js"></script>
+    
     <script>
       $(function () {
         $("#armourers-list").DataTable({
@@ -277,6 +281,45 @@ if(!isset($_SESSION["username"])) {
           "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#armourers-list_wrapper .col-md-6:eq(0)');
       });
+
+      //toastr notifications
+      <?php
+      //Using GET parameters for status is not recommended due to security concerns, but if you choose to do so, ensure proper sanitization and validation.
+      if (isset($_GET['status']) && $_GET['status'] == 'success') {
+          echo "toastr.success('Operation completed successfully!');";
+      } elseif (isset($_GET['status']) && $_GET['status'] == 'error') {
+          echo "toastr.error('An error occurred while processing your request. Please try again.');";
+      }
+      ?>  
+      <?php if (isset($_GET['adminID']) && $_GET['adminID'] > 0): ?>
+        // If adminID is present in the URL, open the edit modal for that specific ID
+        $(document).ready(function() {
+          $('#editModalArmourer<?php echo $_GET['adminID']; ?>').modal('show');
+        });
+      <?php endif; ?>
+      
     </script>
+     <script>
+      // Confirmation dialog for delete actions
+      $(document).on('submit', 'form[action="process-armourer.php"]', function(e) {
+        var action = $(this).find('input[name="action"]').val();
+        if (action === 'delete') {
+          e.preventDefault();
+          if (confirm("Are you sure you want to delete this profile? This action cannot be undone.")) {
+            this.submit();
+          }
+        }
+      });
+      // Confirmation dialog for edit actions (optional, can be removed if not needed)
+      $(document).on('submit', 'form[action="process-armourer.php"]', function(e) {
+        var action = $(this).find('input[name="action"]').val();
+        if (action === 'edit') {
+          e.preventDefault();
+          if (confirm("Are you sure you want to save changes to this profile?")) {
+            this.submit();
+          }
+        }
+      });
+</script>
   </body>
 </html>

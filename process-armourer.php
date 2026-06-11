@@ -30,7 +30,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'add') {
     if ($check->fetchColumn() > 0) {
         $_SESSION['status'] = "CONFLICT_DETECTED: COLLISION_ON_UNIQUE_FIELDS";
         $_SESSION['status_code'] = "error";
-        header("Location: add-new-armourer");
+        header("Location: add-new-armourer?status=error");
         exit();
     }
 
@@ -68,11 +68,84 @@ if (isset($_POST['action']) && $_POST['action'] == 'add') {
     
         $_SESSION['status'] = "UPLINK_SUCCESSFUL: PERSONNEL_ENROLLED";
         $_SESSION['status_code'] = "success";
-        header("Location: armourers"); // Or your specific list page
+        header("Location: armourers?status=success"); // Or your specific list page
     } catch (PDOException $e) {
         $_SESSION['status'] = "DATABASE_CRITICAL: " . $e->getMessage();
         $_SESSION['status_code'] = "error";
-        header("Location: add-new-armourer");
+        header("Location: add-new-armourer?status=error");
     }
     exit();
 }
+// Delete Armourer
+if (isset($_POST['action']) && $_POST['action'] == 'delete') {  
+    $adminID = $_POST['adminID'];
+    
+    try {
+        // Fetch the armourer's name for logging
+        $stmt = $pdo->prepare("SELECT fullname FROM admin_lists WHERE adminID = ?");
+        $stmt->execute([$adminID]);
+        $armourer = $stmt->fetch(PDO::FETCH_ASSOC);
+        $fullname = $armourer ? $armourer['fullname'] : 'Unknown';
+
+        // Delete the armourer
+        $delete_stmt = $pdo->prepare("DELETE FROM admin_lists WHERE adminID = ?");
+        $delete_stmt->execute([$adminID]);
+
+        logDailyActivity($pdo, "Deleted Armourer: " . $fullname, '', 'Armourer Management');
+    
+        $_SESSION['status'] = "UPLINK_SUCCESSFUL: PERSONNEL_DELETED";
+        $_SESSION['status_code'] = "success";
+        header("Location: armourers?status=success");
+    } catch (PDOException $e) {
+        $_SESSION['status'] = "DATABASE_CRITICAL: " . $e->getMessage();
+        $_SESSION['status_code'] = "error";
+        header("Location: armourers?status=error");
+    }
+    exit();
+}
+// Update Armourer
+if (isset($_POST['action']) && $_POST['action'] == 'update') {
+    $adminID  = $_POST['adminID'];
+    $service_no   = trim($_POST['service_no']);
+    $rank         = $_POST['rank'];
+    $fullname     = trim($_POST['fullname']);
+    $admin_email  = trim($_POST['admin_email']);
+    $phone_number = trim($_POST['phone_number']);
+    $username     = trim($_POST['username']);
+    $unit_dept    = "NCTD";
+    $code         = $_POST['code'];   // Random 6-digit
+
+    try {
+        // Fetch the existing armourer's name for logging
+        $stmt = $pdo->prepare("SELECT fullname FROM admin_lists WHERE adminID = ?");
+        $stmt->execute([$adminID]);
+        $armourer = $stmt->fetch(PDO::FETCH_ASSOC);
+        $old_fullname = $armourer ? $armourer['fullname'] : 'Unknown';
+
+        // Update the armourer's details
+        $sql = "UPDATE admin_lists SET 
+                    service_no=?, rank=?, fullname=?, admin_email=?, 
+                    phone_number=?, username=?, unit_dept=?, code=?, status=?
+                WHERE adminID = ?";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            $service_no, $rank, $fullname, 
+            $admin_email, $phone_number, $username, 
+            $unit_dept, $code, $status, 
+            $adminID
+        ]);
+
+        logDailyActivity($pdo, "Updated Armourer: " . $old_fullname . " to " . $fullname, '', 'Armourer Management');
+    
+        $_SESSION['status'] = "UPLINK_SUCCESSFUL: PERSONNEL_UPDATED";
+        $_SESSION['status_code'] = "success";
+        header("Location: armourers?status=success");
+    } catch (PDOException $e) {
+        $_SESSION['status'] = "DATABASE_CRITICAL: " . $e->getMessage();
+        $_SESSION['status_code'] = "error";
+        header("Location: armourers?status=error&adminID=" . $adminID);
+    }
+    exit();
+}
+?>

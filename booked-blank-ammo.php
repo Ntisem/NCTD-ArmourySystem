@@ -127,9 +127,9 @@ $overdueCount = $overdueStmt->fetchColumn();
                                 <button class="btn btn-xs btn-neon ml-1" title="RETURN / RE-MANAGE" onclick="editBooking(<?= htmlspecialchars(json_encode($row)) ?>)">
                                     <i class="mdi mdi-undo-variant"></i>
                                 </button>
-                                <button class="btn btn-xs btn-outline-danger ml-1" title="PURGE LOG" onclick="triggerTacticalPurge(<?= $row['blank_ammoID'] ?>)">
+                                <!-- <button class="btn btn-xs btn-outline-danger ml-1" title="PURGE LOG" onclick="triggerTacticalPurge(<-?= $row['blank_ammoID'] ?>)">
                                     <i class="mdi mdi-delete"></i>
-                                </button>
+                                </button> -->
                             </td>
                         </tr>
                         <?php } ?>
