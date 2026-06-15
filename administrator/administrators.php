@@ -15,7 +15,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>GPS ARMOURY SYSTEM - ARMOURERS</title>
+    <title>GPS ARMOURY SYSTEM - ADMINISTRATORS/ARMOURERS</title>
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="dist/css/theme.min.css">
@@ -91,7 +91,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                     <div class="card">
                       <div class="card-body">
                         <p class="card-description">
-                          <a href="add-new-armourer">
+                          <a href="add-new-administrator">
                             <i class="mdi mdi-account-plus f-22 text-green" style="color:#00f2ff;" title="Click to Add New Armourer"></i>
                           </a>
                         </p>
@@ -100,7 +100,6 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                             <tr>
                               <th>#</th>
                               <th>Service Number</th>
-                              <th>Rank</th>
                               <th>Full Name</th>
                               <th>Username</th>
                               <th>Role</th>
@@ -116,18 +115,17 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                               <tr>
                                 <td><?php echo $i++; ?></td>
                                 <td><?php echo htmlspecialchars($row['service_no']); ?></td>
-                                <td><?php echo htmlspecialchars($row['rank']); ?></td>
-                                <td><?php echo htmlspecialchars($row['fullname']); ?></td>
+                                <td><?php echo htmlspecialchars($row['rank']); ?> <?php echo htmlspecialchars($row['fullname']); ?></td>
                                 <td><?php echo htmlspecialchars($row['username']); ?></td>
                                 <td><?php echo htmlspecialchars($row['user_role']); ?></td>
                                 <td>
-                                  <button type="button" class="btn btn-sm btn-tactical" data-toggle="modal" data-target="#viewModalArmourer<?php echo $row['adminID']; ?>">View</button>
-                                  <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#editModalArmourer<?php echo $row['adminID']; ?>">Edit</button>
-                                  <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModalArmourer<?php echo $row['adminID']; ?>">Delete</button>
+                                  <button type="button" class="btn btn-sm btn-tactical" data-toggle="modal" data-target="#viewModalAdministrator<?php echo $row['adminID']; ?>">View</button>
+                                  <button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#editModalAdministrator<?php echo $row['adminID']; ?>">Edit</button>
+                                  <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModalAdministrator<?php echo $row['adminID']; ?>">Delete</button>
                                 </td>
                               </tr>
 
-                              <div class="modal fade" id="viewModalArmourer<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                              <div class="modal fade" id="viewModalAdministrator<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
                                   <div class="modal-content">
                                     <div class="modal-header">
@@ -160,7 +158,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                                 </div>
                               </div>
 
-                              <div class="modal fade" id="editModalArmourer<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                              <div class="modal fade" id="editModalAdministrator<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                     <div class="modal-header">
@@ -169,20 +167,34 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                                         <span aria-hidden="true">&times;</span>
                                       </button>
                                     </div>
-                                    <form action="process-armourer.php" method="POST" enctype="multipart/form-data">
+                                    <form action="process-administrator.php" method="POST" enctype="multipart/form-data">
                                       <div class="modal-body">
-                                        <input type="hidden" name="action" value="edit">
+                                        <input type="hidden" name="action" value="update">
                                         <input type="hidden" name="adminID" value="<?php echo $row['adminID']; ?>">
                                         <input type="hidden" name="current_image" value="<?php echo $row['profile_image']; ?>">
-                                        <input type="hidden" name="user_role" value="Armourer">
-
                                         <div class="form-group">
                                           <label>Service Number</label>
                                           <input type="text" name="service_no" class="form-control" value="<?php echo htmlspecialchars($row['service_no']); ?>" required>
                                         </div>
-                                        <div class="form-group">
+                                          <div class="form-group">
                                           <label>Rank</label>
-                                          <input type="text" name="rank" class="form-control" value="<?php echo htmlspecialchars($row['rank']); ?>" required>
+                                          <select name="rank" class="form-control" required>
+                                            <option value="<?php echo htmlspecialchars($row['rank']); ?>"><?php echo htmlspecialchars($row['rank']); ?></option>
+                                            <option value="CONST" <?php if($row['rank'] == 'CONST') echo 'selected';?>>CONST</option>
+                                            <option value="L/CPL" <?php if($row['rank'] == 'L/CPL') echo 'selected';?>>L/CPL</option>
+                                            <option value="CPL" <?php if($row['rank'] == 'CPL') echo 'selected';?>>CPL</option>
+                                            <option value="SGT" <?php if($row['rank'] == 'SGT') echo 'selected';?>>SGT</option>
+                                            <option value="INSPR" <?php if($row['rank'] == 'INSPR') echo 'selected';?>>INSPR</option>
+                                            <option value="C/INSPR" <?php if($row['rank'] == 'C/INSPR ') echo 'selected';?>>C/INSPR  </option>
+                                            <option value="ASP" <?php if($row['rank'] == 'ASP') echo 'selected';?>>ASP</option>
+                                            <option value="DSP" <?php if($row['rank'] == 'DSP') echo 'selected';?>>DSP</option>
+                                            <option value="SUPT" <?php if($row['rank'] == 'SUPT') echo 'selected';?>>SUPT</option>
+                                            <option value="C/SUPT" <?php if($row['rank'] == 'C/SUPT') echo 'selected';?>>C/SUPT</option>
+                                            <option value="ACP" <?php if($row['rank'] == 'ACP') echo 'selected';?>>ACP</option>
+                                            <option value="DCOP" <?php if($row['rank'] == 'DCOP ') echo 'selected';?>>DCOP</option>
+                                           <option value="COP" <?php if($row['rank'] == 'COP ') echo 'selected';?>>COP</option>
+
+                                          </select>
                                         </div>
                                         <div class="form-group">
                                           <label>Gender</label>
@@ -215,6 +227,13 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                                           <label>Update Profile Image</label>
                                           <input type="file" name="profile_image" class="form-control">
                                         </div>
+                                        <div class="form-group">
+                                          <label>User Role</label>
+                                          <select name="user_role" class="form-control" required>
+                                            <option value="Administrator" <?php if($row['user_role'] == 'Administrator') echo 'selected';?>>Administrator</option>
+                                            <option value="Armourer" <?php if($row['user_role'] == 'Armourer') echo 'selected';?>>Armourer</option>
+                                          </select>
+                                        </div>
                                       </div>
                                       <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -225,7 +244,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                                 </div>
                               </div>
 
-                              <div class="modal fade" id="deleteModalArmourer<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
+                              <div class="modal fade" id="deleteModalAdministrator<?php echo $row['adminID']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                     <div class="modal-header">
@@ -234,7 +253,7 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
                                         <span aria-hidden="true">&times;</span>
                                       </button>
                                     </div>
-                                    <form action="process-armourer.php" method="POST">
+                                    <form action="process-administrator.php" method="POST">
                                       <div class="modal-body">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="adminID" value="<?php echo $row['adminID']; ?>">
@@ -269,15 +288,60 @@ if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Administrator') 
     <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="dist/js/theme.min.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <script src="plugins/toastr/toastr.min.js"></script>
     <script>
-      $(function () {
+    $(document).ready(function() {
         $("#armourers-list").DataTable({
-          "responsive": true, 
-          "lengthChange": true, 
-          "autoWidth": false,
-          "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            "responsive": true, 
+            "lengthChange": true, 
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#armourers-list_wrapper .col-md-6:eq(0)');
-      });
+    });
     </script>
+     <script>
+      // Confirmation dialog for delete actions
+      $(document).on('submit', 'form[action="process-administrator.php"]', function(e) {
+        var action = $(this).find('input[name="action"]').val();
+        if (action === 'delete') {
+          e.preventDefault();
+          if (confirm("Are you sure you want to delete this profile? This action cannot be undone.")) {
+            this.submit();
+          }
+        }
+      });
+      // Confirmation dialog for edit actions (optional, can be removed if not needed)
+      $(document).on('submit', 'form[action="process-administrator.php"]', function(e) {
+        var action = $(this).find('input[name="action"]').val();
+        if (action === 'update') {
+          e.preventDefault();
+          if (confirm("Are you sure you want to save changes to this profile?")) {
+            this.submit();
+          }
+        }
+      });
+</script>
+     //Check for toast messages and display them using SweetAlert2
+      <?php if(isset($_SESSION['toast_message'])): ?>
+      <script>
+        Swal.fire({
+            toast: true, 
+            position: 'top-end', 
+            icon: '<?php echo $_SESSION['toast_type']; ?>',
+            title: '<?php echo $_SESSION['toast_message']; ?>', 
+            showConfirmButton: false, 
+            timer: 3000,
+            background: '#050a0f', 
+            color: '#00f2ff'
+        });
+    </script>
+    <?php unset($_SESSION['toast_message']); unset($_SESSION['toast_type']); ?>
+<?php endif; ?>
+  
+</script>
+
   </body>
 </html>

@@ -1,45 +1,46 @@
 <?php
 require_once('connections/connect-db.php');
 require_once('includes/user_auth.php');
-require_once('central-logging-engine.php'); // Ensures logDailyActivity() is loaded
+require_once('central-logging-engine.php');
 
 if(!isset($_SESSION["username"]) || $_SESSION["user_role"] !== 'Armourer') {
     header("location: login");
     exit();
 }
 
-if (isset($_POST['action']) && $_POST['action'] == 'add') {
-    // 1. Capture Inputs
-    $service_no   = trim($_POST['service_no']);
-    $rank         = $_POST['rank'];
-    $fullname     = trim($_POST['fullname']);
-    $admin_email  = trim($_POST['admin_email']);
-    $phone_number = trim($_POST['phone_number']);
-    $username     = trim($_POST['username']);
-    $password     = $_POST['password'];
-    $unit_dept    = "NCTD";
-    $status       = $_POST['status']; // Active
-    $code         = $_POST['code'];   // Random 6-digit
-    $created_by   = $_POST['created_by'];
-    $profile_img  = 'avatar_placeholder.png';
+// Unified helper to set toast and redirect
+function setFlash($type, $message) {
+    $_SESSION['toast_type'] = $type; // 'success' or 'error'
+    $_SESSION['toast_message'] = $message;
+}
 
-    // 2. Final Server-Side Uniqueness Check
+if (isset($_POST['action']) && $_POST['action'] == 'add') {
+    $service_no = trim($_POST['service_no']);
+    $rank = $_POST['rank'];
+    $fullname = trim($_POST['fullname']);
+    $admin_email = trim($_POST['admin_email']);
+    $phone_number = trim($_POST['phone_number']);
+    $username = trim($_POST['username']);
+    $password = $_POST['password'];
+    $unit_dept = $_POST['unit_dept'];
+    $user_role = $_POST['user_role'];
+    $status = $_POST['status'];
+    $code = $_POST['code'];
+    $profile_img = 'avatar_placeholder.png';
+    $created_by = $_POST['created_by'];
+
     $check = $pdo->prepare("SELECT COUNT(*) FROM admin_lists WHERE service_no=? OR username=? OR admin_email=? OR phone_number=?");
     $check->execute([$service_no, $username, $admin_email, $phone_number]);
     
     if ($check->fetchColumn() > 0) {
-        $_SESSION['status'] = "CONFLICT_DETECTED: COLLISION_ON_UNIQUE_FIELDS";
-        $_SESSION['status_code'] = "error";
-        header("Location: add-new-armourer?status=error");
+        setFlash("error", "Conflict detected: User already exists.");
+        header("Location: add-new-armourer");
         exit();
     }
 
-    // 3. Profile Image Handling
     if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
         $allowed = ['jpg', 'jpeg', 'png'];
-        $filename = $_FILES['profile_image']['name'];
-        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-        
+        $ext = strtolower(pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION));
         if (in_array($ext, $allowed)) {
             $new_name = "ARM_" . time() . "_" . uniqid() . "." . $ext;
             if (move_uploaded_file($_FILES['profile_image']['tmp_name'], 'assets/images/armourer_images/' . $new_name)) {
@@ -48,104 +49,81 @@ if (isset($_POST['action']) && $_POST['action'] == 'add') {
         }
     }
 
-    // 4. Database Insertion
     try {
-        $sql = "INSERT INTO admin_lists (
-                    profile_image, user_role, service_no, rank, fullname, 
-                    admin_email, phone_number, username, password, 
-                    unit_dept, code, status, datetime
-                ) VALUES (?, 'Armourer', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
-        
+        $sql = "INSERT INTO admin_lists (profile_image, user_role, service_no, rank, fullname, admin_email, phone_number, username, password, unit_dept, code, status, datetime, created_by)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            $profile_img, $service_no, $rank, $fullname, 
-            $admin_email, $phone_number, $username, md5($password), 
-            $unit_dept, $code, $status
-        ]);
-
-        $action_details = "Added Armourer [ " . $fullname . " (" . $service_no . " ) ]";
-        logDailyActivity($pdo, $action_details, '', 'Armourer Management');
-    
-        $_SESSION['status'] = "UPLINK_SUCCESSFUL: PERSONNEL_ENROLLED";
-        $_SESSION['status_code'] = "success";
-        header("Location: armourers?status=success"); // Or your specific list page
+        $stmt->execute([$profile_img, $user_role, $service_no, $rank, $fullname, $admin_email, $phone_number, $username, md5($password), $unit_dept, $code, $status, $created_by]);
+        logDailyActivity($pdo, "Added Armourer: " . $fullname, '', 'Armourer Management');
+        setFlash("success", "Armourer added successfully!");
     } catch (PDOException $e) {
-        $_SESSION['status'] = "DATABASE_CRITICAL: " . $e->getMessage();
-        $_SESSION['status_code'] = "error";
-        header("Location: add-new-armourer?status=error");
+        $_SESSION['toast_type'] = 'error';
+        $_SESSION['toast_message'] = 'Database error: ' . $e->getMessage();
     }
+    $_SESSION['toast_type'] = 'success';
+    $_SESSION['toast_message'] = 'Armourer added successfully!';
+    header("Location: armourers");
     exit();
 }
-// Delete Armourer
+
 if (isset($_POST['action']) && $_POST['action'] == 'delete') {  
     $adminID = $_POST['adminID'];
-    
     try {
-        // Fetch the armourer's name for logging
         $stmt = $pdo->prepare("SELECT fullname FROM admin_lists WHERE adminID = ?");
         $stmt->execute([$adminID]);
-        $armourer = $stmt->fetch(PDO::FETCH_ASSOC);
-        $fullname = $armourer ? $armourer['fullname'] : 'Unknown';
-
-        // Delete the armourer
+        $fullname = $stmt->fetchColumn();
         $delete_stmt = $pdo->prepare("DELETE FROM admin_lists WHERE adminID = ?");
         $delete_stmt->execute([$adminID]);
-
         logDailyActivity($pdo, "Deleted Armourer: " . $fullname, '', 'Armourer Management');
-    
-        $_SESSION['status'] = "UPLINK_SUCCESSFUL: PERSONNEL_DELETED";
-        $_SESSION['status_code'] = "success";
-        header("Location: armourers?status=success");
+        setFlash("success", "Armourer deleted successfully!");
     } catch (PDOException $e) {
-        $_SESSION['status'] = "DATABASE_CRITICAL: " . $e->getMessage();
-        $_SESSION['status_code'] = "error";
-        header("Location: armourers?status=error");
+        $_SESSION['toast_type'] = 'error';
+        $_SESSION['toast_message'] = 'Error deleting record.';
     }
+    $_SESSION['toast_type'] = 'success';
+    $_SESSION['toast_message'] = 'Armourer deleted successfully!';
+    header("Location: armourers");
     exit();
 }
-// Update Armourer
-if (isset($_POST['action']) && $_POST['action'] == 'update') {
-    $adminID  = $_POST['adminID'];
-    $service_no   = trim($_POST['service_no']);
-    $rank         = $_POST['rank'];
-    $fullname     = trim($_POST['fullname']);
-    $admin_email  = trim($_POST['admin_email']);
+
+if (isset($_POST['action']) && $_POST['action'] == 'update') {  
+    $adminID = $_POST['adminID'];
+    $service_no = trim($_POST['service_no']);
+    $rank = $_POST['rank'];
+    $fullname = trim($_POST['fullname']);
+    $admin_email = trim($_POST['admin_email']);
     $phone_number = trim($_POST['phone_number']);
-    $username     = trim($_POST['username']);
-    $unit_dept    = "NCTD";
-    $code         = $_POST['code'];   // Random 6-digit
+    $username = trim($_POST['username']);
+    $unit_dept = trim($_POST['unit_dept']);
+    $current_image = $_POST['current_image'];
+
+    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
+        $allowed = ['jpg', 'jpeg', 'png'];
+        $ext = strtolower(pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION));
+        if (in_array($ext, $allowed)) {
+            $new_name = "ARM_" . time() . "_" . uniqid() . "." . $ext;
+            if (move_uploaded_file($_FILES['profile_image']['tmp_name'], 'assets/images/armourer_images/' . $new_name)) {
+                if ($current_image != 'avatar_placeholder.png' && file_exists('assets/images/armourer_images/' . $current_image)) {
+                    unlink('assets/images/armourer_images/' . $current_image);
+                }
+                $current_image = $new_name;
+            }
+        }
+    }
 
     try {
-        // Fetch the existing armourer's name for logging
-        $stmt = $pdo->prepare("SELECT fullname FROM admin_lists WHERE adminID = ?");
-        $stmt->execute([$adminID]);
-        $armourer = $stmt->fetch(PDO::FETCH_ASSOC);
-        $old_fullname = $armourer ? $armourer['fullname'] : 'Unknown';
-
-        // Update the armourer's details
-        $sql = "UPDATE admin_lists SET 
-                    service_no=?, rank=?, fullname=?, admin_email=?, 
-                    phone_number=?, username=?, unit_dept=?, code=?, status=?
-                WHERE adminID = ?";
-        
+        $sql = "UPDATE admin_lists SET profile_image=?, service_no=?, rank=?, fullname=?, admin_email=?, phone_number=?, username=?, unit_dept=? WHERE adminID=?";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            $service_no, $rank, $fullname, 
-            $admin_email, $phone_number, $username, 
-            $unit_dept, $code, $status, 
-            $adminID
-        ]);
-
-        logDailyActivity($pdo, "Updated Armourer: " . $old_fullname . " to " . $fullname, '', 'Armourer Management');
-    
-        $_SESSION['status'] = "UPLINK_SUCCESSFUL: PERSONNEL_UPDATED";
-        $_SESSION['status_code'] = "success";
-        header("Location: armourers?status=success");
+        $stmt->execute([$current_image, $service_no, $rank, $fullname, $admin_email, $phone_number, $username, $unit_dept, $adminID]);
+        logDailyActivity($pdo, "Updated Armourer: " . $fullname, '', 'Armourer Management');
+        setFlash("success", "Armourer updated successfully!");
     } catch (PDOException $e) {
-        $_SESSION['status'] = "DATABASE_CRITICAL: " . $e->getMessage();
-        $_SESSION['status_code'] = "error";
-        header("Location: armourers?status=error&adminID=" . $adminID);
+        $_SESSION['toast_type'] = 'error';
+        $_SESSION['toast_message'] = 'Error updating record.';
     }
+    $_SESSION['toast_type'] = 'success';
+    $_SESSION['toast_message'] = 'Armourer updated successfully!';  
+    header("Location: armourers");
     exit();
 }
 ?>

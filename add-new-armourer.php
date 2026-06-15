@@ -95,9 +95,10 @@ $created_by = $_SESSION['username'];
                             <form action="process-armourer.php" method="POST" enctype="multipart/form-data" id="armourerForm">
                                 <input type="hidden" name="action" value="add">
                                 <input type="hidden" name="status" value="Verified">
+                                 <input type="hidden" name="user_role" value="Armourer">
                                 <input type="hidden" name="code" value="<?= $security_code ?>">
                                 <input type="hidden" name="created_by" value="<?= $created_by ?>">
-
+                              
                                 <div class="row">
                                     <div class="col-md-3 text-center border-right border-secondary">
                                         <label>Profile Image</label>

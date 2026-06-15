@@ -97,6 +97,7 @@ $created_by = $_SESSION['username'];
                                 <input type="hidden" name="status" value="Verified">
                                 <input type="hidden" name="code" value="<?= $security_code ?>">
                                 <input type="hidden" name="created_by" value="<?= $created_by ?>">
+                               
 
                                 <div class="row">
                                     <div class="col-md-3 text-center border-right border-secondary">

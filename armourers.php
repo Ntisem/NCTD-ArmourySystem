@@ -58,6 +58,41 @@ if(!isset($_SESSION["username"])) {
         border: 1px solid #00f2ff;
         color: #fff;
       }
+      .form-control:focus {
+        background: #05070a;
+        border: 1px solid #00ffcc;
+        color: #fff;
+        box-shadow: none;
+      }
+      .alert {
+        border: 1px solid #00f2ff;
+        background: #0a1a0f;
+        color: #5effa4;
+      }
+      .alert-danger {
+        border: 1px solid #ff0055;
+        background: #1a0a0a;    
+        color: #ff6b8b;
+      }
+      .btn-primary {
+        background: #00f2ff;
+        border: none;
+        color: #000;
+        font-weight: bold;
+      }
+      .btn-primary:hover {
+        background: #00ffcc;
+      }
+      .btn-danger {
+        background: #ff0055;
+        border: none;
+        color: #fff;        font-weight: bold;
+      }
+      .btn-danger:hover {
+        background: #ff6b8b;
+      }
+
+      
     </style>
   </head>
   <body>
@@ -98,8 +133,8 @@ if(!isset($_SESSION["username"])) {
                             <tr>
                               <th>#</th>
                               <th>Service Number</th>
-                              <th>Rank</th>
                               <th>Full Name</th>
+                               <th>Username</th>
                               <th>Email</th>
                               <th>Role</th>
                               <th>Action Controls</th>
@@ -114,8 +149,8 @@ if(!isset($_SESSION["username"])) {
                               <tr>
                                 <td><?php echo $i++; ?></td>
                                 <td><?php echo htmlspecialchars($row['service_no']); ?></td>
-                                <td><?php echo htmlspecialchars($row['rank']); ?></td>
-                                <td><?php echo htmlspecialchars($row['fullname']); ?></td>
+                                <td><?php echo htmlspecialchars($row['rank']); ?> <?php echo htmlspecialchars($row['fullname']); ?></td>
+                                <td><?php echo htmlspecialchars($row['username']); ?></td>
                                 <td><?php echo htmlspecialchars($row['admin_email']); ?></td>
                                 <td><?php echo htmlspecialchars($row['user_role']); ?></td>
                                 <td>
@@ -143,10 +178,10 @@ if(!isset($_SESSION["username"])) {
                                           <p><strong>Service No:</strong> <?php echo htmlspecialchars($row['service_no']); ?></p>
                                           <p><strong>Rank:</strong> <?php echo htmlspecialchars($row['rank']); ?></p>
                                           <p><strong>Full Name:</strong> <?php echo htmlspecialchars($row['fullname']); ?></p>
-                                          <p><strong>Email Address:</strong> <?php echo htmlspecialchars($row['admin_email']); ?></p>
-                                          <p><strong>Phone:</strong> <?php echo htmlspecialchars($row['phone_number']); ?></p>
                                           <p><strong>Username:</strong> <?php echo htmlspecialchars($row['username']); ?></p>
                                           <p><strong>Gender:</strong> <?php echo htmlspecialchars($row['gender']); ?></p>
+                                          <p><strong>Email Address:</strong> <?php echo htmlspecialchars($row['admin_email']); ?></p>
+                                          <p><strong>Phone:</strong> <?php echo htmlspecialchars($row['phone_number']); ?></p>
                                           <p><strong>Unit/Department:</strong> <?php echo htmlspecialchars($row['unit_dept']); ?></p>
                                         </div>
                                       </div>
@@ -169,7 +204,7 @@ if(!isset($_SESSION["username"])) {
                                     </div>
                                     <form action="process-armourer.php" method="POST" enctype="multipart/form-data">
                                       <div class="modal-body">
-                                        <input type="hidden" name="action" value="edit">
+                                        <input type="hidden" name="action" value="update">
                                         <input type="hidden" name="adminID" value="<?php echo $row['adminID']; ?>">
                                         <input type="hidden" name="current_image" value="<?php echo $row['profile_image']; ?>">
                                         <input type="hidden" name="user_role" value="Armourer">
@@ -180,7 +215,25 @@ if(!isset($_SESSION["username"])) {
                                         </div>
                                         <div class="form-group">
                                           <label>Rank</label>
-                                          <input type="text" name="rank" class="form-control" value="<?php echo htmlspecialchars($row['rank']); ?>" required>
+                                        
+                                          <select name="rank" class="form-control" required>
+                                            <option value="<?php echo htmlspecialchars($row['rank']); ?>"><?php echo htmlspecialchars($row['rank']); ?></option>
+                                            <option value="CONST" <?php if($row['rank'] == 'CONST') echo 'selected';?>>CONST</option>
+                                            <option value="L/CPL" <?php if($row['rank'] == 'L/CPL') echo 'selected';?>>L/CPL</option>
+                                            <option value="CPL" <?php if($row['rank'] == 'CPL') echo 'selected';?>>CPL</option>
+                                            <option value="SGT" <?php if($row['rank'] == 'SGT') echo 'selected';?>>SGT</option>
+                                            <option value="INSPR" <?php if($row['rank'] == 'INSPR') echo 'selected';?>>INSPR</option>
+                                            <option value="C/INSPR" <?php if($row['rank'] == 'C/INSPR ') echo 'selected';?>>C/INSPR  </option>
+                                            <option value="ASP" <?php if($row['rank'] == 'ASP') echo 'selected';?>>ASP</option>
+                                            <option value="DSP" <?php if($row['rank'] == 'DSP') echo 'selected';?>>DSP</option>
+                                            <option value="SUPT" <?php if($row['rank'] == 'SUPT') echo 'selected';?>>SUPT</option>
+                                            <option value="C/SUPT" <?php if($row['rank'] == 'C/SUPT') echo 'selected';?>>C/SUPT</option>
+                                            <option value="ACP" <?php if($row['rank'] == 'ACP') echo 'selected';?>>ACP</option>
+                                            <option value="DCOP" <?php if($row['rank'] == 'DCOP ') echo 'selected';?>>DCOP</option>
+                                           <option value="COP" <?php if($row['rank'] == 'COP ') echo 'selected';?>>COP</option>
+                                         
+                                          </select>
+                                        
                                         </div>
                                         <div class="form-group">
                                           <label>Gender</label>
@@ -194,16 +247,16 @@ if(!isset($_SESSION["username"])) {
                                           <input type="text" name="fullname" class="form-control" value="<?php echo htmlspecialchars($row['fullname']); ?>" required>
                                         </div>
                                         <div class="form-group">
-                                          <label>Email Address</label>
+                                          <label>Username</label>
+                                          <input type="text" name="username" class="form-control" value="<?php echo htmlspecialchars($row['username']); ?>" required>
+                                        </div>
+                                        <div class="form-group">
+                                           <label>Email Address</label>
                                           <input type="email" name="admin_email" class="form-control" value="<?php echo htmlspecialchars($row['admin_email']); ?>" required>
                                         </div>
                                         <div class="form-group">
                                           <label>Phone Number</label>
                                           <input type="text" name="phone_number" class="form-control" value="<?php echo htmlspecialchars($row['phone_number']); ?>" required>
-                                        </div>
-                                        <div class="form-group">
-                                          <label>Username</label>
-                                          <input type="text" name="username" class="form-control" value="<?php echo htmlspecialchars($row['username']); ?>" required>
                                         </div>
                                         <div class="form-group">
                                           <label>Unit/Dept</label>
@@ -259,7 +312,7 @@ if(!isset($_SESSION["username"])) {
           <?php require_once('includes/footer.php');?>
         </div>
       </div>
-    </div>
+    </div> 
     <script src="plugins/jquery/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="plugins/datatables/jquery.dataTables.min.js"></script>
@@ -268,36 +321,19 @@ if(!isset($_SESSION["username"])) {
     <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="dist/js/theme.min.js"></script>
     <script src="assets/js/custom.js"></script>
     <script src="plugins/toastr/toastr.min.js"></script>
-    
     <script>
-      $(function () {
+    $(document).ready(function() {
         $("#armourers-list").DataTable({
-          "responsive": true, 
-          "lengthChange": true, 
-          "autoWidth": false,
-          "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            "responsive": true, 
+            "lengthChange": true, 
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#armourers-list_wrapper .col-md-6:eq(0)');
-      });
-
-      //toastr notifications
-      <?php
-      //Using GET parameters for status is not recommended due to security concerns, but if you choose to do so, ensure proper sanitization and validation.
-      if (isset($_GET['status']) && $_GET['status'] == 'success') {
-          echo "toastr.success('Operation completed successfully!');";
-      } elseif (isset($_GET['status']) && $_GET['status'] == 'error') {
-          echo "toastr.error('An error occurred while processing your request. Please try again.');";
-      }
-      ?>  
-      <?php if (isset($_GET['adminID']) && $_GET['adminID'] > 0): ?>
-        // If adminID is present in the URL, open the edit modal for that specific ID
-        $(document).ready(function() {
-          $('#editModalArmourer<?php echo $_GET['adminID']; ?>').modal('show');
-        });
-      <?php endif; ?>
-      
+    });
     </script>
      <script>
       // Confirmation dialog for delete actions
@@ -313,7 +349,7 @@ if(!isset($_SESSION["username"])) {
       // Confirmation dialog for edit actions (optional, can be removed if not needed)
       $(document).on('submit', 'form[action="process-armourer.php"]', function(e) {
         var action = $(this).find('input[name="action"]').val();
-        if (action === 'edit') {
+        if (action === 'update') {
           e.preventDefault();
           if (confirm("Are you sure you want to save changes to this profile?")) {
             this.submit();
@@ -321,5 +357,26 @@ if(!isset($_SESSION["username"])) {
         }
       });
 </script>
+     //Check for toast messages and display them using SweetAlert2
+      <?php if(isset($_SESSION['toast_message'])): ?>
+      <script>
+        Swal.fire({
+            toast: true, 
+            position: 'top-end', 
+            icon: '<?php echo $_SESSION['toast_type']; ?>',
+            title: '<?php echo $_SESSION['toast_message']; ?>', 
+            showConfirmButton: false, 
+            timer: 3000,
+            background: '#050a0f', 
+            color: '#00f2ff'
+        });
+    </script>
+    <?php unset($_SESSION['toast_message']); unset($_SESSION['toast_type']); ?>
+<?php endif; ?>
+  
+</script>
+
+ 
+
   </body>
 </html>
