@@ -229,40 +229,7 @@ try {
                         </div>
                      
                     </div>
-                    <div class="row">
-                        <div class="col-lg-7 grid-margin stretch-card">
-                            <div class="card tactical-card">
-                                <div class="card-body">
-                                    <h4 class="header-title mb-4" style="font-size: 0.9rem;">Distribution_by_Class</h4>
-                                    <div class="chart-container">
-                                        <canvas id="distributionChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 grid-margin stretch-card">
-                            <div class="card tactical-card">
-                                <div class="card-body">
-                                    <h4 class="header-title mb-4" style="font-size: 0.9rem;">Field_Deployment_Status</h4>
-                                    <div class="text-center py-3">
-                                        <div class="stat-value text-info mb-2"><?= $activeDeployments ?></div>
-                                        <p class="text-muted">FIREARMS_IN_FIELD</p>
-                                    </div>
-                                    <hr style="border-top: 1px dashed rgba(255,255,255,0.1);">
-                                    <div class="d-flex justify-content-between mb-3">
-                                        <span class="small">Deployed Munitions</span>
-                                        <span class="text-warning small"><?= number_format($deployedAmmo) ?> RNDS</span>
-                                    </div>
-                                    <div class="progress progress-md bg-dark">
-                                        <div class="progress-bar bg-info" style="width: <?= ($totalFirearms > 0) ? ($activeDeployments/$totalFirearms)*100 : 0 ?>%"></div>
-                                    </div>
-                                    <small class="text-muted mt-2 d-block">System Load: <?= round(($activeDeployments/$totalFirearms)*100, 1) ?>% Capacity</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
+                          <div class="row">
                         <div class="col-lg-12 grid-margin stretch-card">
                             <div class="card tactical-card">
                         <div class="card tactical-card">
@@ -327,6 +294,38 @@ try {
                                     echo '<div class="col-12 text-danger small">[SYSTEM_ERR]: DATA_LINK_FAILURE</div>';
                                 }
                                 ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-7 grid-margin stretch-card">
+                            <div class="card tactical-card">
+                                <div class="card-body">
+                                    <h4 class="header-title mb-4" style="font-size: 0.9rem;">Distribution_by_Class</h4>
+                                    <div class="chart-container">
+                                        <canvas id="distributionChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 grid-margin stretch-card">
+                            <div class="card tactical-card">
+                                <div class="card-body">
+                                    <h4 class="header-title mb-4" style="font-size: 0.9rem;">Field_Deployment_Status</h4>
+                                    <div class="text-center py-3">
+                                        <div class="stat-value text-info mb-2"><?= $activeDeployments ?></div>
+                                        <p class="text-muted">FIREARMS_IN_FIELD</p>
+                                    </div>
+                                    <hr style="border-top: 1px dashed rgba(255,255,255,0.1);">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <span class="small">Deployed Munitions</span>
+                                        <span class="text-warning small"><?= number_format($deployedAmmo) ?> RNDS</span>
+                                    </div>
+                                    <div class="progress progress-md bg-dark">
+                                        <div class="progress-bar bg-info" style="width: <?= ($totalFirearms > 0) ? ($activeDeployments/$totalFirearms)*100 : 0 ?>%"></div>
+                                    </div>
+                                    <small class="text-muted mt-2 d-block">System Load: <?= round(($activeDeployments/$totalFirearms)*100, 1) ?>% Capacity</small>
+                                </div>
                             </div>
                         </div>
                     </div>
