@@ -152,7 +152,7 @@ try {
                     <div class="row mb-4">
                         <div class="col-12 d-flex justify-content-between align-items-center">
                             <div>
-                                <h3 class="header-title mb-0">National_Armory_Command</h3>
+                                <h3 class="header-title mb-0">NCTD_Armoury_Command</h3>
                                 <span class="text-muted small">[ STATUS: <span class="text-success blink">OPERATIONAL</span> ]</span>
                             </div>
                             <div class="text-right">
