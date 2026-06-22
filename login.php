@@ -39,7 +39,7 @@ if (isset($_POST['username'])) {
                 $location = $redirect_url;
                 $_SESSION['status'] = "UPLINK_RESTORED: RETURNING_TO_STATION";
             } else {
-                $location = "armourer.php";
+                $location = "armourer";
                 $_SESSION['status'] = "UPLINK_ESTABLISHED: WELCOME " . strtoupper($row['rank'])." " . strtoupper($row['fullname']);
             }
 
