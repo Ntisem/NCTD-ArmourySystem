@@ -230,8 +230,7 @@ if(!isset($_SESSION["username"])) {
                                             <option value="C/SUPT" <?php if($row['rank'] == 'C/SUPT') echo 'selected';?>>C/SUPT</option>
                                             <option value="ACP" <?php if($row['rank'] == 'ACP') echo 'selected';?>>ACP</option>
                                             <option value="DCOP" <?php if($row['rank'] == 'DCOP ') echo 'selected';?>>DCOP</option>
-                                           <option value="COP" <?php if($row['rank'] == 'COP ') echo 'selected';?>>COP</option>
-                                         
+                                           <option value="COP" <?php if($row['rank'] == 'COP ') echo 'selected';?>>COP</option>          
                                           </select>
                                         
                                         </div>
