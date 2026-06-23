@@ -319,7 +319,25 @@ if (isset($_GET['view_id'])) {
                         </select>
                     </div>
                     <div class="form-group"><label>SERVICE NO</label><input type="text" name="edit_officer_service_no" id="edit_officer_service_no" class="form-control"></div>
-                    <div class="form-group"><label>RANK</label><input type="text" name="edit_rank" id="edit_rank" class="form-control" required></div>
+                    <div class="form-group">
+                        <label>RANK</label>
+                        <!-- <input type="text" name="edit_rank" id="edit_rank" class="form-control" required> -->
+                            <select name="edit_rank" id="edit_rank" class="form-control">
+                            <option value="CONST">CONST</option>
+                            <option value="L/CPL">L/CPL</option>
+                            <option value="CPL">CPL</option>
+                            <option value="SGT">SGT</option>
+                            <option value="INSPR">INSPR</option>
+                            <option value="C/INSPR">C/INSPR</option>
+                            <option value="ASP">ASP</option>
+                            <option value="DSP">DSP</option>
+                            <option value="SUPT">SUPT</option>
+                            <option value="C/SUPT">C/SUPT</option>
+                            <option value="ACP">ACP</option>
+                            <option value="DCOP">DCOP</option>
+                            <option value="COP">COP</option>
+                            </select>
+                    </div>
                     <div class="form-group"><label>FULL NAME</label><input type="text" name="edit_full_name" id="edit_full_name" class="form-control" required></div>
                     <div class="form-group"><label>DEPT/UNIT</label><input type="text" name="edit_dept_unit" id="edit_dept_unit" class="form-control" required></div>
                     <div class="form-group"><label>GENDER</label>
