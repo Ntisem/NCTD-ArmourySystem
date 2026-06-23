@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 12, 2026 at 08:24 PM
+-- Generation Time: Jun 24, 2026 at 01:13 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -54,11 +54,12 @@ CREATE TABLE `admin_lists` (
 --
 
 INSERT INTO `admin_lists` (`adminID`, `profile_image`, `user_role`, `service_no`, `rank`, `gender`, `fullname`, `admin_email`, `phone_number`, `username`, `password`, `unit_dept`, `code`, `status`, `update_date`, `datetime`, `reset_token`, `token_expiry`, `created_by`) VALUES
-(2, '69d0d166a52914.22988217.jpg', 'Armourer', '45232', 'INSPR', 'Male', 'Richard Boampong', 'richardboappng13@gmail.com', '0246846556', 'boampong', '532e6d0a3a420e4168e46df1db4359e9', 'CTD', '882165', 'Verified', 'April 4, 2026, 8:52 am', '2026-04-04 08:52:54', NULL, NULL, ''),
+(2, 'e70ba8bd26ba210034783b3ebe838349.jpg', 'Armourer', '45232', 'INSPR', 'Male', 'Richard Boampong', 'richardboappng13@gmail.com', '0246846556', 'boampong', '532e6d0a3a420e4168e46df1db4359e9', 'CTD', '882165', 'Verified', 'April 4, 2026, 8:52 am', '2026-06-11 06:06:04', NULL, NULL, ''),
 (3, 'avatar_placeholder.png', 'Armourer', '60544', 'C/Inspr', 'Male', 'Ntisem William', 'williamntisem123@gmail.com', '0246076373', 'willies', '532e6d0a3a420e4168e46df1db4359e9', 'CTD', '', 'Verified', '', '2026-05-12 06:50:18', NULL, NULL, ''),
-(4, 'avatar_placeholder.png', 'Armourer', '58459', 'L/CPL', 'Male', 'William Ntisem', 'lawrencejay19@yahoo.com', '0241752325', 'william', 'e6526e1c72e65e38ab5674d0e4be419c', 'CTD', '688025', 'Verified', 'March 25, 2026, 9:02 am', '2026-05-09 17:39:17', NULL, NULL, ''),
+(4, '37a2f0b2807a0bd0eb139b09a03d5ff9.jpeg', 'Armourer', '58459', 'L/CPL', 'Male', 'William Ntisem', 'lawrencejay19@yahoo.com', '0241752325', 'william', 'e6526e1c72e65e38ab5674d0e4be419c', 'NCTD', '688025', 'Verified', 'March 25, 2026, 9:02 am', '2026-06-23 22:53:44', NULL, NULL, ''),
 (5, 'ARM_1778479215_6a01706fa1562.jpg', 'Administrator', '12345', 'C/INSPR', '', 'William NTI', 'william12@gmail.com', '0246076371', 'williams', '7e55000bb06fd285304339db46418142', '', '', '', '', '2026-05-11 17:53:02', NULL, NULL, ''),
-(6, 'ARM_1778479215_6a01706fa1562.jpg', 'Armourer', '123456', 'COP', '', 'William Ntisem', 'william@hot.com', '0235553982', 'Willie', '6f7aaa441fee759714355949f9902456', 'NCTD', '385701', 'Active', '', '2026-05-11 06:00:15', NULL, NULL, '');
+(6, 'ARM_1778479215_6a01706fa1562.jpg', 'Armourer', '123456', 'COP', '', 'William Ntisem', 'william@hot.com', '0235553982', 'Willie', '6f7aaa441fee759714355949f9902456', 'NCTD', '385701', 'Active', '', '2026-05-11 06:00:15', NULL, NULL, ''),
+(7, 'ARM_1782148570_6a396ddaf1265.png', 'Armourer', '58459', 'L/CPL', '', 'Lawrence Acheampong', 'lawrencejay19@yahoo.com', '0241752325', 'owoahene@22', 'd874c1a24ac1f5ef2873b1bc55dd1699', 'NCTD', '074446', 'Verified', '', '2026-06-23 08:26:06', NULL, NULL, 'boampong');
 
 -- --------------------------------------------------------
 
@@ -122,14 +123,6 @@ CREATE TABLE `ammo_bookings` (
   `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `ammo_bookings`
---
-
-INSERT INTO `ammo_bookings` (`book_ammoID`, `bookingCode`, `ammoID`, `officerID`, `armourer_issuer`, `officer_image`, `to_officer`, `booking_time`, `ammo_name`, `ammo_rounds`, `ammo_returned`, `ammo_state`, `no_faulty_ammo`, `duty_type`, `duty_location`, `duty_duration`, `ammo_comment`, `ammo_returns`, `returned_time`, `datetime`) VALUES
-(3, '', '6', '1148', '45232 INSPR Richard Boampong', '69b2d17a2b8438.44320500.jpg', '67304 CONST Baba Osman ', 'March 27, 2026, 6:22 am', '9MM', 20, 0, ' ', 0, 'Guide Duty', 'Armed Guide', '12', '', 'Not-Return', ' ', '2026-03-27 06:22:16'),
-(4, '', '6', '1190', '45232 INSPR Richard Boampong', '69c5125608d7e1.61040660.jpg', '56140 L/CPL Samuel Ntim', 'March 27, 2026, 6:22 am', '9MM', 20, 0, ' ', 0, 'Guide Duty', 'Armed Guide', '', '', 'Not-Return', ' ', '2026-03-27 11:53:47');
-
 -- --------------------------------------------------------
 
 --
@@ -173,6 +166,9 @@ CREATE TABLE `ammunitions` (
   `ammo_application` varchar(200) NOT NULL,
   `ammo_rounds` int(255) NOT NULL,
   `booking_status` varchar(200) NOT NULL,
+  `adminID` int(100) NOT NULL,
+  `armourer_admin_name` varchar(200) NOT NULL,
+  `remarks` varchar(500) NOT NULL,
   `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `is_deleted` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -181,10 +177,10 @@ CREATE TABLE `ammunitions` (
 -- Dumping data for table `ammunitions`
 --
 
-INSERT INTO `ammunitions` (`ammoID`, `manufacturer`, `ammo_type`, `ammo_name`, `ammo_application`, `ammo_rounds`, `booking_status`, `datetime`, `is_deleted`) VALUES
-(6, 'Sellier & Bellot', '', '9MM', 'Duty', 10923, 'Not-Available', '2026-05-09 09:25:09', 0),
-(8, 'Kidma Tech', '', '7.62x39 ', 'Duty', 21430, 'Available', '2026-05-05 06:27:21', 0),
-(9, 'Sellier & Bellot', '', '5.56X45', 'Duty', 30, 'Available', '2024-09-30 20:39:29', 0);
+INSERT INTO `ammunitions` (`ammoID`, `manufacturer`, `ammo_type`, `ammo_name`, `ammo_application`, `ammo_rounds`, `booking_status`, `adminID`, `armourer_admin_name`, `remarks`, `datetime`, `is_deleted`) VALUES
+(6, 'Sellier & Bellot', 'Live-Ammo', '9MM', 'Duty', 10903, 'Available', 0, '', '', '2026-06-23 22:24:49', 0),
+(8, 'Kidma Tech', 'Live-Ammo', '7.62x39 ', 'Duty', 21430, 'Available', 0, '', '', '2026-06-23 22:24:54', 0),
+(9, 'Sellier & Bellot', 'Live-Ammo', '5.56X45', 'Duty', 30, 'Available', 0, '', '', '2026-06-23 22:25:00', 0);
 
 -- --------------------------------------------------------
 
@@ -271,6 +267,31 @@ CREATE TABLE `asset_bookings2` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `blank_ammo_bookings`
+--
+
+CREATE TABLE `blank_ammo_bookings` (
+  `blank_ammoID` int(11) NOT NULL,
+  `officerID` varchar(200) NOT NULL,
+  `ammoID` varchar(100) NOT NULL,
+  `armourer_issuer` varchar(500) NOT NULL,
+  `officer_image` varchar(500) NOT NULL,
+  `to_officer` varchar(500) NOT NULL,
+  `booking_time` varchar(200) NOT NULL,
+  `ammo_name` varchar(500) NOT NULL,
+  `ammo_rounds` int(11) NOT NULL,
+  `ammo_returned` int(11) NOT NULL DEFAULT 0,
+  `duty_type` varchar(200) NOT NULL,
+  `duty_location` varchar(500) NOT NULL,
+  `duty_duration` varchar(200) NOT NULL,
+  `ammo_comment` text DEFAULT NULL,
+  `returns_state` varchar(100) NOT NULL DEFAULT 'Not-Return',
+  `returned_time` varchar(200) NOT NULL DEFAULT ' '
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `bookings`
 --
 
@@ -329,283 +350,9 @@ INSERT INTO `bookings` (`bookingID`, `bookingCode`, `firearmID`, `ammoID`, `offi
 (28, '', '', '8', '1131', 'March 26, 2026, 8:28 am', '58459 L/CPL Lawrence Acheampong', '69b2b489043f43.52712900.jpg', '66792 CONST Haruna Abdulai ', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'March 27, 2026, 12:27 pm', '2026-03-27 12:27:27', 0),
 (29, '', '', '6', '46', 'March 26, 2026, 8:30 am', '58459 L/CPL Lawrence Acheampong', '670974a6ebcdc9.60476512.jpg', '58239 L/CPL Enerst Anim ', 'CZ-SCORPION', 'D-406084', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '24 hours', 'Returned', '', 'March 27, 2026, 1:02 pm', '2026-03-27 13:02:48', 0),
 (30, '', '', '8', '1135', 'March 26, 2026, 6:56 pm', '58459 L/CPL Lawrence Acheampong', '69b2b95193a3d8.56421490.jpg', '67049 CONST Awudu Ali', 'CZ807', 'E021880', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'March 27, 2026, 12:28 pm', '2026-03-27 12:28:28', 0),
-(31, '', '', '8', '1140', 'March 26, 2026, 6:57 pm', '58459 L/CPL Lawrence Acheampong', '69b2bfe98bc695.49146455.jpg', '66394 CONST Samuel Laweh Teye ', 'CZ807', 'C402178', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'March 27, 2026, 12:29 pm', '2026-03-27 12:29:26', 0),
-(32, '', '', '6', '1161', 'March 26, 2026, 6:58 pm', '58459 L/CPL Lawrence Acheampong', '69b442eed55d23.65814209.jpg', '67156 CONST Tenadu Asiedu', 'CZ-SCORPION', 'D-174853', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'March 27, 2026, 1:00 pm', '2026-03-27 13:00:44', 0),
-(33, '', '', '6', '1148', 'March 26, 2026, 6:59 pm', '58459 L/CPL Lawrence Acheampong', '69b2d17a2b8438.44320500.jpg', '67304 CONST Baba Osman ', 'CZ-SCORPION', 'D-281536', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'March 27, 2026, 12:19 pm', '2026-03-27 12:19:57', 0),
-(34, '', '', '6', '1155', 'March 26, 2026, 7:02 pm', '58459 L/CPL Lawrence Acheampong', '69b3c9592099d1.82925269.jpg', '67232 CONST Seth Woolley', 'CZ-SCORPION', 'D-145292', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'March 27, 2026, 12:22 pm', '2026-03-27 12:22:04', 0),
-(35, '', '537', '8', '1120', 'March 27, 2026, 12:34 pm', '45232 INSPR Richard Boampong', '69b28705873187.89831585.jpg', '66046 CONST Samuel Zogli', 'CZ807', 'C326965', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'March 29, 2026, 7:31 am', '2026-03-29 07:31:36', 0),
-(36, '', '532', '8', '1160', 'March 27, 2026, 12:40 pm', '45232 INSPR Richard Boampong', '69b42aa1ef4329.51153481.jpg', '66124 CONST Osei Bismark', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'March 29, 2026, 7:31 am', '2026-03-29 07:31:58', 0),
-(37, '', '547', '8', '1156', 'March 27, 2026, 12:44 pm', '45232 INSPR Richard Boampong', '69b3cb1a952059.88393048.jpg', '66407 CONST Obeng Joseph Konadu', 'CZ807', 'E021880', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '12', 'Returned', '', 'March 27, 2026, 6:34 pm', '2026-03-27 18:34:03', 0),
-(38, '', '549', '8', '1129', 'March 27, 2026, 12:46 pm', '45232 INSPR Richard Boampong', '69b2b2125deac3.56142041.jpg', '15815 CONST Nancy Agyei', 'CZ807', 'C402178', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'March 27, 2026, 6:33 pm', '2026-03-27 18:33:15', 0),
-(39, '', '437', '6', '36', 'March 27, 2026, 12:50 pm', '45232 INSPR Richard Boampong', '6707dc04e99862.44989633.jpg', '57976 L/CPL Richmond  Agyei Yeboah ', 'CZ-SCORPION', 'D-406084', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'March 29, 2026, 7:30 am', '2026-03-29 07:30:58', 0),
-(40, '', '399', '6', '127', 'March 27, 2026, 12:52 pm', '45232 INSPR Richard Boampong', '670fca9cde93d6.18099682.jpg', '58331  L/CPL Philip Sakah ', 'CZ-SCORPION', 'D-145292', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'March 29, 2026, 7:32 am', '2026-03-29 07:32:22', 0),
-(41, '', '381', '6', '1185', 'March 27, 2026, 12:53 pm', '45232 INSPR Richard Boampong', '69c41825edcc14.61652171.jpg', '56082 L/CPL Frank Asamoah Appeakorang', 'CZ-SCORPION', 'D-145304', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'March 29, 2026, 7:32 am', '2026-03-29 07:32:51', 0),
-(42, '', '414', '6', '', 'March 27, 2026, 12:56 pm', '45232 INSPR Richard Boampong', '', 'Opoku samuel', 'CZ-SCORPION', 'D-279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'March 29, 2026, 7:33 am', '2026-03-29 07:33:11', 0),
-(43, '', '', '8', '1130', 'April 13, 2026, 6:14 pm', '58459 L/CPL Lawrence Acheampong', '69b2b35c6d4509.23082572.jpg', '67255 CONST Abdul- Rauf Abdul- Rahaman', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 14, 2026, 6:11 am', '2026-04-14 06:11:07', 0),
-(44, '', '', '6', '1123', 'April 13, 2026, 6:18 pm', '58459 L/CPL Lawrence Acheampong', '69b28aba198b96.79213544.jpg', '65808 CONST Prosper Dagadu', 'CZ-SCORPION', 'D-135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 14, 2026, 6:08 am', '2026-04-14 06:08:50', 0),
-(45, '', '', '6', '1161', 'April 13, 2026, 6:21 pm', '58459 L/CPL Lawrence Acheampong', '69b442eed55d23.65814209.jpg', '67156 CONST Tenadu Asiedu', 'CZ-SCORPION', 'D-174828', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 14, 2026, 6:09 am', '2026-04-14 06:09:10', 0),
-(46, '', '', '8', '1148', 'April 13, 2026, 6:22 pm', '58459 L/CPL Lawrence Acheampong', '69b2d17a2b8438.44320500.jpg', '67304 CONST Baba Osman ', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 14, 2026, 6:26 am', '2026-04-14 06:26:32', 0),
-(47, '', '', '6', '1116', 'April 13, 2026, 6:25 pm', '58459 L/CPL Lawrence Acheampong', '69b24df2e50153.09990062.jpg', '66855 CONST Bawah Abdul Isumaila ', 'CZ-SCORPION', 'D-406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 14, 2026, 6:11 am', '2026-04-14 06:11:32', 0),
-(48, '', '', '8', '1125', 'April 14, 2026, 6:10 am', '58459 L/CPL Lawrence Acheampong', '69b2aa991b1001.24627116.jpg', '15866 CONST Patience Issajoulun', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 14, 2026, 6:36 pm', '2026-04-14 18:36:53', 0),
-(49, '', '', '6', '13', 'April 14, 2026, 6:18 am', '58459 L/CPL Lawrence Acheampong', '67042def908e34.16990129.jpg', '54669 CPL Felix Appiah', 'CZ-SCORPION', 'D-406078', 'Duty-Weapon', 0, 'Not-Faulty', '9mm', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 15, 2026, 6:05 am', '2026-04-15 06:05:20', 0),
-(50, '', '', '8', '1117', 'April 14, 2026, 6:30 am', '58459 L/CPL Lawrence Acheampong', '69b251142e0b44.85058804.jpg', '67163 CONST Jeffery Boakye', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 15, 2026, 6:15 am', '2026-04-15 06:15:55', 0),
-(51, '', '', '8', '1135', 'April 14, 2026, 6:54 am', '58459 L/CPL Lawrence Acheampong', '69b2b95193a3d8.56421490.jpg', '67049 CONST Awudu Ali', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39mm', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 14, 2026, 6:37 pm', '2026-04-14 18:37:29', 0),
-(52, '', '', '8', '1162', 'April 14, 2026, 6:55 am', '58459 L/CPL Lawrence Acheampong', '69b550add89769.58634026.jpg', '66500 CONST Yakubu Amadu', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 15, 2026, 6:11 am', '2026-04-15 06:11:22', 0),
-(53, '', '', '6', '84', 'April 14, 2026, 6:57 am', '58459 L/CPL Lawrence Acheampong', '670ad384951d08.94188639.jpg', '58339 L/CPL Emmanuel Painstsil', 'CZ-SCORPION', 'D-280014', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 15, 2026, 6:08 am', '2026-04-15 06:08:21', 0),
-(54, '', '', '6', '36', 'April 14, 2026, 6:58 am', '58459 L/CPL Lawrence Acheampong', '6707dc04e99862.44989633.jpg', '57976 L/CPL Richmond  Agyei Yeboah ', 'CZ-SCORPION', 'D-281556', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 15, 2026, 6:08 am', '2026-04-15 06:08:51', 0),
-(55, '', '', '6', '1185', 'April 14, 2026, 6:59 am', '58459 L/CPL Lawrence Acheampong', '69c41825edcc14.61652171.jpg', '56082 L/CPL Frank Asamoah Appeakorang', 'CZ-SCORPION', 'D-279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 15, 2026, 6:09 am', '2026-04-15 06:09:15', 0),
-(56, '', '', '8', '1148', 'April 14, 2026, 6:38 pm', '58459 L/CPL Lawrence Acheampong', '69b2d17a2b8438.44320500.jpg', '67304 CONST Baba Osman ', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 15, 2026, 6:16 am', '2026-04-15 06:16:23', 0),
-(57, '', '', '8', '1130', 'April 14, 2026, 6:39 pm', '58459 L/CPL Lawrence Acheampong', '69b2b35c6d4509.23082572.jpg', '67255 CONST Abdul- Rauf Abdul- Rahaman', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 15, 2026, 6:18 am', '2026-04-15 06:18:27', 0),
-(58, '', '', '6', '1116', 'April 14, 2026, 6:51 pm', '58459 L/CPL Lawrence Acheampong', '69b24df2e50153.09990062.jpg', '66855 CONST Bawah Abdul Isumaila ', 'CZ-SCORPION', 'D-135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 15, 2026, 6:09 am', '2026-04-15 06:09:49', 0),
-(59, '', '', '6', '1123', 'April 14, 2026, 6:52 pm', '58459 L/CPL Lawrence Acheampong', '69b28aba198b96.79213544.jpg', '65808 CONST Prosper Dagadu', 'CZ-SCORPION', 'D-174828', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 15, 2026, 6:10 am', '2026-04-15 06:10:09', 0),
-(60, '', '', '6', '1161', 'April 14, 2026, 6:53 pm', '58459 L/CPL Lawrence Acheampong', '69b442eed55d23.65814209.jpg', '67156 CONST Tenadu Asiedu', 'CZ-SCORPION', 'D-174871', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 15, 2026, 6:06 am', '2026-04-15 06:06:43', 0),
-(61, '', '', '6', '44', 'April 14, 2026, 6:54 pm', '58459 L/CPL Lawrence Acheampong', '67096c20261ed8.73226717.jpg', '58213 L/CPL Abraham  Nkumdow ', 'CZ-SCORPION', 'D-138572', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 15, 2026, 6:06 am', '2026-04-15 06:06:15', 0),
-(62, '', '', '6', '1194', 'April 15, 2026, 6:07 am', '58459 L/CPL Lawrence Acheampong', '69c9aac0bd6f59.62327774.jpg', '56277 L/CPL Benjamin Antwi-Kusi', 'CZ-SCORPION', 'D-174871', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 16, 2026, 5:47 am', '2026-04-16 05:47:51', 0),
-(63, '', '', '8', '1126', 'April 15, 2026, 6:17 am', '58459 L/CPL Lawrence Acheampong', '69b2abc99108b8.01318054.jpg', '65827 CONST Raymond Asimah', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 16, 2026, 6:42 am', '2026-04-16 06:42:41', 0),
-(64, '', '', '8', '1194', 'April 15, 2026, 6:25 am', '58459 L/CPL Lawrence Acheampong', '69c9aac0bd6f59.62327774.jpg', '56140 L/CPL Samuel Ntim', 'F102305 CZ807 ( Rifle) - [Caliber: 7.62x39mm] ', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 0, ' ', 0, 'Guide Duty', 'DG/NAPD', '', 'Not-Return', '', ' ', '2026-04-15 06:28:27', 0),
-(65, '', '', '8', '1125', 'April 15, 2026, 6:26 am', '58459 L/CPL Lawrence Acheampong', '69b2aa991b1001.24627116.jpg', '15866 CONST Patience Issajoulun', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 15, 2026, 6:26 pm', '2026-04-15 18:26:09', 0),
-(66, '', '', '8', '1162', 'April 15, 2026, 6:30 am', '58459 L/CPL Lawrence Acheampong', '69b550add89769.58634026.jpg', '66500 CONST Yakubu Amadu', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 15, 2026, 6:14 pm', '2026-04-15 18:14:03', 0),
-(67, '', '', '8', '1131', 'April 15, 2026, 6:31 am', '58459 L/CPL Lawrence Acheampong', '69b2b489043f43.52712900.jpg', '66792 CONST Haruna Abdulai ', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 16, 2026, 6:43 am', '2026-04-16 06:43:38', 0),
-(68, '', '', '6', '46', 'April 15, 2026, 6:33 am', '58459 L/CPL Lawrence Acheampong', '670974a6ebcdc9.60476512.jpg', '58239 L/CPL Enerst Anim ', 'CZ-SCORPION', 'D-279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 15, 2026, 6:34 am', '2026-04-15 06:34:17', 0),
-(69, '', '', '6', '46', 'April 15, 2026, 6:35 am', '58459 L/CPL Lawrence Acheampong', '670974a6ebcdc9.60476512.jpg', '58239 L/CPL Enerst Anim ', 'CZ-SCORPION', 'D-406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 16, 2026, 5:48 am', '2026-04-16 05:48:32', 0),
-(70, '', '', '6', '127', 'April 15, 2026, 6:58 am', '58459 L/CPL Lawrence Acheampong', '670fca9cde93d6.18099682.jpg', '58331  L/CPL Philip Sakah ', 'CZ-SCORPION', 'D-279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 16, 2026, 5:49 am', '2026-04-16 05:49:01', 0),
-(71, '', '', '8', '1130', 'April 15, 2026, 6:15 pm', '58459 L/CPL Lawrence Acheampong', '69b2b35c6d4509.23082572.jpg', '67255 CONST Abdul- Rauf Abdul- Rahaman', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 16, 2026, 6:34 am', '2026-04-16 06:34:35', 0),
-(72, '', '', '8', '1148', 'April 15, 2026, 6:25 pm', '58459 L/CPL Lawrence Acheampong', '69b2d17a2b8438.44320500.jpg', '67304 CONST Baba Osman ', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 16, 2026, 6:44 am', '2026-04-16 06:44:17', 0),
-(73, '', '', '6', '1161', 'April 15, 2026, 6:29 pm', '58459 L/CPL Lawrence Acheampong', '69b442eed55d23.65814209.jpg', '67156 CONST Tenadu Asiedu', 'CZ-SCORPION', 'D-135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 16, 2026, 5:49 am', '2026-04-16 05:49:29', 0),
-(74, '', '', '6', '44', 'April 15, 2026, 6:35 pm', '58459 L/CPL Lawrence Acheampong', '67096c20261ed8.73226717.jpg', '58213 L/CPL Abraham  Nkumdow ', 'CZ-SCORPION', 'D-138572', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 16, 2026, 5:49 am', '2026-04-16 05:49:55', 0),
-(75, '', '', '6', '1116', 'April 15, 2026, 6:40 pm', '58459 L/CPL Lawrence Acheampong', '69b24df2e50153.09990062.jpg', '66855 CONST Bawah Abdul Isumaila ', 'CZ-SCORPION', 'D-280014', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 16, 2026, 5:50 am', '2026-04-16 05:50:16', 0),
-(76, '', '', '6', '1123', 'April 15, 2026, 6:41 pm', '58459 L/CPL Lawrence Acheampong', '69b28aba198b96.79213544.jpg', '65808 CONST Prosper Dagadu', 'CZ-SCORPION', 'D-281556', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 16, 2026, 5:51 am', '2026-04-16 05:51:02', 0),
-(77, '', '', '8', '1125', 'April 16, 2026, 6:34 am', '58459 L/CPL Lawrence Acheampong', '69b2aa991b1001.24627116.jpg', '15866 CONST Patience Issajoulun', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 16, 2026, 5:43 pm', '2026-04-16 17:43:15', 0),
-(78, '', '', '6', '13', 'April 16, 2026, 6:35 am', '58459 L/CPL Lawrence Acheampong', '67042def908e34.16990129.jpg', '54669 CPL Felix Appiah', 'CZ-SCORPION', 'D280014', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 17, 2026, 5:45 am', '2026-04-17 05:45:45', 0),
-(79, '', '', '6', '36', 'April 16, 2026, 6:40 am', '58459 L/CPL Lawrence Acheampong', '6707dc04e99862.44989633.jpg', '57976 L/CPL Richmond  Agyei Yeboah ', 'CZ-SCORPION', 'D281556', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 17, 2026, 5:46 am', '2026-04-17 05:46:14', 0),
-(80, '', '', '6', '1185', 'April 16, 2026, 6:41 am', '58459 L/CPL Lawrence Acheampong', '69c41825edcc14.61652171.jpg', '56082 L/CPL Frank Asamoah Appeakorang', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 17, 2026, 5:46 am', '2026-04-17 05:46:50', 0),
-(81, '', '', '6', '84', 'April 16, 2026, 6:42 am', '58459 L/CPL Lawrence Acheampong', '670ad384951d08.94188639.jpg', '58339 L/CPL Emmanuel Painstsil', 'CZ-SCORPION', 'D138572', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', -1, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 17, 2026, 5:47 am', '2026-04-17 05:47:40', 0),
-(82, '', '', '8', '1162', 'April 16, 2026, 6:45 am', '58459 L/CPL Lawrence Acheampong', '69b550add89769.58634026.jpg', '66500 CONST Yakubu Amadu', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 16, 2026, 5:43 pm', '2026-04-16 17:43:44', 0),
-(83, '', '', '8', '1117', 'April 16, 2026, 6:46 am', '58459 L/CPL Lawrence Acheampong', '69b251142e0b44.85058804.jpg', '67163 CONST Jeffery Boakye', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', -1, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 17, 2026, 5:53 am', '2026-04-17 05:53:04', 0),
-(84, '', '', '8', '1135', 'April 16, 2026, 6:47 am', '58459 L/CPL Lawrence Acheampong', '69b2b95193a3d8.56421490.jpg', '67049 CONST Awudu Ali', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', -3, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 17, 2026, 6:01 am', '2026-04-17 06:01:12', 0),
-(85, '', '', '8', '1130', 'April 16, 2026, 5:44 pm', '58459 L/CPL Lawrence Acheampong', '69b2b35c6d4509.23082572.jpg', '67255 CONST Rauf Abdul - Rahaman', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 17, 2026, 6:01 am', '2026-04-17 06:01:37', 0),
-(86, '', '', '8', '1148', 'April 16, 2026, 5:45 pm', '58459 L/CPL Lawrence Acheampong', '69b2d17a2b8438.44320500.jpg', '67304 CONST Baba Osman ', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 17, 2026, 6:02 am', '2026-04-17 06:02:01', 0),
-(87, '', '', '6', '1195', 'April 16, 2026, 6:18 pm', '58459 L/CPL Lawrence Acheampong', '69e082268d9ea2.33187317.jpg', '55104 CPL Samuel Opoku', 'CZ-SCORPION', 'D135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 17, 2026, 5:49 am', '2026-04-17 05:49:08', 0),
-(88, '', '', '6', '1195', 'April 16, 2026, 6:23 pm', '58459 L/CPL Lawrence Acheampong', '69e082268d9ea2.33187317.jpg', '56140 L/CPL Samuel Ntim', 'CZ-SCORPION', 'D174828', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '', 'Returned', '', 'April 16, 2026, 6:26 pm', '2026-04-16 18:26:53', 0),
-(89, '', '', '6', '1195', 'April 16, 2026, 6:25 pm', '58459 L/CPL Lawrence Acheampong', '69e082268d9ea2.33187317.jpg', '56140 L/CPL Samuel Ntim', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '', 'Returned', '', 'April 16, 2026, 6:27 pm', '2026-04-16 18:27:23', 0),
-(90, '', '', '6', '1195', 'April 16, 2026, 6:29 pm', '58459 L/CPL Lawrence Acheampong', '69e082268d9ea2.33187317.jpg', '56140 L/CPL Samuel Ntim', 'CZ-SCORPION', 'D174828', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '', 'Returned', '', 'April 17, 2026, 5:50 am', '2026-04-17 05:50:33', 0),
-(91, '', '', '6', '1116', 'April 16, 2026, 6:30 pm', '58459 L/CPL Lawrence Acheampong', '69b24df2e50153.09990062.jpg', '66855 CONST Bawah Abdul Isumaila ', 'CZ-SCORPION', 'D174871', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', -1, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 17, 2026, 5:51 am', '2026-04-17 05:51:07', 0),
-(92, '', '', '6', '44', 'April 16, 2026, 6:31 pm', '58459 L/CPL Lawrence Acheampong', '67096c20261ed8.73226717.jpg', '58213 L/CPL Abraham  Nkumdow ', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', -1, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 17, 2026, 5:51 am', '2026-04-17 05:51:33', 0),
-(93, '', '', '8', '1126', 'April 17, 2026, 6:03 am', '58459 L/CPL Lawrence Acheampong', '69b2abc99108b8.01318054.jpg', '65827 CONST Raymond Asimah', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 18, 2026, 6:08 am', '2026-04-18 06:08:00', 0),
-(94, '', '', '8', '1162', 'April 17, 2026, 6:04 am', '58459 L/CPL Lawrence Acheampong', '69b550add89769.58634026.jpg', '66500 CONST Yakubu Amadu', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 17, 2026, 5:46 pm', '2026-04-17 17:46:55', 0),
-(95, '', '', '8', '1131', 'April 17, 2026, 6:05 am', '58459 L/CPL Lawrence Acheampong', '69b2b489043f43.52712900.jpg', '66792 CONST Haruna Abdulai ', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 18, 2026, 1:59 pm', '2026-04-18 13:59:31', 0),
-(96, '', '', '8', '1125', 'April 17, 2026, 6:08 am', '58459 L/CPL Lawrence Acheampong', '69b2aa991b1001.24627116.jpg', '15866 CONST Patience Issajoulun', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 17, 2026, 5:47 pm', '2026-04-17 17:47:21', 0),
-(97, '', '', '6', '46', 'April 17, 2026, 6:09 am', '58459 L/CPL Lawrence Acheampong', '670974a6ebcdc9.60476512.jpg', '58239 L/CPL Enerst Anim ', 'CZ-SCORPION', 'D174828', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 18, 2026, 5:49 am', '2026-04-18 05:49:34', 0),
-(98, '', '', '6', '1194', 'April 17, 2026, 6:32 am', '58459 L/CPL Lawrence Acheampong', '69c9aac0bd6f59.62327774.jpg', '56277 L/CPL Benjamin Antwi-Kusi', 'CZ-SCORPION', 'D174871', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 18, 2026, 5:52 am', '2026-04-18 05:52:05', 0),
-(99, '', '', '6', '1195', 'April 17, 2026, 6:41 am', '58459 L/CPL Lawrence Acheampong', '69e082268d9ea2.33187317.jpg', '56140 L/CPL Samuel Ntim', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '', 'Returned', '', 'April 18, 2026, 5:59 am', '2026-04-18 05:59:05', 0),
-(100, '', '42', '8', '1148', 'April 17, 2026, 5:48 pm', '58459 L/CPL Lawrence Acheampong', '69b2d17a2b8438.44320500.jpg', '67304 CONST Baba Osman ', 'CZ807', 'f141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 18, 2026, 6:08 am', '2026-04-18 06:08:41', 0),
-(101, '', '', '8', '1130', 'April 17, 2026, 5:49 pm', '58459 L/CPL Lawrence Acheampong', '69b2b35c6d4509.23082572.jpg', '67255 CONST Rauf Abdul - Rahaman', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 18, 2026, 6:09 am', '2026-04-18 06:09:18', 0),
-(102, '', '', '6', '1195', 'April 17, 2026, 6:38 pm', '58459 L/CPL Lawrence Acheampong', '69e082268d9ea2.33187317.jpg', '56140 L/CPL Samuel Ntim', 'CZ-SCORPION', 'D280014', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 19, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '', 'Returned', '', 'April 18, 2026, 5:59 am', '2026-04-18 05:59:41', 0),
-(103, '', '', '6', '1195', 'April 17, 2026, 6:39 pm', '58459 L/CPL Lawrence Acheampong', '69e082268d9ea2.33187317.jpg', '56140 L/CPL Samuel Ntim', 'CZ-SCORPION', 'D281556', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '', 'Returned', '', 'April 18, 2026, 6:00 am', '2026-04-18 06:00:13', 0),
-(104, '', '', '6', '1195', 'April 17, 2026, 6:39 pm', '58459 L/CPL Lawrence Acheampong', '69e082268d9ea2.33187317.jpg', '55104 CPL Samuel Opoku', 'CZ-SCORPION', 'D135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 18, 2026, 5:49 am', '2026-04-18 05:49:07', 0),
-(105, '', '', '8', '1135', 'April 18, 2026, 6:11 am', '58459 L/CPL Lawrence Acheampong', '69b2b95193a3d8.56421490.jpg', '67049 CONST Awudu Ali', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 19, 2026, 5:53 am', '2026-04-19 05:53:48', 0),
-(106, '', '', '8', '1162', 'April 18, 2026, 6:12 am', '58459 L/CPL Lawrence Acheampong', '69b550add89769.58634026.jpg', '66500 CONST Yakubu Amadu', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '24 hours', 'Returned', '', 'April 18, 2026, 5:55 pm', '2026-04-18 17:55:42', 0),
-(107, '', '', '8', '1125', 'April 18, 2026, 6:13 am', '58459 L/CPL Lawrence Acheampong', '69b2aa991b1001.24627116.jpg', '15866 CONST Patience Issajoulun', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 18, 2026, 5:58 pm', '2026-04-18 17:58:38', 0),
-(108, '', '', '6', '13', 'April 18, 2026, 6:19 am', '58459 L/CPL Lawrence Acheampong', '67042def908e34.16990129.jpg', '54669 CPL Felix Appiah', 'CZ-SCORPION', 'D280014', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '12', 'Returned', '', 'April 18, 2026, 5:59 pm', '2026-04-18 17:59:14', 0),
-(109, '', '', '6', '36', 'April 18, 2026, 6:22 am', '58459 L/CPL Lawrence Acheampong', '6707dc04e99862.44989633.jpg', '57976 L/CPL Richmond  Agyei Yeboah ', 'CZ-SCORPION', 'D281556', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '12', 'Returned', '', 'April 18, 2026, 5:59 pm', '2026-04-18 17:59:49', 0),
-(110, '', '', '6', '84', 'April 18, 2026, 6:27 am', '58459 L/CPL Lawrence Acheampong', '670ad384951d08.94188639.jpg', '58339 L/CPL Emmanuel Painstsil', 'CZ-SCORPION', 'D135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '12', 'Returned', '', 'April 18, 2026, 6:02 pm', '2026-04-18 18:02:03', 0),
-(111, '', '', '6', '1185', 'April 18, 2026, 6:29 am', '58459 L/CPL Lawrence Acheampong', '69c41825edcc14.61652171.jpg', '56082 L/CPL Frank Asamoah Appeakorang', 'CZ-SCORPION', 'D174871', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '12', 'Returned', '', 'April 18, 2026, 6:03 pm', '2026-04-18 18:03:32', 0),
-(112, '', '', '8', '1130', 'April 18, 2026, 6:04 pm', '58459 L/CPL Lawrence Acheampong', '69b2b35c6d4509.23082572.jpg', '67255 CONST Rauf Abdul - Rahaman', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 19, 2026, 5:59 am', '2026-04-19 05:59:20', 0),
-(113, '', '', '8', '1148', 'April 18, 2026, 6:05 pm', '58459 L/CPL Lawrence Acheampong', '69b2d17a2b8438.44320500.jpg', '67304 CONST Baba Osman ', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 19, 2026, 6:12 am', '2026-04-19 06:12:45', 0),
-(114, '', '', '6', '127', 'April 18, 2026, 6:06 pm', '58459 L/CPL Lawrence Acheampong', '670fca9cde93d6.18099682.jpg', '58331  L/CPL Philip Sakah ', 'CZ-SCORPION', 'D135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '12', 'Returned', '', 'April 19, 2026, 6:15 am', '2026-04-19 06:15:35', 0),
-(115, '', '', '6', '46', 'April 18, 2026, 6:08 pm', '58459 L/CPL Lawrence Acheampong', '670974a6ebcdc9.60476512.jpg', '58239 L/CPL Enerst Anim ', 'CZ-SCORPION', 'D280014', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '12', 'Returned', '', 'April 19, 2026, 6:16 am', '2026-04-19 06:16:15', 0),
-(116, '', '', '6', '1194', 'April 18, 2026, 6:09 pm', '58459 L/CPL Lawrence Acheampong', '69c9aac0bd6f59.62327774.jpg', '56277 L/CPL Benjamin Antwi-Kusi', 'CZ-SCORPION', 'D174871', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '12', 'Returned', '', 'April 19, 2026, 6:16 am', '2026-04-19 06:16:58', 0),
-(117, '', '', '6', '1116', 'April 18, 2026, 6:19 pm', '58459 L/CPL Lawrence Acheampong', '69b24df2e50153.09990062.jpg', '66855 CONST Bawah Abdul Isumaila ', 'CZ-SCORPION', 'D281556', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 19, 2026, 6:17 am', '2026-04-19 06:17:34', 0),
-(118, '', '', '6', '44', 'April 18, 2026, 6:57 pm', '58459 L/CPL Lawrence Acheampong', '67096c20261ed8.73226717.jpg', '58213 L/CPL Abraham  Nkumdow ', 'CZ-SCORPION', 'D174828', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 19, 2026, 6:18 am', '2026-04-19 06:18:12', 0),
-(119, '', '', '8', '1155', 'April 19, 2026, 6:00 am', '58459 L/CPL Lawrence Acheampong', '69b3c9592099d1.82925269.jpg', '67232 CONST Seth Woolley', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 20, 2026, 6:13 am', '2026-04-20 06:13:13', 0),
-(120, '', '', '8', '1164', 'April 19, 2026, 6:01 am', '58459 L/CPL Lawrence Acheampong', '69bce39d3b06a5.99956353.jpg', '15769 CONST Asante Jessica Afful ', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 19, 2026, 6:01 pm', '2026-04-19 18:01:15', 0),
-(121, '', '', '8', '1128', 'April 19, 2026, 6:02 am', '58459 L/CPL Lawrence Acheampong', '69b2b12bde6fe0.29997882.jpg', '66741 CONST Abdulai Sualisu', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 20, 2026, 6:14 am', '2026-04-20 06:14:18', 0),
-(122, '', '', '8', '1122', 'April 19, 2026, 6:14 am', '58459 L/CPL Lawrence Acheampong', '69b2894147e6f0.79616494.jpg', '66837 CONST Francis Atuobi', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 19, 2026, 5:17 pm', '2026-04-19 17:17:27', 0),
-(123, '', '', '6', '1190', 'April 19, 2026, 6:24 am', '58459 L/CPL Lawrence Acheampong', '69c5125608d7e1.61040660.jpg', '58249 L/CPL Evans Ofosu', 'CZ-SCORPION', 'D174828', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 20, 2026, 6:12 am', '2026-04-20 06:12:09', 0),
-(124, '', '', '6', '26', 'April 19, 2026, 6:29 am', '58459 L/CPL Lawrence Acheampong', '67053feeb2b394.69718031.jpg', '57914 L/CPL Kenny Adarkwah ', 'CZ-SCORPION', 'D135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 19, 2026, 5:59 pm', '2026-04-19 17:59:56', 0),
-(125, '', '42', '6', '13', 'April 19, 2026, 6:33 am', '58459 L/CPL Lawrence Acheampong', '67042def908e34.16990129.jpg', '54669 CPL Felix Appiah', 'CZ-SCORPION', 'D174871', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 20, 2026, 6:12 am', '2026-04-20 06:12:35', 0),
-(126, '', '', '8', '1120', 'April 19, 2026, 5:18 pm', '58459 L/CPL Lawrence Acheampong', '69b28705873187.89831585.jpg', '66046 CONST Samuel Zogli', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', -1, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 20, 2026, 6:14 am', '2026-04-20 06:14:55', 0),
-(127, '', '', '6', '1116', 'April 19, 2026, 5:58 pm', '58459 L/CPL Lawrence Acheampong', '69b24df2e50153.09990062.jpg', '66855 CONST Bawah Abdul Isumaila ', 'CZ-SCORPION', 'D281556', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 20, 2026, 6:22 am', '2026-04-20 06:22:57', 0),
-(128, '', '', '6', '1141', 'April 19, 2026, 5:59 pm', '58459 L/CPL Lawrence Acheampong', '69b2c14ae3f559.34963057.jpg', '66942 CONST Apreku Felix', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 20, 2026, 6:23 am', '2026-04-20 06:23:37', 0),
-(129, '', '', '8', '1161', 'April 19, 2026, 6:02 pm', '58459 L/CPL Lawrence Acheampong', '69b442eed55d23.65814209.jpg', '67156 CONST Tenadu Asiedu', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 20, 2026, 6:15 am', '2026-04-20 06:15:38', 0),
-(130, '', '', '6', '1121', 'April 19, 2026, 6:14 pm', '58459 L/CPL Lawrence Acheampong', '69b28830d5ea93.99641637.jpg', '66138 CONST Isaac Appiah', 'CZ-SCORPION', 'D135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 20, 2026, 6:24 am', '2026-04-20 06:24:18', 0),
-(131, '', '', '8', '1118', 'April 20, 2026, 6:16 am', '58459 L/CPL Lawrence Acheampong', '69b251f1773cf9.61070979.jpg', '65851 CONST Gabriel Ahiable', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 21, 2026, 6:02 am', '2026-04-21 06:02:55', 0),
-(132, '', '', '8', '1127', 'April 20, 2026, 6:18 am', '58459 L/CPL Lawrence Acheampong', '69b2ae62c20632.37644830.jpg', '66519 CONST Eugene Ayirebi Okyere', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 21, 2026, 6:15 am', '2026-04-21 06:15:00', 0),
-(133, '', '', '8', '1122', 'April 20, 2026, 6:20 am', '58459 L/CPL Lawrence Acheampong', '69b2894147e6f0.79616494.jpg', '66837 CONST Francis Atuobi', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 20, 2026, 5:32 pm', '2026-04-20 17:32:49', 0),
-(134, '', '', '8', '1164', 'April 20, 2026, 6:21 am', '58459 L/CPL Lawrence Acheampong', '69bce39d3b06a5.99956353.jpg', '15769 CONST Asante Jessica Afful ', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 20, 2026, 5:54 pm', '2026-04-20 17:54:11', 0),
-(135, '', '', '6', '29', 'April 20, 2026, 6:34 am', '58459 L/CPL Lawrence Acheampong', '670543f75f17e1.72713618.jpg', '55931 L/CPL George  Osei Agyemang ', 'CZ-SCORPION', 'D174871', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', -2, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 21, 2026, 6:06 am', '2026-04-21 06:06:39', 0),
-(136, '', '', '6', '1168', 'April 20, 2026, 6:44 am', '58459 L/CPL Lawrence Acheampong', '69c3a7c099b0e9.68472705.jpg', '49742 SGT Edward Ayendago', 'CZ-SCORPION', 'D135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 21, 2026, 6:08 am', '2026-04-21 06:08:44', 0),
-(137, '', '', '6', '55', 'April 20, 2026, 6:52 am', '58459 L/CPL Lawrence Acheampong', '670a788174fa91.75312494.jpg', '10569 L/CPL Alberta Asieduwaa', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 21, 2026, 6:09 am', '2026-04-21 06:09:35', 0),
-(138, '', '', '8', '1120', 'April 20, 2026, 5:33 pm', '58459 L/CPL Lawrence Acheampong', '69b28705873187.89831585.jpg', '66046 CONST Samuel Zogli', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 21, 2026, 6:03 am', '2026-04-21 06:03:47', 0),
-(139, '', '', '8', '1161', 'April 20, 2026, 5:56 pm', '58459 L/CPL Lawrence Acheampong', '69b442eed55d23.65814209.jpg', '67156 CONST Tenadu Asiedu', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 21, 2026, 6:16 am', '2026-04-21 06:16:17', 0),
-(140, '', '', '6', '1196', 'April 20, 2026, 5:57 pm', '58459 L/CPL Lawrence Acheampong', '69e31f9a5b5769.06168966.jpg', '55104 CPL Samuel Opoku', 'CZ-SCORPION', 'D174828', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 21, 2026, 6:30 am', '2026-04-21 06:30:56', 0),
-(141, '', '', '6', '1116', 'April 20, 2026, 6:21 pm', '58459 L/CPL Lawrence Acheampong', '69b24df2e50153.09990062.jpg', '66855 CONST Bawah Abdul Isumaila ', 'CZ-SCORPION', 'D280014', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 21, 2026, 5:50 am', '2026-04-21 05:50:22', 0),
-(142, '', '', '6', '1141', 'April 20, 2026, 6:22 pm', '58459 L/CPL Lawrence Acheampong', '69b2c14ae3f559.34963057.jpg', '66942 CONST Apreku Felix', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 21, 2026, 5:49 am', '2026-04-21 05:49:58', 0),
-(143, '', '', '8', '1128', 'April 21, 2026, 6:05 am', '58459 L/CPL Lawrence Acheampong', '69b2b12bde6fe0.29997882.jpg', '66741 CONST Abdulai Sualisu', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 22, 2026, 6:00 am', '2026-04-22 06:00:04', 0),
-(144, '', '', '8', '1164', 'April 21, 2026, 6:05 am', '58459 L/CPL Lawrence Acheampong', '69bce39d3b06a5.99956353.jpg', '15769 CONST Asante Jessica Afful ', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', -1, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 21, 2026, 5:24 pm', '2026-04-21 17:24:27', 0),
-(145, '', '', '8', '1122', 'April 21, 2026, 6:17 am', '58459 L/CPL Lawrence Acheampong', '69b2894147e6f0.79616494.jpg', '66837 CONST Francis Atuobi', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 21, 2026, 5:42 pm', '2026-04-21 17:42:36', 0),
-(146, '', '', '8', '1155', 'April 21, 2026, 6:19 am', '58459 L/CPL Lawrence Acheampong', '69b3c9592099d1.82925269.jpg', '67232 CONST Seth Woolley', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 22, 2026, 6:00 am', '2026-04-22 06:00:54', 0),
-(147, '', '', '6', '13', 'April 21, 2026, 6:25 am', '58459 L/CPL Lawrence Acheampong', '67042def908e34.16990129.jpg', '54669 CPL Felix Appiah', 'CZ-SCORPION', 'D280014', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 22, 2026, 6:10 am', '2026-04-22 06:10:45', 0),
-(148, '', '', '6', '26', 'April 21, 2026, 6:30 am', '58459 L/CPL Lawrence Acheampong', '67053feeb2b394.69718031.jpg', '57914 L/CPL Kenny Adarkwah ', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 22, 2026, 6:11 am', '2026-04-22 06:11:34', 0),
-(149, '', '', '6', '59', 'April 21, 2026, 6:40 am', '58459 L/CPL Lawrence Acheampong', '670a7d13d26c27.84839470.jpg', '10048 CPL Elizabet Appiah', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 21, 2026, 6:20 pm', '2026-04-21 18:20:27', 0),
-(150, '', '', '6', '1190', 'April 21, 2026, 6:41 am', '58459 L/CPL Lawrence Acheampong', '69c5125608d7e1.61040660.jpg', '58249 L/CPL Evans Ofosu', 'CZ-SCORPION', 'D281556', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', -1, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 22, 2026, 6:12 am', '2026-04-22 06:12:26', 0),
-(151, '', '', '8', '1120', 'April 21, 2026, 5:25 pm', '58459 L/CPL Lawrence Acheampong', '69b28705873187.89831585.jpg', '66046 CONST Samuel Zogli', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 22, 2026, 6:02 am', '2026-04-22 06:02:19', 0),
-(152, '', '', '8', '1161', 'April 21, 2026, 5:43 pm', '58459 L/CPL Lawrence Acheampong', '69b442eed55d23.65814209.jpg', '67156 CONST Tenadu Asiedu', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 22, 2026, 6:03 am', '2026-04-22 06:03:00', 0),
-(153, '', '', '6', '1123', 'April 21, 2026, 5:45 pm', '58459 L/CPL Lawrence Acheampong', '69b28aba198b96.79213544.jpg', '65808 CONST Prosper Dagadu', 'CZ-SCORPION', 'D174828', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'None', 0, 'Guide Duty', 'Escort', '12', 'Returned', '', 'April 22, 2026, 8:29 am', '2026-04-22 08:29:54', 0);
-INSERT INTO `bookings` (`bookingID`, `bookingCode`, `firearmID`, `ammoID`, `officerID`, `booking_time`, `armourer_issuer`, `officer_image`, `to_officer`, `firearm_name`, `firearm_serial_no`, `firearm_class`, `quantity_issued`, `firearm_state`, `ammunition_name`, `number_of_rounds`, `ammo_returned`, `ammo_state`, `no_faulty_ammo`, `duty_type`, `duty_location`, `duty_duration`, `returns`, `comment`, `returned_time`, `datetime`, `is_deleted`) VALUES
-(154, '', '', '6', '1160', 'April 21, 2026, 5:46 pm', '58459 L/CPL Lawrence Acheampong', '69b42aa1ef4329.51153481.jpg', '66124 CONST Osei Bismark', 'CZ-SCORPION', 'D138572', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Escort', '12', 'Returned', '', 'April 22, 2026, 8:30 am', '2026-04-22 08:30:25', 0),
-(155, '', '', '6', '39', 'April 21, 2026, 5:47 pm', '58459 L/CPL Lawrence Acheampong', '67095d077b5231.06692709.jpg', '53616  CPL Richard  Asare', 'CZ-SCORPION', 'D176116', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Escort', '12', 'Returned', '', 'April 22, 2026, 8:31 am', '2026-04-22 08:31:17', 0),
-(156, '', '', '6', '1196', 'April 21, 2026, 6:21 pm', '58459 L/CPL Lawrence Acheampong', '69e31f9a5b5769.06168966.jpg', '55104 CPL Samuel Opoku', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 22, 2026, 6:13 am', '2026-04-22 06:13:57', 0),
-(157, '', '', '6', '1116', 'April 21, 2026, 6:23 pm', '58459 L/CPL Lawrence Acheampong', '69b24df2e50153.09990062.jpg', '66855 CONST Bawah Abdul Isumaila ', 'CZ-SCORPION', 'D135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 22, 2026, 6:14 am', '2026-04-22 06:14:56', 0),
-(158, '', '', '6', '1141', 'April 21, 2026, 6:24 pm', '58459 L/CPL Lawrence Acheampong', '69b2c14ae3f559.34963057.jpg', '66942 CONST Apreku Felix', 'CZ-SCORPION', 'D145304', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'None', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 22, 2026, 6:15 am', '2026-04-22 06:15:56', 0),
-(159, '', '', '8', '1118', 'April 22, 2026, 6:06 am', '58459 L/CPL Lawrence Acheampong', '69b251f1773cf9.61070979.jpg', '65851 CONST Gabriel Ahiable', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 23, 2026, 5:55 am', '2026-04-23 05:55:12', 0),
-(160, '', '', '8', '1122', 'April 22, 2026, 6:07 am', '58459 L/CPL Lawrence Acheampong', '69b2894147e6f0.79616494.jpg', '66837 CONST Francis Atuobi', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 22, 2026, 5:27 pm', '2026-04-22 17:27:42', 0),
-(161, '', '', '8', '1127', 'April 22, 2026, 6:08 am', '58459 L/CPL Lawrence Acheampong', '69b2ae62c20632.37644830.jpg', '66519 CONST Eugene Ayirebi Okyere', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 23, 2026, 6:14 am', '2026-04-23 06:14:55', 0),
-(162, '', '', '8', '1164', 'April 22, 2026, 6:09 am', '58459 L/CPL Lawrence Acheampong', '69bce39d3b06a5.99956353.jpg', '15769 CONST Asante Jessica Afful ', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 22, 2026, 5:29 pm', '2026-04-22 17:29:25', 0),
-(163, '', '', '6', '29', 'April 22, 2026, 6:49 am', '58459 L/CPL Lawrence Acheampong', '670543f75f17e1.72713618.jpg', '55931 L/CPL George  Osei Agyemang ', 'CZ-SCORPION', 'D281556', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 23, 2026, 5:57 am', '2026-04-23 05:57:15', 0),
-(164, '', '', '6', '55', 'April 22, 2026, 7:01 am', '58459 L/CPL Lawrence Acheampong', '670a788174fa91.75312494.jpg', '10569 L/CPL Alberta Asieduwaa', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 23, 2026, 5:58 am', '2026-04-23 05:58:17', 0),
-(165, '', '', '8', '1120', 'April 22, 2026, 5:28 pm', '58459 L/CPL Lawrence Acheampong', '69b28705873187.89831585.jpg', '66046 CONST Samuel Zogli', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 23, 2026, 6:38 am', '2026-04-23 06:38:41', 0),
-(166, '', '', '8', '1161', 'April 22, 2026, 5:30 pm', '58459 L/CPL Lawrence Acheampong', '69b442eed55d23.65814209.jpg', '67156 CONST Tenadu Asiedu', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 23, 2026, 6:16 am', '2026-04-23 06:16:10', 0),
-(167, '', '', '6', '1141', 'April 22, 2026, 6:10 pm', '58459 L/CPL Lawrence Acheampong', '69b2c14ae3f559.34963057.jpg', '66942 CONST Apreku Felix', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 23, 2026, 5:59 am', '2026-04-23 05:59:13', 0),
-(168, '', '', '6', '1116', 'April 22, 2026, 6:11 pm', '58459 L/CPL Lawrence Acheampong', '69b24df2e50153.09990062.jpg', '66855 CONST Bawah Abdul Isumaila ', 'CZ-SCORPION', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 23, 2026, 6:00 am', '2026-04-23 06:00:06', 0),
-(169, '', '', '6', '44', 'April 22, 2026, 6:12 pm', '58459 L/CPL Lawrence Acheampong', '67096c20261ed8.73226717.jpg', '58213 L/CPL Abraham  Nkumdow ', 'CZ-SCORPION', 'D135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 23, 2026, 6:01 am', '2026-04-23 06:01:04', 0),
-(170, '', '', '8', '1128', 'April 23, 2026, 5:56 am', '58459 L/CPL Lawrence Acheampong', '69b2b12bde6fe0.29997882.jpg', '66741 CONST Abdulai Sualisu', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 24, 2026, 5:49 am', '2026-04-24 05:49:53', 0),
-(171, '', '', '6', '1190', 'April 23, 2026, 6:37 am', '58459 L/CPL Lawrence Acheampong', '69c5125608d7e1.61040660.jpg', '58249 L/CPL Evans Ofosu', 'CZ-SCORPION', 'D281556', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 24, 2026, 5:57 am', '2026-04-24 05:57:54', 0),
-(172, '', '', '8', '1122', 'April 23, 2026, 6:40 am', '58459 L/CPL Lawrence Acheampong', '69b2894147e6f0.79616494.jpg', '66837 CONST Francis Atuobi', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 23, 2026, 5:39 pm', '2026-04-23 17:39:55', 0),
-(173, '', '', '8', '1155', 'April 23, 2026, 6:41 am', '58459 L/CPL Lawrence Acheampong', '69b3c9592099d1.82925269.jpg', '67232 CONST Seth Woolley', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 24, 2026, 5:50 am', '2026-04-24 05:50:53', 0),
-(174, '', '', '8', '1164', 'April 23, 2026, 6:43 am', '58459 L/CPL Lawrence Acheampong', '69bce39d3b06a5.99956353.jpg', '15769 CONST Asante Jessica Afful ', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 23, 2026, 5:41 pm', '2026-04-23 17:41:04', 0),
-(175, '', '', '6', '13', 'April 23, 2026, 6:45 am', '58459 L/CPL Lawrence Acheampong', '67042def908e34.16990129.jpg', '54669 CPL Felix Appiah', 'CZ-SCORPION', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 24, 2026, 6:09 am', '2026-04-24 06:09:30', 0),
-(176, '', '', '8', '1161', 'April 23, 2026, 5:42 pm', '58459 L/CPL Lawrence Acheampong', '69b442eed55d23.65814209.jpg', '67156 CONST Tenadu Asiedu', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 24, 2026, 6:10 am', '2026-04-24 06:10:31', 0),
-(177, '', '', '8', '1120', 'April 23, 2026, 5:43 pm', '58459 L/CPL Lawrence Acheampong', '69b28705873187.89831585.jpg', '66046 CONST Samuel Zogli', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 24, 2026, 6:11 am', '2026-04-24 06:11:52', 0),
-(178, '', '', '6', '1196', 'April 23, 2026, 5:44 pm', '58459 L/CPL Lawrence Acheampong', '69e31f9a5b5769.06168966.jpg', '55104 CPL Samuel Opoku', 'CZ-SCORPION', 'D135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 24, 2026, 5:59 am', '2026-04-24 05:59:11', 0),
-(179, '', '', '6', '1141', 'April 23, 2026, 6:14 pm', '58459 L/CPL Lawrence Acheampong', '69b2c14ae3f559.34963057.jpg', '66942 CONST Apreku Felix', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 24, 2026, 5:55 am', '2026-04-24 05:55:15', 0),
-(180, '', '', '6', '1116', 'April 23, 2026, 6:15 pm', '58459 L/CPL Lawrence Acheampong', '69b24df2e50153.09990062.jpg', '66855 CONST Bawah Abdul Isumaila ', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 24, 2026, 6:00 am', '2026-04-24 06:00:29', 0),
-(181, '', '', '6', '44', 'April 23, 2026, 6:17 pm', '58459 L/CPL Lawrence Acheampong', '67096c20261ed8.73226717.jpg', '58213 L/CPL Abraham  Nkumdow ', 'CZ-SCORPION', 'D280014', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 24, 2026, 6:02 am', '2026-04-24 06:02:57', 0),
-(182, '', '', '8', '1118', 'April 24, 2026, 5:53 am', '58459 L/CPL Lawrence Acheampong', '69b251f1773cf9.61070979.jpg', '65851 CONST Gabriel Ahiable', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 24, 2026, 5:35 pm', '2026-04-24 17:35:16', 0),
-(183, '', '', '8', '1127', 'April 24, 2026, 5:54 am', '58459 L/CPL Lawrence Acheampong', '69b2ae62c20632.37644830.jpg', '66519 CONST Eugene Ayirebi Okyere', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 25, 2026, 5:52 am', '2026-04-25 05:52:29', 0),
-(184, '', '', '8', '1122', 'April 24, 2026, 6:13 am', '58459 L/CPL Lawrence Acheampong', '69b2894147e6f0.79616494.jpg', '66837 CONST Francis Atuobi', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 24, 2026, 6:14 pm', '2026-04-24 18:14:22', 0),
-(185, '', '', '8', '1164', 'April 24, 2026, 6:14 am', '58459 L/CPL Lawrence Acheampong', '69bce39d3b06a5.99956353.jpg', '15769 CONST Asante Jessica Afful ', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 24, 2026, 6:15 pm', '2026-04-24 18:15:41', 0),
-(186, '', '', '6', '1196', 'April 24, 2026, 6:46 am', '58459 L/CPL Lawrence Acheampong', '69e31f9a5b5769.06168966.jpg', '56140 L/CPL Samuel Ntim', 'D406070 CZ-SCORPION ( Rifle) - [Caliber: 9x19mm] ', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '', 'Returned', '', 'April 24, 2026, 6:50 am', '2026-04-24 06:50:43', 0),
-(187, '', '', '6', '29', 'April 24, 2026, 6:47 am', '58459 L/CPL Lawrence Acheampong', '670543f75f17e1.72713618.jpg', '55931 L/CPL George  Osei Agyemang ', 'CZ-SCORPION', 'D281556', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 25, 2026, 5:56 am', '2026-04-25 05:56:50', 0),
-(188, '', '', '6', '55', 'April 24, 2026, 6:52 am', '58459 L/CPL Lawrence Acheampong', '670a788174fa91.75312494.jpg', '10569 L/CPL Alberta Asieduwaa', 'CZ-SCORPION', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 25, 2026, 5:58 am', '2026-04-25 05:58:00', 0),
-(189, '', '', '6', '34', 'April 24, 2026, 9:22 am', '58459 L/CPL Lawrence Acheampong', '670697d72147b2.04817119.jpg', '55637 L/Cpl.  Prince Amponsah', 'BERETTA-M9', 'M9-213813', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 15, 15, 'Not-Faulty', 0, 'Guide Duty', 'Escort', '12', 'Returned', '', 'April 29, 2026, 5:59 pm', '2026-04-29 17:59:00', 0),
-(190, '', '', '8', '1120', 'April 24, 2026, 6:17 pm', '58459 L/CPL Lawrence Acheampong', '69b28705873187.89831585.jpg', '66046 CONST Samuel Zogli', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 25, 2026, 6:07 am', '2026-04-25 06:07:23', 0),
-(191, '', '', '8', '1161', 'April 24, 2026, 6:18 pm', '58459 L/CPL Lawrence Acheampong', '69b442eed55d23.65814209.jpg', '67156 CONST Tenadu Asiedu', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 25, 2026, 6:11 am', '2026-04-25 06:11:44', 0),
-(192, '', '', '6', '1196', 'April 24, 2026, 6:27 pm', '58459 L/CPL Lawrence Acheampong', '69e31f9a5b5769.06168966.jpg', '55104 CPL Samuel Opoku', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 25, 2026, 5:59 am', '2026-04-25 05:59:13', 0),
-(193, '', '', '6', '1116', 'April 24, 2026, 6:28 pm', '58459 L/CPL Lawrence Acheampong', '69b24df2e50153.09990062.jpg', '66855 CONST Bawah Abdul Isumaila ', 'CZ-SCORPION', 'D135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'May 1, 2026, 5:32 am', '2026-05-01 05:32:21', 0),
-(194, '', '', '6', '1141', 'April 24, 2026, 6:29 pm', '58459 L/CPL Lawrence Acheampong', '69b2c14ae3f559.34963057.jpg', '66942 CONST Apreku Felix', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 25, 2026, 5:40 am', '2026-04-25 05:40:38', 0),
-(195, '', '', '8', '1128', 'April 25, 2026, 5:54 am', '58459 L/CPL Lawrence Acheampong', '69b2b12bde6fe0.29997882.jpg', '66741 CONST Abdulai Sualisu', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 26, 2026, 6:32 am', '2026-04-26 06:32:15', 0),
-(196, '', '', '8', '1122', 'April 25, 2026, 6:06 am', '58459 L/CPL Lawrence Acheampong', '69b2894147e6f0.79616494.jpg', '66837 CONST Francis Atuobi', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 25, 2026, 5:49 pm', '2026-04-25 17:49:43', 0),
-(197, '', '', '8', '1164', 'April 25, 2026, 6:09 am', '58459 L/CPL Lawrence Acheampong', '69bce39d3b06a5.99956353.jpg', '15769 CONST Asante Jessica Afful ', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 25, 2026, 6:00 pm', '2026-04-25 18:00:25', 0),
-(198, '', '', '8', '1155', 'April 25, 2026, 6:10 am', '58459 L/CPL Lawrence Acheampong', '69b3c9592099d1.82925269.jpg', '67232 CONST Seth Woolley', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 26, 2026, 6:34 am', '2026-04-26 06:34:30', 0),
-(199, '', '', '6', '1190', 'April 25, 2026, 6:19 am', '58459 L/CPL Lawrence Acheampong', '69c5125608d7e1.61040660.jpg', '58249 L/CPL Evans Ofosu', 'CZ-SCORPION', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '12', 'Returned', '', 'April 25, 2026, 5:53 pm', '2026-04-25 17:53:41', 0),
-(200, '', '', '6', '13', 'April 25, 2026, 6:20 am', '58459 L/CPL Lawrence Acheampong', '67042def908e34.16990129.jpg', '54669 CPL Felix Appiah', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '12', 'Returned', '', 'April 26, 2026, 6:30 am', '2026-04-26 06:30:25', 0),
-(201, '', '', '8', '1120', 'April 25, 2026, 5:52 pm', '58459 L/CPL Lawrence Acheampong', '69b28705873187.89831585.jpg', '66046 CONST Samuel Zogli', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 26, 2026, 6:10 am', '2026-04-26 06:10:21', 0),
-(202, '', '', '8', '1161', 'April 25, 2026, 6:03 pm', '58459 L/CPL Lawrence Acheampong', '69b442eed55d23.65814209.jpg', '67156 CONST Tenadu Asiedu', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 26, 2026, 6:11 am', '2026-04-26 06:11:40', 0),
-(203, '', '238', '8', '84', 'April 25, 2026, 6:24 pm', '58459 L/CPL Lawrence Acheampong', '670ad384951d08.94188639.jpg', '58339 L/CPL Emmanuel Painstsil', 'CZ807', '578978', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 30, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 26, 2026, 5:41 am', '2026-04-26 05:41:41', 0),
-(204, '', '', '6', '44', 'April 25, 2026, 6:32 pm', '58459 L/CPL Lawrence Acheampong', '67096c20261ed8.73226717.jpg', '58213 L/CPL Abraham  Nkumdow ', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '12', 'Returned', '', 'April 26, 2026, 6:35 am', '2026-04-26 06:35:55', 0),
-(205, '', '', '6', '55', 'April 25, 2026, 6:34 pm', '58459 L/CPL Lawrence Acheampong', '670a788174fa91.75312494.jpg', '10569 L/CPL Alberta Asieduwaa', 'CZ-SCORPION', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '12', 'Returned', '', 'April 26, 2026, 6:37 am', '2026-04-26 06:37:28', 0),
-(206, '', '', '8', '1119', 'April 26, 2026, 6:13 am', '58459 L/CPL Lawrence Acheampong', '69b2597f9064b9.89473236.jpg', '65848 CONST Ebenezer Aidoo', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 26, 2026, 6:03 pm', '2026-04-26 18:03:46', 0),
-(207, '', '', '8', '1152', 'April 26, 2026, 6:16 am', '58459 L/CPL Lawrence Acheampong', '69b2fc8cb94e66.84077538.jpg', '15994 CONST Bafanayah Dennis Helena ', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 26, 2026, 6:06 pm', '2026-04-26 18:06:22', 0),
-(208, '', '', '6', '1194', 'April 26, 2026, 6:20 am', '58459 L/CPL Lawrence Acheampong', '69c9aac0bd6f59.62327774.jpg', '56277 L/CPL Benjamin Antwi-Kusi', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 27, 2026, 6:03 am', '2026-04-27 06:03:01', 0),
-(209, '', '', '6', '56', 'April 26, 2026, 6:21 am', '58459 L/CPL Lawrence Acheampong', '670a7a37a5ed83.64890035.jpg', '10706 L/CPL Emelia Akyamaa', 'CZ-SCORPION', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 26, 2026, 6:08 pm', '2026-04-26 18:08:30', 0),
-(210, '', '', '8', '1156', 'April 26, 2026, 6:25 am', '58459 L/CPL Lawrence Acheampong', '69b3cb1a952059.88393048.jpg', '66407 CONST Obeng Joseph Konadu', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 27, 2026, 6:11 am', '2026-04-27 06:11:49', 0),
-(211, '', '', '8', '1162', 'April 26, 2026, 6:26 am', '58459 L/CPL Lawrence Acheampong', '69b550add89769.58634026.jpg', '66500 CONST Yakubu Amadu', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 27, 2026, 6:13 am', '2026-04-27 06:13:02', 0),
-(212, '', '', '6', '36', 'April 26, 2026, 6:28 am', '58459 L/CPL Lawrence Acheampong', '6707dc04e99862.44989633.jpg', '57976 L/CPL Richmond  Agyei Yeboah ', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 27, 2026, 5:50 am', '2026-04-27 05:50:52', 0),
-(213, '', '', '8', '1123', 'April 26, 2026, 6:10 pm', '58459 L/CPL Lawrence Acheampong', '69b28aba198b96.79213544.jpg', '65808 CONST Prosper Dagadu', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 27, 2026, 6:15 am', '2026-04-27 06:15:10', 0),
-(214, '', '', '8', '1121', 'April 26, 2026, 6:11 pm', '58459 L/CPL Lawrence Acheampong', '69b28830d5ea93.99641637.jpg', '66138 CONST Isaac Appiah', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 27, 2026, 6:16 am', '2026-04-27 06:16:23', 0),
-(215, '', '', '8', '84', 'April 26, 2026, 6:12 pm', '58459 L/CPL Lawrence Acheampong', '670ad384951d08.94188639.jpg', '58339 L/CPL Emmanuel Painstsil', 'AK47', '232084', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Armed Guide', '12', 'Returned', '', 'April 27, 2026, 6:03 am', '2026-04-27 06:03:55', 0),
-(216, '', '', '8', '1119', 'April 27, 2026, 6:05 am', '58459 L/CPL Lawrence Acheampong', '69b2597f9064b9.89473236.jpg', '65848 CONST Ebenezer Aidoo', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 27, 2026, 6:06 pm', '2026-04-27 18:06:14', 0),
-(217, '', '', '8', '1152', 'April 27, 2026, 6:07 am', '58459 L/CPL Lawrence Acheampong', '69b2fc8cb94e66.84077538.jpg', '15994 CONST Bafanayah Dennis Helena ', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 27, 2026, 6:07 pm', '2026-04-27 18:07:35', 0),
-(218, '', '', '8', '1131', 'April 27, 2026, 6:09 am', '58459 L/CPL Lawrence Acheampong', '69b2b489043f43.52712900.jpg', '66792 CONST Haruna Abdulai ', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 28, 2026, 6:34 am', '2026-04-28 06:34:37', 0),
-(219, '', '', '8', '1148', 'April 27, 2026, 6:10 am', '58459 L/CPL Lawrence Acheampong', '69b2d17a2b8438.44320500.jpg', '67304 CONST Baba Osman ', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 28, 2026, 6:36 am', '2026-04-28 06:36:08', 0),
-(220, '', '', '6', '1196', 'April 27, 2026, 6:21 am', '58459 L/CPL Lawrence Acheampong', '69e31f9a5b5769.06168966.jpg', '56140 L/CPL Samuel Ntim', 'D406078 CZ-SCORPION ( Rifle) - [Caliber: 9x19mm] ', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 0, ' ', 0, 'Patrol duty', 'Airporthills', '', 'Not-Return', '', ' ', '2026-04-27 06:25:13', 0),
-(221, '', '', '6', '29', 'April 27, 2026, 6:23 am', '58459 L/CPL Lawrence Acheampong', '670543f75f17e1.72713618.jpg', '55931 L/CPL George  Osei Agyemang ', 'CZ-SCORPION', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 28, 2026, 6:18 am', '2026-04-28 06:18:29', 0),
-(222, '', '', '6', '1185', 'April 27, 2026, 6:29 am', '58459 L/CPL Lawrence Acheampong', '69c41825edcc14.61652171.jpg', '56082 L/CPL Frank Asamoah Appeakorang', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 28, 2026, 6:42 am', '2026-04-28 06:42:25', 0),
-(223, '', '', '6', '46', 'April 27, 2026, 6:38 am', '58459 L/CPL Lawrence Acheampong', '670974a6ebcdc9.60476512.jpg', '58239 L/CPL Enerst Anim ', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 28, 2026, 6:45 am', '2026-04-28 06:45:34', 0),
-(224, '', '', '8', '1123', 'April 27, 2026, 6:04 pm', '58459 L/CPL Lawrence Acheampong', '69b28aba198b96.79213544.jpg', '65808 CONST Prosper Dagadu', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 28, 2026, 6:37 am', '2026-04-28 06:37:36', 0),
-(225, '', '', '8', '1121', 'April 27, 2026, 6:05 pm', '58459 L/CPL Lawrence Acheampong', '69b28830d5ea93.99641637.jpg', '66138 CONST Isaac Appiah', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 28, 2026, 6:40 am', '2026-04-28 06:40:02', 0),
-(226, '', '', '6', '44', 'April 27, 2026, 6:27 pm', '58459 L/CPL Lawrence Acheampong', '67096c20261ed8.73226717.jpg', '58213 L/CPL Abraham  Nkumdow ', 'CZ-SCORPION', 'D280014', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 28, 2026, 6:47 am', '2026-04-28 06:47:19', 0),
-(227, '', '', '8', '1152', 'April 28, 2026, 6:22 am', '58459 L/CPL Lawrence Acheampong', '69b2fc8cb94e66.84077538.jpg', '15994 CONST Bafanayah Dennis Helena ', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 28, 2026, 6:02 pm', '2026-04-28 18:02:22', 0),
-(228, '', '', '8', '1119', 'April 28, 2026, 6:26 am', '58459 L/CPL Lawrence Acheampong', '69b2597f9064b9.89473236.jpg', '65848 CONST Ebenezer Aidoo', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 28, 2026, 6:03 pm', '2026-04-28 18:03:38', 0),
-(229, '', '', '8', '1156', 'April 28, 2026, 6:28 am', '58459 L/CPL Lawrence Acheampong', '69b3cb1a952059.88393048.jpg', '66407 CONST Obeng Joseph Konadu', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 29, 2026, 6:52 am', '2026-04-29 06:52:49', 0),
-(230, '', '', '8', '1162', 'April 28, 2026, 6:29 am', '58459 L/CPL Lawrence Acheampong', '69b550add89769.58634026.jpg', '66500 CONST Yakubu Amadu', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 29, 2026, 6:55 am', '2026-04-29 06:55:19', 0),
-(231, '', '', '6', '36', 'April 28, 2026, 6:30 am', '58459 L/CPL Lawrence Acheampong', '6707dc04e99862.44989633.jpg', '57976 L/CPL Richmond  Agyei Yeboah ', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 29, 2026, 7:21 am', '2026-04-29 07:21:53', 0),
-(232, '', '', '6', '1194', 'April 28, 2026, 6:32 am', '58459 L/CPL Lawrence Acheampong', '69c9aac0bd6f59.62327774.jpg', '56277 L/CPL Benjamin Antwi-Kusi', 'CZ-SCORPION', 'D280014', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 29, 2026, 7:22 am', '2026-04-29 07:22:34', 0),
-(233, '', '', '6', '56', 'April 28, 2026, 6:33 am', '58459 L/CPL Lawrence Acheampong', '670a7a37a5ed83.64890035.jpg', '10706 L/CPL Emelia Akyamaa', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 29, 2026, 7:24 am', '2026-04-29 07:24:24', 0),
-(234, '', '', '8', '1121', 'April 28, 2026, 5:59 pm', '58459 L/CPL Lawrence Acheampong', '69b28830d5ea93.99641637.jpg', '66138 CONST Isaac Appiah', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 29, 2026, 6:57 am', '2026-04-29 06:57:04', 0),
-(235, '', '', '8', '1123', 'April 28, 2026, 6:00 pm', '58459 L/CPL Lawrence Acheampong', '69b28aba198b96.79213544.jpg', '65808 CONST Prosper Dagadu', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 29, 2026, 6:58 am', '2026-04-29 06:58:30', 0),
-(236, '', '', '6', '1196', 'April 28, 2026, 6:01 pm', '58459 L/CPL Lawrence Acheampong', '69e31f9a5b5769.06168966.jpg', '55104 CPL Samuel Opoku', 'CZ-SCORPION', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 29, 2026, 7:34 am', '2026-04-29 07:34:09', 0),
-(237, '', '', '8', '1148', 'April 29, 2026, 7:36 am', '58459 L/CPL Lawrence Acheampong', '69b2d17a2b8438.44320500.jpg', '67304 CONST Baba Osman ', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 30, 2026, 6:14 am', '2026-04-30 06:14:14', 0),
-(238, '', '', '8', '1131', 'April 29, 2026, 7:37 am', '58459 L/CPL Lawrence Acheampong', '69b2b489043f43.52712900.jpg', '66792 CONST Haruna Abdulai ', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'April 30, 2026, 6:15 am', '2026-04-30 06:15:46', 0),
-(239, '', '', '8', '1152', 'April 29, 2026, 7:39 am', '58459 L/CPL Lawrence Acheampong', '69b2fc8cb94e66.84077538.jpg', '15994 CONST Bafanayah Dennis Helena ', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 29, 2026, 5:32 pm', '2026-04-29 17:32:18', 0),
-(240, '', '', '8', '1119', 'April 29, 2026, 7:41 am', '58459 L/CPL Lawrence Acheampong', '69b2597f9064b9.89473236.jpg', '65848 CONST Ebenezer Aidoo', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 29, 2026, 5:57 pm', '2026-04-29 17:57:52', 0),
-(241, '', '', '6', '1185', 'April 29, 2026, 7:48 am', '58459 L/CPL Lawrence Acheampong', '69c41825edcc14.61652171.jpg', '56082 L/CPL Frank Asamoah Appeakorang', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 30, 2026, 5:55 am', '2026-04-30 05:55:20', 0),
-(242, '', '', '6', '46', 'April 29, 2026, 7:49 am', '58459 L/CPL Lawrence Acheampong', '670974a6ebcdc9.60476512.jpg', '58239 L/CPL Enerst Anim ', 'CZ-SCORPION', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 30, 2026, 5:56 am', '2026-04-30 05:56:46', 0),
-(243, '', '', '6', '29', 'April 29, 2026, 7:52 am', '58459 L/CPL Lawrence Acheampong', '670543f75f17e1.72713618.jpg', '55931 L/CPL George  Osei Agyemang ', 'CZ-SCORPION', 'D279990', 'None', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'April 30, 2026, 5:58 am', '2026-04-30 05:58:10', 0),
-(244, '', '', '8', '1123', 'April 29, 2026, 5:31 pm', '58459 L/CPL Lawrence Acheampong', '69b28aba198b96.79213544.jpg', '65808 CONST Prosper Dagadu', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 30, 2026, 6:18 am', '2026-04-30 06:18:33', 0),
-(245, '', '', '8', '1121', 'April 29, 2026, 5:56 pm', '58459 L/CPL Lawrence Acheampong', '69b28830d5ea93.99641637.jpg', '66138 CONST Isaac Appiah', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 30, 2026, 6:18 pm', '2026-04-30 18:18:19', 0),
-(246, '', '', '6', '1196', 'April 29, 2026, 6:19 pm', '58459 L/CPL Lawrence Acheampong', '69e31f9a5b5769.06168966.jpg', '55104 CPL Samuel Opoku', 'CZ-SCORPION', 'D280014', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'April 30, 2026, 5:59 am', '2026-04-30 05:59:40', 0),
-(247, '', '', '8', '1119', 'April 30, 2026, 6:04 am', '58459 L/CPL Lawrence Acheampong', '69b2597f9064b9.89473236.jpg', '65848 CONST Ebenezer Aidoo', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'April 30, 2026, 6:25 pm', '2026-04-30 18:25:58', 0),
-(248, '', '', '8', '1156', 'April 30, 2026, 6:06 am', '58459 L/CPL Lawrence Acheampong', '69b3cb1a952059.88393048.jpg', '66407 CONST Obeng Joseph Konadu', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'May 1, 2026, 6:07 am', '2026-05-01 06:07:57', 0),
-(249, '', '', '6', '36', 'April 30, 2026, 6:07 am', '58459 L/CPL Lawrence Acheampong', '6707dc04e99862.44989633.jpg', '57976 L/CPL Richmond  Agyei Yeboah ', 'CZ-SCORPION', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'May 1, 2026, 6:04 am', '2026-05-01 06:04:29', 0),
-(250, '', '', '8', '1162', 'April 30, 2026, 6:12 am', '58459 L/CPL Lawrence Acheampong', '69b550add89769.58634026.jpg', '66500 CONST Yakubu Amadu', 'CZ807', 'E103855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'May 1, 2026, 6:09 am', '2026-05-01 06:09:43', 0),
-(251, '', '', '6', '1194', 'April 30, 2026, 6:36 am', '58459 L/CPL Lawrence Acheampong', '69c9aac0bd6f59.62327774.jpg', '56277 L/CPL Benjamin Antwi-Kusi', 'CZ-SCORPION', 'D406078', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'May 1, 2026, 6:06 am', '2026-05-01 06:06:16', 0),
-(252, '', '', '8', '1121', 'April 30, 2026, 6:22 pm', '58459 L/CPL Lawrence Acheampong', '69b28830d5ea93.99641637.jpg', '66138 CONST Isaac Appiah', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'May 1, 2026, 6:11 am', '2026-05-01 06:11:27', 0),
-(253, '', '', '8', '1123', 'April 30, 2026, 6:24 pm', '58459 L/CPL Lawrence Acheampong', '69b28aba198b96.79213544.jpg', '65808 CONST Prosper Dagadu', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'May 1, 2026, 5:48 pm', '2026-05-01 17:48:13', 0),
-(254, '', '', '8', '1119', 'May 1, 2026, 5:59 am', '58459 L/CPL Lawrence Acheampong', '69b2597f9064b9.89473236.jpg', '65848 CONST Ebenezer Aidoo', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'May 1, 2026, 5:52 pm', '2026-05-01 17:52:39', 0),
-(255, '', '', '8', '1148', 'May 1, 2026, 6:00 am', '58459 L/CPL Lawrence Acheampong', '69b2d17a2b8438.44320500.jpg', '67304 CONST Baba Osman ', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'May 2, 2026, 6:21 am', '2026-05-02 06:21:15', 0),
-(256, '', '', '8', '1131', 'May 1, 2026, 6:01 am', '58459 L/CPL Lawrence Acheampong', '69b2b489043f43.52712900.jpg', '66792 CONST Haruna Abdulai ', 'CZ807', 'E013855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Returned', '', 'May 2, 2026, 6:23 am', '2026-05-02 06:23:20', 0),
-(257, '', '', '6', '1185', 'May 1, 2026, 6:28 am', '58459 L/CPL Lawrence Acheampong', '69c41825edcc14.61652171.jpg', '56082 L/CPL Frank Asamoah Appeakorang', 'CZ-SCORPION', 'D135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'May 2, 2026, 6:03 am', '2026-05-02 06:03:26', 0),
-(258, '', '', '6', '29', 'May 1, 2026, 6:48 am', '58459 L/CPL Lawrence Acheampong', '670543f75f17e1.72713618.jpg', '55931 L/CPL George  Osei Agyemang ', 'CZ-SCORPION', 'D280014', 'None', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'May 2, 2026, 6:05 am', '2026-05-02 06:05:16', 0),
-(259, '', '', '6', '46', 'May 1, 2026, 6:58 am', '58459 L/CPL Lawrence Acheampong', '670974a6ebcdc9.60476512.jpg', '58239 L/CPL Enerst Anim ', 'CZ-SCORPION', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', '', 'May 2, 2026, 6:06 am', '2026-05-02 06:06:59', 0),
-(260, '', '', '8', '1123', 'May 1, 2026, 5:50 pm', '58459 L/CPL Lawrence Acheampong', '69b28aba198b96.79213544.jpg', '65808 CONST Prosper Dagadu', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'May 2, 2026, 6:24 am', '2026-05-02 06:24:55', 0),
-(261, '', '', '8', '1121', 'May 1, 2026, 5:51 pm', '58459 L/CPL Lawrence Acheampong', '69b28830d5ea93.99641637.jpg', '66138 CONST Isaac Appiah', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'DG/NAPD', '12', 'Returned', '', 'May 3, 2026, 6:15 am', '2026-05-03 06:15:12', 0),
-(262, '', '', '6', '1196', 'May 1, 2026, 6:55 pm', '58459 L/CPL Lawrence Acheampong', '69e31f9a5b5769.06168966.jpg', '55104 CPL Samuel Opoku', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, 'Not-Faulty', 0, 'Guide Duty', 'Airporthills', '12', 'Returned', '', 'May 2, 2026, 6:08 am', '2026-05-02 06:08:37', 0),
-(263, '', '', '6', '', 'May 3, 2026, 3:14 pm', '58459 L/CPL Lawrence Acheampong', '', '47738 G/Sgt Elikem Adzawla', 'BERETTA-M9', 'm9-211709', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 15, 0, ' ', 0, 'Guide Duty', 'Escort', '24 hours', 'Not-Return', '', ' ', '2026-05-03 15:14:00', 0),
-(264, '', '', '8', '1122', 'May 5, 2026, 6:20 am', '58459 L/CPL Lawrence Acheampong', '69b2894147e6f0.79616494.jpg', '66837 CONST Francis Atuobi', 'CZ807', 'D418901', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 0, ' ', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Not-Return', '', ' ', '2026-05-05 06:20:16', 0),
-(265, '', '', '8', '1121', 'May 5, 2026, 6:23 am', '58459 L/CPL Lawrence Acheampong', '69b28830d5ea93.99641637.jpg', '66138 CONST Isaac Appiah', 'CZ807', 'EO13855', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 0, ' ', 0, 'Guide Duty', 'F. Interior', '24 hours', 'Not-Return', '', ' ', '2026-05-05 06:23:33', 0),
-(266, '', '', '8', '1129', 'May 5, 2026, 6:26 am', '58459 L/CPL Lawrence Acheampong', '69b2b2125deac3.56142041.jpg', '15815 CONST Nancy Agyei', 'CZ807', 'F102305', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 0, ' ', 0, 'Guide Duty', 'DG/NAPD', '12', 'Not-Return', '', ' ', '2026-05-05 06:26:01', 0),
-(267, '', '', '8', '1130', 'May 5, 2026, 6:27 am', '58459 L/CPL Lawrence Acheampong', '69b2b35c6d4509.23082572.jpg', '67255 CONST Rauf Abdul - Rahaman', 'CZ807', 'F141249', 'Duty-Weapon', 0, 'Not-Faulty', '7.62x39 ', 20, 0, ' ', 0, 'Guide Duty', 'DG/NAPD', '12', 'Not-Return', '', ' ', '2026-05-05 06:27:21', 0),
-(268, '', '', '6', '13', 'May 5, 2026, 6:29 am', '58459 L/CPL Lawrence Acheampong', '67042def908e34.16990129.jpg', '54669 CPL Felix Appiah', 'CZ-SCORPION', 'D279990', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 0, ' ', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Not-Return', '', ' ', '2026-05-09 09:25:27', 1),
-(269, '', '', '6', '104', 'May 5, 2026, 6:36 am', '58459 L/CPL Lawrence Acheampong', '670b0b12d75bf7.81499515.jpg', '54253 CPL Wisdom  Adzasu', 'CZ-SCORPION', 'D406070', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 0, ' ', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Not-Return', '', ' ', '2026-05-05 06:36:18', 0),
-(270, '', '', '6', '59', 'May 5, 2026, 6:37 am', '58459 L/CPL Lawrence Acheampong', '670a7d13d26c27.84839470.jpg', '10048 CPL Elizabet Appiah', 'CZ-SCORPION', 'D135518', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 20, ' ', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Returned', 'gdsgdgdh', 'May 9, 2026, 11:25 am', '2026-05-09 09:25:09', 0),
-(271, '', '', '6', '1190', 'May 5, 2026, 6:43 am', '58459 L/CPL Lawrence Acheampong', '69c5125608d7e1.61040660.jpg', '58249 L/CPL Evans Ofosu', 'CZ-SCORPION', 'D176116', 'Duty-Weapon', 0, 'Not-Faulty', '9MM', 20, 0, ' ', 0, 'Patrol duty', 'Airporthills', '24 hours', 'Not-Return', '', ' ', '2026-05-09 09:03:40', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `bookings2`
---
-
-CREATE TABLE `bookings2` (
-  `bookingID` int(100) NOT NULL,
-  `bookingCode` varchar(100) NOT NULL,
-  `firearmID` varchar(100) NOT NULL,
-  `ammoID` varchar(100) NOT NULL,
-  `officerID` varchar(100) NOT NULL,
-  `booking_time` varchar(200) NOT NULL,
-  `armourer_issuer` varchar(500) NOT NULL,
-  `officer_image` varchar(500) NOT NULL,
-  `to_officer` varchar(500) NOT NULL,
-  `firearm_name` varchar(500) NOT NULL,
-  `firearm_serial_no` varchar(200) NOT NULL,
-  `firearm_class` varchar(200) NOT NULL,
-  `quantity_issued` int(100) NOT NULL,
-  `firearm_state` varchar(200) NOT NULL,
-  `ammunition_name` varchar(500) NOT NULL,
-  `number_of_rounds` int(200) NOT NULL,
-  `ammo_returned` int(200) NOT NULL,
-  `ammo_state` varchar(200) NOT NULL,
-  `no_faulty_ammo` int(200) NOT NULL,
-  `duty_type` varchar(500) NOT NULL,
-  `duty_location` varchar(500) NOT NULL,
-  `duty_duration` varchar(200) NOT NULL,
-  `returns` varchar(200) NOT NULL,
-  `comment` varchar(1000) NOT NULL,
-  `returned_time` varchar(200) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(272, '', '381', '', '39', 'June 12, 2026, 12:05 pm', 'INSPR Richard Boampong', '', '53616  CPL Richard  Asare', 'CZ-SCORPION', 'D145304', 'Duty-Weapon', 0, 'Not-Faulty', '9', 30, 0, '', 0, 'General Duty', 'AHAFO NORTH', '24 Hours', 'Not-Return', '', '', '2026-06-12 10:05:28', 0),
+(273, '', '478', '', '1154', 'June 23, 2026, 10:10 am', 'L/CPL Lawrence Acheampong 1', '', 'PN26827 INSPR Asamoah Frank', 'BERETTA-M9', 'M9-212749', 'Duty-Weapon', 0, 'Not-Faulty', '9mm', 15, 0, '', 0, 'General Duty', 'ASSIGNMENT', '365 DAYS', 'Not-Return', '', '', '2026-06-23 08:10:29', 0),
+(274, '', '503', '', '51', 'June 23, 2026, 10:24 am', 'L/CPL Lawrence Acheampong 1', '', '49665 SGT Wilson Agbley Selorm ', 'SIGPRO', 'SP-0137277', 'Duty-Weapon', 0, 'Not-Faulty', '9mm', 10, 0, '', 0, 'General Duty', 'ASSIGNMENT', '365 DAYS', 'Not-Return', '', '', '2026-06-23 08:24:53', 0);
 
 -- --------------------------------------------------------
 
@@ -634,7 +381,200 @@ INSERT INTO `daily_activities` (`activityID`, `adminID`, `armourer_admin_name`, 
 (3, 0, 'William NTI', 'Administrator', 'INDUCTED_NEW_ASSET: [ NP-22 | SN: 4623 ]', 'Asset Management', '', '2026-05-12 17:18:08'),
 (4, 0, 'William NTI', 'Administrator', 'INDUCTED_NEW_ASSET: [ NP-18 | SN: R1234 ]', 'Asset Management', '', '2026-05-12 17:19:48'),
 (5, 0, 'William NTI', 'Administrator', 'Deleted Firearm Name [  ]', 'Firearm Management', '', '2026-05-12 18:02:23'),
-(6, 5, '12345 C/INSPR William NTI', 'Administrator', 'SOFT_DELETE_PERFORMED on Asset ID: 576', 'Firearm Management', '', '2026-05-12 18:04:40');
+(6, 5, '12345 C/INSPR William NTI', 'Administrator', 'SOFT_DELETE_PERFORMED on Asset ID: 576', 'Firearm Management', '', '2026-05-12 18:04:40'),
+(7, 4, 'William Ntisem', 'Armourer', 'Updated Profile [ ID: 4 ]', 'Profile Management', '', '2026-05-13 12:33:15'),
+(8, 4, '58459 L/CPL William Ntisem', 'Armourer', 'Issued a Firearm [ CZ805-C068408(with number of Rounds: 20 ]', 'Deployments', '', '2026-05-13 13:44:57'),
+(9, 0, 'William NTI', 'Administrator', 'Issued a Firearm [ AK47-AZ -4233(with number of Rounds: 20 ] to 57914 L/CPL Kenny Adarkwah ', 'Deployments', '', '2026-05-13 14:02:28'),
+(10, 0, 'William Ntisem', 'Armourer', 'Logged Faulty Ammunition Entry [ Name: 7.62x39 | Qty: 20 ]', 'Ammunition Management', '', '2026-05-20 06:33:31'),
+(11, 0, 'William Ntisem', 'Armourer', 'Purged Faulty Ammunition Entry Records [ ID: 1 ]', 'Ammunition Management', '', '2026-05-20 06:34:10'),
+(12, 0, 'William Ntisem', 'Armourer', 'Logged Faulty Ammunition Entry [ Name: 9MM | Qty: 43 ]', 'Ammunition Management', '', '2026-05-20 06:35:40'),
+(13, 4, 'William Ntisem', 'Armourer', 'AMMO_DEPLOYED: 30 rounds of 7.62x39  issued to 56530 L/CPL Stephen Owusu', NULL, NULL, '2026-05-20 07:38:23'),
+(14, 4, 'William Ntisem', 'Armourer', 'Booked Ammunition [ ID:  ] - 30 rounds of 7.62x39  issued to 56530 L/CPL Stephen Owusu', 'Ammunition Management', '', '2026-05-20 07:38:23'),
+(15, 0, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition [ ID: 5 ]', 'Ammunition Management', '', '2026-05-20 08:15:44'),
+(16, 4, 'William Ntisem', 'Armourer', 'AMMO_DEPLOYED: 20 rounds of 9MM (Sellier & Bellot) issued to 54669 CPL Felix Appiah', NULL, NULL, '2026-05-20 14:56:05'),
+(17, 4, 'William Ntisem', 'Armourer', 'Booked Blank Ammunition [ Log ID: 2 ] - 20 rounds of 9MM (Sellier & Bellot) issued to 54669 CPL Felix Appiah', 'Ammunition Management', '', '2026-05-20 14:56:05'),
+(18, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 2 ] to state [Returned] with 20 rounds.', 'Ammunition Management', '', '2026-05-20 15:00:39'),
+(19, 4, 'William Ntisem', 'Armourer', 'AMMO_DEPLOYED: 20 rounds of 7.62x39 (Kidma Tech) issued to 58353 L/CPL Paul Father Tsibuah', NULL, NULL, '2026-05-20 15:08:33'),
+(20, 4, 'William Ntisem', 'Armourer', 'Booked Blank Ammunition [ Log ID: 3 ] - 20 rounds of 7.62x39 (Kidma Tech) issued to 58353 L/CPL Paul Father Tsibuah', 'Ammunition Management', '', '2026-05-20 15:08:33'),
+(21, 4, 'William Ntisem', 'Armourer', 'AMMO_DEPLOYED: 20 rounds of 9MM (Sellier & Bellot) issued to 58443 L/CPL David Mpanga Tamanja', NULL, NULL, '2026-05-20 15:09:38'),
+(22, 4, 'William Ntisem', 'Armourer', 'Booked Blank Ammunition [ Log ID: 4 ] - 20 rounds of 9MM (Sellier & Bellot) issued to 58443 L/CPL David Mpanga Tamanja', 'Ammunition Management', '', '2026-05-20 15:09:38'),
+(23, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 3 ] to state [Not-Return] with 20 rounds.', 'Ammunition Management', '', '2026-05-20 15:11:21'),
+(24, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 3 ] to state [Not-Return] with 20 rounds.', 'Ammunition Management', '', '2026-05-20 15:15:02'),
+(25, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 3 ] to state [Returned] with 20 rounds.', 'Ammunition Management', '', '2026-05-20 15:15:12'),
+(26, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 3 ] to state [Returned] with 20 rounds.', 'Ammunition Management', '', '2026-05-20 15:17:46'),
+(27, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 3 ] to state [Not-Return] with 20 rounds.', 'Ammunition Management', '', '2026-05-20 15:17:55'),
+(28, 0, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition [ ID: 3 ]', 'Ammunition Management', '', '2026-05-21 08:39:16'),
+(29, 0, 'William Ntisem', 'Armourer', 'ASSET_RECOVERY: Restocked AK47 and 20 rounds. State: Not-Faulty', NULL, NULL, '2026-05-21 08:40:12'),
+(30, 0, 'William Ntisem', 'Armourer', 'Updated Return Status [ ID: 273 ] - ASSET_RECOVERY: Restocked AK47 and 20 rounds. State: Not-Faulty]', 'Return Management', '', '2026-05-21 08:40:12'),
+(31, 0, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition [ ID: 3 ]', 'Ammunition Management', '', '2026-05-21 08:41:08'),
+(32, 0, 'William Ntisem', 'Armourer', 'RET_AMMO_COMMITTED: Log ID [ 3 ] updated. State: Not-Return. Returned Qty: 20 rounds.', 'Ammunition Management', '', '2026-05-21 09:17:48'),
+(33, 0, 'William Ntisem', 'Armourer', 'RET_AMMO_COMMITTED: Log ID [ 3 ] updated. State: Not-Return. Returned Qty: 20 rounds.', 'Ammunition Management', '', '2026-05-21 09:17:50'),
+(34, 0, 'William Ntisem', 'Armourer', 'AMMO_RETURN_COMPLETED: Log ID [ 4 ] updated. State: Returned. Returned Qty: 10 rounds.', 'Ammunition Management', '', '2026-05-21 10:19:14'),
+(35, 0, 'William Ntisem', 'Armourer', 'PURGE_LOG: Permanently deleted deployment log Entry [ ID: 5 ] from the system.', 'Ammunition Management', '', '2026-05-21 10:22:05'),
+(36, 0, 'William Ntisem', 'Armourer', 'ASSET_RECOVERY: Restocked F102305 CZ807 ( Rifle) - [Caliber: 7.62x39mm]  and 20 rounds. State: Not-Faulty', NULL, NULL, '2026-05-21 10:41:21'),
+(37, 0, 'William Ntisem', 'Armourer', 'Updated Return Status [ ID: 64 ] - ASSET_RECOVERY: Restocked F102305 CZ807 ( Rifle) - [Caliber: 7.62x39mm]  and 20 rounds. State: Not-Faulty]', 'Return Management', '', '2026-05-21 10:41:21'),
+(38, 0, 'William Ntisem', 'Armourer', 'STATUS_UPDATE: Booking ID 269 set to Not-Return.', NULL, NULL, '2026-05-21 10:41:32'),
+(39, 0, 'William Ntisem', 'Armourer', 'Updated Return Status [ ID: 269 ] - STATUS_UPDATE: Booking ID 269 set to Not-Return.]', 'Return Management', '', '2026-05-21 10:41:32'),
+(40, 0, 'William Ntisem', 'Armourer', 'ASSET_RECOVERY: Restocked CZ-SCORPION and 20 rounds. State: Not-Faulty', NULL, NULL, '2026-05-21 10:41:52'),
+(41, 0, 'William Ntisem', 'Armourer', 'Updated Return Status [ ID: 269 ] - ASSET_RECOVERY: Restocked CZ-SCORPION and 20 rounds. State: Not-Faulty]', 'Return Management', '', '2026-05-21 10:41:52'),
+(42, 0, 'William Ntisem', 'Armourer', 'ASSET_RECOVERY: Restocked BERETTA-M9 and 15 rounds. State: Not-Faulty', NULL, NULL, '2026-05-21 10:43:12'),
+(43, 0, 'William Ntisem', 'Armourer', 'Updated Return Status [ ID: 263 ] - ASSET_RECOVERY: Restocked BERETTA-M9 and 15 rounds. State: Not-Faulty]', 'Return Management', '', '2026-05-21 10:43:12'),
+(44, 0, 'William Ntisem', 'Armourer', 'AMMO_RETURN_COMPLETED: Log ID [ 3 ] updated. State: Returned. Returned Qty: 20 rounds.', 'Ammunition Management', '', '2026-05-21 11:11:51'),
+(45, 0, 'William Ntisem', 'Armourer', 'Certified Component Restored to Store Inventory [ ID: 2 ]', 'Ammunition Management', '', '2026-05-21 11:13:04'),
+(46, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 3 ] to state [Returned] with 20 rounds.', 'Ammunition Management', '', '2026-05-21 11:16:34'),
+(47, 4, 'William Ntisem', 'Armourer', 'AMMO_DEPLOYED: 60 rounds of 7.62x39 (Kidma Tech) issued to 54669 CPL Felix Appiah', NULL, NULL, '2026-05-21 11:39:28'),
+(48, 4, 'William Ntisem', 'Armourer', 'Booked Blank Ammunition [ Log ID: 5 ] - 60 rounds of 7.62x39 (Kidma Tech) issued to 54669 CPL Felix Appiah', 'Ammunition Management', '', '2026-05-21 11:39:28'),
+(49, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 5 ] to state [Returned] with 60 rounds.', 'Ammunition Management', '', '2026-05-21 11:41:39'),
+(50, 4, 'William Ntisem', 'Armourer', 'AMMO_RETURN_MANIFEST_UPDATED: Log Entry ID [ 5 ] changed to status [Not-Return]. Returned count calculated at: 0 RDS.', 'Ammunition Management', '', '2026-05-21 12:10:36'),
+(51, 4, 'William Ntisem', 'Armourer', 'AMMO_RETURN_MANIFEST_UPDATED: Log Entry ID [ 5 ] changed to status [Returned]. Returned count calculated at: 50 RDS.', 'Ammunition Management', '', '2026-05-21 12:11:31'),
+(52, 4, 'William Ntisem', 'Armourer', 'PURGE_LOG: Permanently deleted deployment log Entry [ ID: 5 ] from active records.', 'Ammunition Management', '', '2026-05-21 12:22:41'),
+(53, 4, 'William Ntisem', 'Armourer', 'BLANK_AMMO_RETURN_COMPLETED: Log ID [ 4 ] updated to state [Not-Return] | Returned Units: 20 RDS restocked.', 'Ammunition Management', '', '2026-05-21 12:22:57'),
+(54, 4, 'William Ntisem', 'Armourer', 'BLANK_AMMO_RETURN_COMPLETED: Log ID [ 4 ] updated to state [Returned] | Returned Units: 0 RDS restocked.', 'Ammunition Management', '', '2026-05-21 12:23:07'),
+(55, 4, 'William Ntisem', 'Armourer', 'AMMO_DEPLOYED: 30 rounds of 7.62x39 (Kidma Tech) issued to 58551 L/CPL Bright Opoku Agyei', NULL, NULL, '2026-05-21 13:38:35'),
+(56, 4, 'William Ntisem', 'Armourer', 'Booked Blank Ammunition [ Log ID: 6 ] - 30 rounds of 7.62x39 (Kidma Tech) issued to 58551 L/CPL Bright Opoku Agyei', 'Ammunition Management', '', '2026-05-21 13:38:35'),
+(57, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 6 ] to state [Returned] with 30 rounds returned and restocked.', 'Ammunition Management', '', '2026-05-21 13:39:19'),
+(58, 4, 'William Ntisem', 'Armourer', 'PURGE_LOG: Permanently Deleted Booked Ammunition Entry [ ID: 4 ] from active logs.', 'Ammunition Management', '', '2026-05-21 14:04:40'),
+(59, 4, 'William Ntisem', 'Armourer', 'PURGE_LOG: Permanently Deleted Booked Ammunition Entry [ ID: 3 ] from active logs.', 'Ammunition Management', '', '2026-05-21 14:04:43'),
+(60, 4, 'William Ntisem', 'Armourer', 'PURGE_LOG: Permanently Deleted Booked Ammunition Entry [ ID: 2 ] from active logs.', 'Ammunition Management', '', '2026-05-21 14:04:45'),
+(61, 4, 'William Ntisem', 'Armourer', 'AMMO_DEPLOYED: 30 rounds of 7.62x39 (Kidma Tech) issued to 54669 CPL Felix Appiah', NULL, NULL, '2026-05-21 14:05:12'),
+(62, 4, 'William Ntisem', 'Armourer', 'Booked Blank Ammunition [ Log ID: 7 ] - 30 rounds of 7.62x39 (Kidma Tech) issued to 54669 CPL Felix Appiah', 'Ammunition Management', '', '2026-05-21 14:05:12'),
+(63, 4, 'William Ntisem', 'Armourer', 'AMMO_DEPLOYED: 28 rounds of 7.62x39 (Kidma Tech) issued to 58473 L/CPL Eugene Bronya', NULL, NULL, '2026-05-21 14:05:42'),
+(64, 4, 'William Ntisem', 'Armourer', 'Booked Blank Ammunition [ Log ID: 8 ] - 28 rounds of 7.62x39 (Kidma Tech) issued to 58473 L/CPL Eugene Bronya', 'Ammunition Management', '', '2026-05-21 14:05:42'),
+(65, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 7 ] to state [Returned] with 30 rounds returned and restocked.', 'Ammunition Management', '', '2026-05-21 14:06:04'),
+(66, 4, 'William Ntisem', 'Armourer', 'PURGE_LOG: Permanently Deleted Booked Ammunition Entry [ ID: 7 ] from active logs.', 'Ammunition Management', '', '2026-05-21 14:06:20'),
+(67, 4, 'William Ntisem', 'Armourer', 'AMMO_DEPLOYED: 20 rounds of 9MM (Sellier & Bellot) issued to 58595 L/CPL Gehead Yeboah', NULL, NULL, '2026-05-21 14:07:22'),
+(68, 4, 'William Ntisem', 'Armourer', 'Booked Blank Ammunition [ Log ID: 9 ] - 20 rounds of 9MM (Sellier & Bellot) issued to 58595 L/CPL Gehead Yeboah', 'Ammunition Management', '', '2026-05-21 14:07:22'),
+(69, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 8 ] to state [Returned] with 28 rounds returned and restocked.', 'Ammunition Management', '', '2026-05-21 14:08:11'),
+(70, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 9 ] to state [Returned] with 20 rounds returned and restocked.', 'Ammunition Management', '', '2026-05-21 14:24:46'),
+(71, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 8 ] to state [Not-Return] with 0 rounds returned and restocked.', 'Ammunition Management', '', '2026-05-21 14:25:28'),
+(72, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 8 ] to state [Returned] with 28 rounds returned and restocked.', 'Ammunition Management', '', '2026-05-21 14:25:56'),
+(73, 5, '12345 C/INSPR William NTI', 'Administrator', 'SOFT_DELETE_PERFORMED on Asset ID: 136', 'Firearm Management', '', '2026-05-21 16:26:34'),
+(74, 5, '12345 C/INSPR William NTI', 'Administrator', 'SOFT_DELETE_PERFORMED on Asset ID: 137', 'Firearm Management', '', '2026-05-21 16:26:38'),
+(75, 5, '12345 C/INSPR William NTI', 'Administrator', 'SOFT_DELETE_PERFORMED on Asset ID: 490', 'Firearm Management', '', '2026-05-21 16:26:42'),
+(76, 4, '58459 L/CPL William Ntisem', 'Armourer', 'ASSET_PURGED_FROM_ACTIVE_REGISTRY: Record ID [ 491 ] dropped from inventory view metrics.', 'Firearm Management', '', '2026-05-21 16:40:35'),
+(77, 5, '12345 C/INSPR William NTI', 'Administrator', 'RESTORED_ASSET: ID 491', 'Firearm Management', '', '2026-05-21 16:50:16'),
+(78, 5, '12345 C/INSPR William NTI', 'Administrator', 'RESTORED_ASSET: ID 137', 'Firearm Management', '', '2026-05-21 16:50:23'),
+(79, 4, '58459 L/CPL William Ntisem', 'Armourer', 'ASSET_PURGED_FROM_ACTIVE_REGISTRY: Record ID [ 88 ] dropped from inventory view metrics.', 'Firearm Management', '', '2026-05-21 16:51:03'),
+(80, 4, '58459 L/CPL William Ntisem', 'Armourer', 'ASSET_PURGED_FROM_ACTIVE_REGISTRY: Record ID [ 97 ] dropped from inventory view metrics.', 'Firearm Management', '', '2026-05-21 16:51:12'),
+(81, 4, '58459 L/CPL William Ntisem', 'Armourer', 'ASSET_PURGED_FROM_ACTIVE_REGISTRY: Record ID [ 99 ] dropped from inventory view metrics.', 'Firearm Management', '', '2026-05-21 16:51:27'),
+(82, 4, '58459 L/CPL William Ntisem', 'Armourer', 'ASSET_PURGED_FROM_ACTIVE_REGISTRY: Record ID [ 98 ] dropped from inventory view metrics.', 'Firearm Management', '', '2026-05-21 16:51:32'),
+(83, 4, '58459 L/CPL William Ntisem', 'Armourer', 'ASSET_PURGED_FROM_ACTIVE_REGISTRY: Record ID [ 89 ] dropped from inventory view metrics.', 'Firearm Management', '', '2026-05-21 16:51:57'),
+(84, 4, '58459 L/CPL William Ntisem', 'Armourer', 'MODIFIED_ASSET_METRICS: Serial [M9-212792rrrr] under Class [BERETTA-M9] modified by terminal admin.', 'Firearm Management', '', '2026-05-21 17:00:44'),
+(85, 4, '58459 L/CPL William Ntisem', 'Armourer', 'MODIFIED_ASSET_METRICS: Serial [M9-212792] under Class [BERETTA-M9] modified by terminal admin.', 'Firearm Management', '', '2026-05-21 17:00:51'),
+(86, 5, '12345 C/INSPR William NTI', 'Administrator', 'ASSET_PURGED_FROM_ACTIVE_REGISTRY: Record ID [ 137 ] dropped from inventory view metrics.', 'Firearm Management', '', '2026-05-21 17:05:48'),
+(87, 5, '12345 C/INSPR William NTI', 'Administrator', 'MODIFIED_ASSET_METRICS: Serial [H78690ZdadD] under Class [BERETTA-92] modified by terminal admin.', 'Firearm Management', '', '2026-05-21 17:05:56'),
+(88, 5, '12345 C/INSPR William NTI', 'Administrator', 'MODIFIED_ASSET_METRICS: Serial [H78690] under Class [BERETTA-92] modified by terminal admin.', 'Firearm Management', '', '2026-05-21 17:06:04'),
+(89, 4, '58459 L/CPL William Ntisem', 'Armourer', 'VIEWED_FIREARM_DETAILS: Serial [ H78690 ] checked by william', 'Ammunition Management', '', '2026-05-22 10:59:05'),
+(90, 4, '58459 L/CPL William Ntisem', 'Armourer', 'VIEWED_FIREARM_DETAILS: Serial [ H78690 ] checked by william', 'Ammunition Management', '', '2026-05-22 11:01:12'),
+(91, 4, '58459 L/CPL William Ntisem', 'Armourer', 'VIEWED_FIREARM_DETAILS: Serial [ H78690 ] checked by william', 'Ammunition Management', '', '2026-05-22 11:02:08'),
+(92, 4, '58459 L/CPL William Ntisem', 'Armourer', 'VIEWED_FIREARM_DETAILS: Serial [ H78690 ] checked by william', 'Ammunition Management', '', '2026-05-22 11:02:37'),
+(93, 4, '58459 L/CPL William Ntisem', 'Armourer', 'VIEWED_FIREARM_DETAILS: Serial [ H78688Z ] checked by william', 'Ammunition Management', '', '2026-05-22 11:04:42'),
+(94, 4, '58459 L/CPL William Ntisem', 'Armourer', 'VIEWED_FIREARM_DETAILS: Serial [ AZ -4233 ] checked by william', 'Ammunition Management', '', '2026-05-22 11:04:57'),
+(95, 0, 'William Ntisem', 'Armourer', 'Logged Faulty Ammunition Entry [ Name: 7.62x39 | Qty: 20 ]', 'Ammunition Management', '', '2026-05-25 12:46:46'),
+(96, 4, 'William Ntisem', 'Armourer', 'NEW_AMMO_REGISTERED: 8.9MM [Qty: 400]', NULL, NULL, '2026-05-25 14:19:16'),
+(97, 4, 'William Ntisem', 'Armourer', 'Added Ammunition [ 8.9MM  WILLIS (400 ) ]', 'Ammunition Management', '', '2026-05-25 14:19:16'),
+(98, 4, 'William Ntisem', 'Armourer', 'UPDATED_AMMO_STOCK: 8.9MMwwwww', NULL, NULL, '2026-05-25 14:21:13'),
+(99, 4, 'William Ntisem', 'Armourer', 'Updated Ammunition [ ID: 10 ]', 'Ammunition Management', '', '2026-05-25 14:21:13'),
+(100, 4, 'William Ntisem', 'Armourer', 'UPDATED_AMMO_STOCK: 8.9MM', NULL, NULL, '2026-05-25 14:21:24'),
+(101, 4, 'William Ntisem', 'Armourer', 'Updated Ammunition [ ID: 10 ]', 'Ammunition Management', '', '2026-05-25 14:21:24'),
+(102, 4, 'William Ntisem', 'Armourer', 'AMMO_DEPLOYED: 50 rounds of 8.9MM (WILLIS) issued to 58595 L/CPL Gehead Yeboah', NULL, NULL, '2026-05-25 14:49:55'),
+(103, 4, 'William Ntisem', 'Armourer', 'Booked Blank Ammunition [ Log ID: 10 ] - 50 rounds of 8.9MM (WILLIS) issued to 58595 L/CPL Gehead Yeboah', 'Ammunition Management', '', '2026-05-25 14:49:55'),
+(104, 4, 'William Ntisem', 'Armourer', 'Updated Booked Ammunition Entry [ ID: 10 ] to state [Returned] with 50 rounds returned and restocked.', 'Ammunition Management', '', '2026-05-25 15:22:06'),
+(105, 4, 'William Ntisem', 'Armourer', 'PURGE_LOG: Permanently Deleted Booked Ammunition Entry [ ID: 10 ] from active logs.', 'Ammunition Management', '', '2026-05-25 15:22:22'),
+(106, 4, 'William Ntisem', 'Armourer', 'Altered Faulty Ammunition Record Parameters [ ID: 3 ]', 'Ammunition Management', '', '2026-05-25 15:25:56'),
+(107, 4, 'William Ntisem', 'Armourer', 'Certified Component Restored to Store Inventory [ ID: 2 ]', 'Ammunition Management', '', '2026-05-25 15:26:14'),
+(108, 4, 'William Ntisem', 'Armourer', 'Purged Faulty Ammunition Entry Records [ ID: 1 ]', 'Ammunition Management', '', '2026-05-25 15:28:37'),
+(109, 4, 'William Ntisem', 'Armourer', 'UPDATED_AMMO_STOCK: 8.9MM', NULL, NULL, '2026-05-25 15:29:22'),
+(110, 4, 'William Ntisem', 'Armourer', 'Updated Ammunition [ ID: 10 ]', 'Ammunition Management', '', '2026-05-25 15:29:22'),
+(111, 4, 'William Ntisem', 'Armourer', 'UPDATED_AMMO_STOCK: 7.62x39 ', NULL, NULL, '2026-05-25 15:29:49'),
+(112, 4, 'William Ntisem', 'Armourer', 'Updated Ammunition [ ID: 8 ]', 'Ammunition Management', '', '2026-05-25 15:29:49'),
+(113, 4, 'William Ntisem', 'Armourer', 'NEW_AMMO_REGISTERED: 9.77MM [Qty: 800]', NULL, NULL, '2026-05-25 16:32:19'),
+(114, 4, 'William Ntisem', 'Armourer', 'Added Ammunition [ 9.77MM  WINEME BRANDS (800 ) ]', 'Ammunition Management', '', '2026-05-25 16:32:19'),
+(115, 4, 'William Ntisem', 'Armourer', 'NEW_AMMO_REGISTERED: 77.65 [Qty: 670]', NULL, NULL, '2026-05-25 16:33:07'),
+(116, 4, 'William Ntisem', 'Armourer', 'Added Ammunition [ 77.65  WonderLord (670 ) ]', 'Ammunition Management', '', '2026-05-25 16:33:07'),
+(117, 4, 'William Ntisem', 'Armourer', 'NEW_AMMO_REGISTERED: 67.22MM [Qty: 900] [Live-Ammo]', NULL, NULL, '2026-05-25 16:41:22'),
+(118, 4, 'William Ntisem', 'Armourer', 'Added Ammunition [ 67.22MM  KKKK (900 ) ] Type: Live-Ammo', 'Ammunition Management', '', '2026-05-25 16:41:22'),
+(119, 4, 'William Ntisem', 'Armourer', 'NEW_AMMO_REGISTERED: 56.67MMM [Qty: 1000] [Blank-Ammo]', NULL, NULL, '2026-05-25 16:42:02'),
+(120, 4, 'William Ntisem', 'Armourer', 'Added Ammunition [ 56.67MMM  Wonder (1000 ) ] Type: Blank-Ammo', 'Ammunition Management', '', '2026-05-25 16:42:02'),
+(121, 4, 'William Ntisem', 'Armourer', 'UPDATED_AMMO_STOCK: 77.65MM', NULL, NULL, '2026-05-25 16:42:20'),
+(122, 4, 'William Ntisem', 'Armourer', 'Updated Ammunition [ ID: 12 ]', 'Ammunition Management', '', '2026-05-25 16:42:20'),
+(123, 4, 'William Ntisem', 'Armourer', 'AMMO_DEPLOYED: 50 rounds of 56.67MMM (Wonder) issued to 53606 CPL Ebenezer Aning Nti', NULL, NULL, '2026-05-25 17:01:43'),
+(124, 4, 'William Ntisem', 'Armourer', 'Booked Blank Ammunition [ Log ID: 11 ] - 50 rounds of 56.67MMM (Wonder) issued to 53606 CPL Ebenezer Aning Nti', 'Ammunition Management', '', '2026-05-25 17:01:43'),
+(125, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-05-28 06:37:10'),
+(126, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Asante Jessica Afful (SN: 15769)', NULL, NULL, '2026-05-28 06:56:23'),
+(127, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-05-28 06:56:36'),
+(128, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Nancy Agyei (SN: 15815)', NULL, NULL, '2026-05-28 06:57:13'),
+(129, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Peter Owusu Mensah (SN: )', NULL, NULL, '2026-05-28 06:57:45'),
+(130, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Boateng Anna (SN: 15819)', NULL, NULL, '2026-05-28 06:58:13'),
+(131, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Frank Marful (SN: 27086)', NULL, NULL, '2026-05-28 06:59:28'),
+(132, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-05-28 06:59:44'),
+(133, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Peter Owusu Mensah (SN: )', NULL, NULL, '2026-05-28 06:59:53'),
+(134, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Seidu Issah (SN: 4422)', NULL, NULL, '2026-05-28 10:15:55'),
+(135, 4, '58459 L/CPL William Ntisem', 'Armourer', 'ASSET_RECOVERY: Restocked CZ807 and 10 rounds. State: Not-Faulty', NULL, NULL, '2026-06-04 19:29:21'),
+(136, 4, '58459 L/CPL William Ntisem', 'Armourer', 'Updated Return Status [ ID: 265 ] - ASSET_RECOVERY: Restocked CZ807 and 10 rounds. State: Not-Faulty]', 'Return Management', '', '2026-06-04 19:29:21'),
+(137, 4, '58459 L/CPL William Ntisem', 'Armourer', 'Added Armourer [ Opoku (60978 ) ]', 'Armourer Management', '', '2026-06-11 10:18:13'),
+(138, 4, '58459 L/CPL William Ntisem', 'Armourer', 'Added Armourer [ Reuben Darko (67892 ) ]', 'Armourer Management', '', '2026-06-11 10:24:34'),
+(139, 4, '58459 L/CPL William Ntisem', 'Armourer', 'Added Armourer [ WilliamsAnokye (67822 ) ]', 'Armourer Management', '', '2026-06-11 10:27:39'),
+(140, 0, 'William Ntisem', 'Armourer', 'Added Armourer: Amos Opoku', 'Armourer Management', '', '2026-06-11 13:34:41'),
+(141, 0, 'William Ntisem', 'Armourer', 'Deleted Armourer: Reuben Darko', 'Armourer Management', '', '2026-06-11 13:46:55'),
+(142, 0, 'William Ntisem', 'Armourer', 'Deleted Armourer: William Ntisem', 'Armourer Management', '', '2026-06-11 13:47:05'),
+(143, 0, 'William Ntisem', 'Armourer', 'Deleted Armourer: Opoku', 'Armourer Management', '', '2026-06-11 13:47:20'),
+(144, 0, 'William Ntisem', 'Armourer', 'Deleted Armourer: Amos Opoku', 'Armourer Management', '', '2026-06-11 13:49:46'),
+(145, 0, 'William Ntisem', 'Armourer', 'Deleted Armourer: WilliamsAnokye', 'Armourer Management', '', '2026-06-11 13:51:55'),
+(146, 0, 'William Ntisem', 'Armourer', 'Deleted Armourer: William Ntisem', 'Armourer Management', '', '2026-06-11 13:55:57'),
+(147, 0, 'William Ntisem', 'Armourer', 'Added Armourer [ William Anokye (56232 ) ]', 'Armourer Management', '', '2026-06-11 13:59:25'),
+(148, 0, 'William Ntisem', 'Armourer', 'Deleted Armourer: William Anokye', 'Armourer Management', '', '2026-06-11 14:00:17'),
+(149, 0, 'Ntisem William', 'Armourer', 'Deleted Armourer: Richard Boampong', 'Armourer Management', '', '2026-06-14 10:11:46'),
+(150, 0, 'Ntisem William', 'Armourer', 'Added Armourer [ Lawrence Acheampong (605441 ) ]', 'Armourer Management', '', '2026-06-14 10:17:08'),
+(151, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Lawrence Acheampong', 'Armourer Management', '', '2026-06-14 10:22:32'),
+(152, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Lawrence Acheampong', 'Armourer Management', '', '2026-06-14 10:23:10'),
+(153, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Ntisem William', 'Armourer Management', '', '2026-06-14 10:23:41'),
+(154, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Lawrence Acheampong', 'Armourer Management', '', '2026-06-14 10:54:29'),
+(155, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Ntisem William', 'Armourer Management', '', '2026-06-14 23:01:36'),
+(156, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Lawrence Acheampong', 'Armourer Management', '', '2026-06-14 23:16:05'),
+(157, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Ntisem William', 'Armourer Management', '', '2026-06-14 23:17:41'),
+(158, 0, 'Ntisem William', 'Armourer', 'Added Armourer: Boampong', 'Armourer Management', '', '2026-06-14 23:19:42'),
+(159, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Lawrence Acheampong', 'Armourer Management', '', '2026-06-15 00:40:39'),
+(160, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Lawrence Acheampong', 'Armourer Management', '', '2026-06-15 00:42:23'),
+(161, 0, 'William NTI', 'Administrator', 'Deleted Armourer/Administrator: Lawrence Acheampong', 'Armourer/Administrator Management', '', '2026-06-15 01:04:06'),
+(162, 0, 'William NTI', 'Administrator', 'Deleted Armourer/Administrator: Boampong', 'Armourer/Administrator Management', '', '2026-06-15 01:05:36'),
+(163, 0, 'Ntisem William', 'Armourer', 'Added Armourer: William Ntisem', 'Armourer Management', '', '2026-06-15 01:09:03'),
+(164, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: William Ntisem', 'Armourer Management', '', '2026-06-15 01:09:20'),
+(165, 0, 'Ntisem William', 'Armourer', 'Added Armourer: Anokye Ntisem', 'Armourer Management', '', '2026-06-15 01:11:05'),
+(166, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Anokye Ntisem', 'Armourer Management', '', '2026-06-15 01:11:29'),
+(167, 0, 'Ntisem William', 'Armourer', 'Deleted Armourer: Anokye Ntisem', 'Armourer Management', '', '2026-06-15 01:11:39'),
+(168, 0, 'Ntisem William', 'Armourer', 'Added Armourer: Anokye Kwaku', 'Armourer Management', '', '2026-06-15 01:35:02'),
+(169, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Anokye Kwaku', 'Armourer Management', '', '2026-06-15 01:35:34'),
+(170, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Anokye Kwaku', 'Armourer Management', '', '2026-06-15 01:44:08'),
+(171, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Anokye Kwaku', 'Armourer Management', '', '2026-06-15 01:44:28'),
+(172, 0, 'Ntisem William', 'Armourer', 'Updated Armourer: Anokye Kwaku2', 'Armourer Management', '', '2026-06-15 01:57:47'),
+(173, 0, 'William NTI', 'Administrator', 'Added Administrator / Armourer: Edith Wineme', 'Armourer / Administrator Management', '', '2026-06-15 02:15:46'),
+(174, 0, 'William NTI', 'Administrator', 'Deleted Armourer/Administrator Edith Wineme', 'Administrator / Armourer Management', '', '2026-06-15 02:28:40'),
+(175, 3, '60900 C/Inspr Ntisem William', 'Armourer', 'Deleted Armourer: William Ntisem', 'Armourer Management', '', '2026-06-19 13:27:25'),
+(176, 3, 'Ntisem William', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-06-23 13:53:00'),
+(177, 3, 'Ntisem William', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-06-23 13:57:04'),
+(178, 3, 'Ntisem William', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-06-23 13:57:26'),
+(179, 3, 'Ntisem William', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-06-23 13:58:20'),
+(180, 3, 'Ntisem William', 'Armourer', 'UPDATED_OFFICER: Daniel Kitiaku (SN: )', NULL, NULL, '2026-06-23 13:59:01'),
+(181, 3, 'Ntisem William', 'Armourer', 'UPDATED_OFFICER: Daniel Kitiaku (SN: )', NULL, NULL, '2026-06-23 13:59:25'),
+(182, 3, 'Ntisem William', 'Armourer', 'UPDATED_OFFICER: Daniel Kitiaku (SN: )', NULL, NULL, '2026-06-23 14:00:46'),
+(183, 3, 'Ntisem William', 'Armourer', 'UPDATED_OFFICER: Daniel Kitiaku (SN: )', NULL, NULL, '2026-06-23 14:00:57'),
+(184, 3, 'Ntisem William', 'Armourer', 'UPDATED_OFFICER: Daniel Kitiaku (SN: )', NULL, NULL, '2026-06-23 14:03:27'),
+(185, 3, 'Ntisem William', 'Armourer', 'UPDATED_OFFICER: Daniel Kitiaku (SN: )', NULL, NULL, '2026-06-23 14:06:01'),
+(186, 3, 'Ntisem William', 'Armourer', 'UPDATED_OFFICER: Daniel Kitiaku (SN: )', NULL, NULL, '2026-06-23 14:07:40'),
+(187, 3, 'Ntisem William', 'Armourer', 'UPDATED_OFFICER: Daniel Kitiaku (SN: )', NULL, NULL, '2026-06-23 14:12:43'),
+(188, 3, '60900 C/Inspr Ntisem William', 'Armourer', 'INDUCTED_NEW_ASSET: [ BERETTA-92 | SN: 6482 ]', 'Asset Management', '', '2026-06-23 14:17:37'),
+(189, 3, '60900 C/Inspr Ntisem William', 'Armourer', 'INDUCTED_NEW_ASSET: [ AK47 | SN: C00333 ]', 'Asset Management', '', '2026-06-23 14:19:32'),
+(190, 4, '58459 L/CPL William Ntisem', 'Armourer', 'MODIFIED_ASSET_METRICS: Serial [AZ-4233] under Class [AK47] modified by terminal admin.', 'Firearm Management', '', '2026-06-23 22:50:29'),
+(191, 4, '58459 L/CPL William Ntisem', 'Armourer', 'Updated Profile [ ID: 4 ]', 'Profile Management', '', '2026-06-23 22:53:44'),
+(192, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Baba Osman (SN: 67304)', NULL, NULL, '2026-06-23 22:55:11'),
+(193, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-06-23 22:55:38'),
+(194, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-06-23 23:04:53'),
+(195, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-06-23 23:05:14'),
+(196, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-06-23 23:05:24'),
+(197, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-06-23 23:08:35'),
+(198, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-06-23 23:08:44'),
+(199, 4, 'William Ntisem', 'Armourer', 'UPDATED_OFFICER: Fred Akafo Sena (SN: )', NULL, NULL, '2026-06-23 23:08:52');
 
 -- --------------------------------------------------------
 
@@ -644,65 +584,15 @@ INSERT INTO `daily_activities` (`activityID`, `adminID`, `armourer_admin_name`, 
 
 CREATE TABLE `faulty_ammo` (
   `faulty_ammoID` int(200) NOT NULL,
-  `faulty_ammo_serial_no` varchar(200) NOT NULL,
-  `faulty_ammo_type` varchar(200) NOT NULL,
+  `faulty_ammo_name` varchar(200) NOT NULL,
+  `faulty_ammo_manufacturer` varchar(200) NOT NULL,
   `faulty_ammo_quantity` int(200) NOT NULL,
   `faulty_type` varchar(200) NOT NULL,
   `faulty_ammo_image` varchar(500) NOT NULL,
   `faulty_ammo_comment` varchar(1000) NOT NULL,
+  `returned_by_officer` varchar(200) NOT NULL,
   `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `is_deleted` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `faulty_ammo2`
---
-
-CREATE TABLE `faulty_ammo2` (
-  `faulty_ammoID` int(200) NOT NULL,
-  `faulty_ammo_serial_no` varchar(200) NOT NULL,
-  `faulty_ammo_type` varchar(200) NOT NULL,
-  `faulty_ammo_quantity` int(200) NOT NULL,
-  `faulty_type` varchar(200) NOT NULL,
-  `faulty_ammo_image` varchar(500) NOT NULL,
-  `faulty_ammo_comment` varchar(1000) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `faulty_asset`
---
-
-CREATE TABLE `faulty_asset` (
-  `faulty_assetID` int(200) NOT NULL,
-  `faulty_asset_serial_no` varchar(200) NOT NULL,
-  `faulty_asset_quantity` int(200) NOT NULL,
-  `faulty_type` varchar(200) NOT NULL,
-  `faulty_nature` varchar(200) NOT NULL,
-  `faulty_asset_image` varchar(500) NOT NULL,
-  `faulty_asset_comment` varchar(1000) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `faulty_asset2`
---
-
-CREATE TABLE `faulty_asset2` (
-  `faulty_assetID` int(200) NOT NULL,
-  `faulty_asset_serial_no` varchar(200) NOT NULL,
-  `faulty_asset_quantity` int(200) NOT NULL,
-  `faulty_type` varchar(200) NOT NULL,
-  `faulty_nature` varchar(200) NOT NULL,
-  `faulty_asset_image` varchar(500) NOT NULL,
-  `faulty_asset_comment` varchar(1000) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -743,44 +633,6 @@ INSERT INTO `faulty_weapons` (`faulty_weaponID`, `faulty_firearm_serial_no`, `fa
 (11, '0027-19', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Unserviceable', '66fae3f2a53846.47659020.jpeg', '', '2024-09-30 17:46:26', 0),
 (12, '0009-19', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Serviceable', '66fae4156570f4.13374582.jpeg', '', '2024-09-30 17:47:01', 0),
 (13, 'M9-211856', 'Side-Arm', 'BERETTA-M9', 'Duty Weapon', 'Trigger issue', 'Serviceable', '66fc1c8259f0d5.93980816.jpg', '', '2024-10-01 16:00:02', 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `faulty_weapons2`
---
-
-CREATE TABLE `faulty_weapons2` (
-  `faulty_weaponID` int(100) NOT NULL,
-  `faulty_firearm_serial_no` varchar(500) NOT NULL,
-  `faulty_firearm_type` varchar(500) NOT NULL,
-  `faulty_firearm_name` varchar(500) NOT NULL,
-  `faulty_firearm_class` varchar(200) NOT NULL,
-  `faulty_type` varchar(200) NOT NULL,
-  `faulty_nature` varchar(200) NOT NULL,
-  `faulty_firearm_image` varchar(500) NOT NULL,
-  `faulty_firearm_comment` varchar(1000) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `faulty_weapons2`
---
-
-INSERT INTO `faulty_weapons2` (`faulty_weaponID`, `faulty_firearm_serial_no`, `faulty_firearm_type`, `faulty_firearm_name`, `faulty_firearm_class`, `faulty_type`, `faulty_nature`, `faulty_firearm_image`, `faulty_firearm_comment`, `datetime`) VALUES
-(1, '198630-2', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Serviceable', '66fae1ea9d2301.71027147.jpeg', '', '2024-09-30 17:37:46'),
-(2, 'HA-3907', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Serviceable', '66fae29e155507.52951122.png', '', '2024-09-30 17:40:46'),
-(3, '0070-19', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Serviceable', '66fae2c5c947b1.58326814.jpg', '', '2024-09-30 17:41:25'),
-(4, '0022-19', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Serviceable', '66fae2dfeb2aa1.43677299.jpg', '', '2024-09-30 17:41:51'),
-(5, '0019-19', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Serviceable', '66fae3119c0085.43071970.jpeg', '', '2024-09-30 17:42:41'),
-(6, '0011-19', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Serviceable', '66fae3396f18f6.49948013.jpeg', '', '2024-09-30 17:43:21'),
-(7, '0005-19', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Serviceable', '66fae3588cad75.85646023.jpg', '', '2024-09-30 17:43:52'),
-(8, '0064-19', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Serviceable', '66fae380f13346.45458335.jpeg', '', '2024-09-30 17:44:32'),
-(9, '0035-19', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Serviceable', '66fae3a459c2a9.65662021.jpg', '', '2024-09-30 17:45:08'),
-(10, '0025-19', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Unserviceable', '66fae3c996e9a3.81115654.jpg', '', '2024-09-30 17:45:45'),
-(11, '0027-19', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Unserviceable', '66fae3f2a53846.47659020.jpeg', '', '2024-09-30 17:46:26'),
-(12, '0009-19', 'Rifle', 'AK47', 'Duty Weapon', 'Breakage', 'Serviceable', '66fae4156570f4.13374582.jpeg', '', '2024-09-30 17:47:01'),
-(13, 'M9-211856', 'Side-Arm', 'BERETTA-M9', 'Duty Weapon', 'Trigger issue', 'Serviceable', '66fc1c8259f0d5.93980816.jpg', '', '2024-10-01 16:00:02');
 
 -- --------------------------------------------------------
 
@@ -832,7 +684,7 @@ INSERT INTO `firearms` (`firearmID`, `firearm_serial_no`, `manufacturer`, `firea
 (60, 'C069628', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:37:29', 0, 0, '', ''),
 (61, 'C082026', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:40:18', 0, 0, '', ''),
 (62, 'C061901', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 14:05:19', 0, 0, '', ''),
-(63, 'AZ -4233', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-30 17:50:11', 0, 0, '', ''),
+(63, 'AZ-4233', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-06-23 22:50:29', 0, 4, '', ''),
 (64, 'AZ-4543', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:20:35', 0, 0, '', ''),
 (65, 'AL-0548', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:22:11', 0, 0, '', ''),
 (66, '0087', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:24:00', 0, 0, '', ''),
@@ -1105,7 +957,7 @@ INSERT INTO `firearms` (`firearmID`, `firearm_serial_no`, `manufacturer`, `firea
 (378, 'D176088', 'CZ', 'Rifle', 'CZ-SCORPION', '9x19mm', '30', 1, '', 'Not Faulty', 'Available', '2026-04-16 06:09:57', 0, 0, '', ''),
 (379, 'D147196', 'CZ', 'Rifle', 'CZ-SCORPION', '9x19mm', '30', 1, '', 'Not Faulty', 'Available', '2026-04-16 05:58:50', 0, 0, '', ''),
 (380, 'D145322', 'CZ', 'Rifle', 'CZ-SCORPION', '9x19mm', '30', 1, '', 'Not Faulty', 'Available', '2026-04-16 05:57:09', 0, 0, '', ''),
-(381, 'D145304', 'CZ', 'Rifle', 'CZ-SCORPION', '9x19mm', '30', 1, '', 'Not Faulty', 'Available', '2026-04-16 05:56:31', 0, 0, '', ''),
+(381, 'D145304', 'CZ', 'Rifle', 'CZ-SCORPION', '9x19mm', '30', 1, '', 'Not Faulty', 'Not-Available', '2026-06-12 10:05:28', 0, 0, '', ''),
 (382, 'D135522', 'CZ', 'Rifle', 'CZ-SCORPION', '9x19mm', '30', 1, '', 'Not Faulty', 'Available', '2026-04-16 05:52:51', 0, 0, '', ''),
 (383, 'D138488', 'CZ', 'Rifle', 'CZ-SCORPION', '9x19mm', '30', 1, '', 'Not Faulty', 'Available', '2026-04-16 05:54:36', 0, 0, '', ''),
 (384, 'D174880', 'CZ', 'Rifle', 'CZ-SCORPION', '9x19mm', '30', 1, '', 'Not Faulty', 'Available', '2026-04-16 06:09:24', 0, 0, '', ''),
@@ -1202,7 +1054,7 @@ INSERT INTO `firearms` (`firearmID`, `firearm_serial_no`, `manufacturer`, `firea
 (475, 'M9-212766', 'Sellier & Bellot', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 14:09:28', 0, 0, '', ''),
 (476, 'M9-213927', 'Sellier & Bellot', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 14:09:32', 0, 0, '', ''),
 (477, 'M9-211892', 'Sellier & Bellot', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 14:09:34', 0, 0, '', ''),
-(478, 'M9-212749', 'Sellier & Bellot', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 14:09:36', 0, 0, '', ''),
+(478, 'M9-212749', 'Sellier & Bellot', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Not-Available', '2026-06-23 08:10:29', 0, 0, '', ''),
 (479, 'M9-212910', 'Sellier & Bellot', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 14:09:38', 0, 0, '', ''),
 (480, 'M9-211693', 'Sellier & Bellot', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 14:09:41', 0, 0, '', ''),
 (481, 'M9-215353', 'Sellier & Bellot', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 14:09:43', 0, 0, '', ''),
@@ -1222,7 +1074,7 @@ INSERT INTO `firearms` (`firearmID`, `firearm_serial_no`, `manufacturer`, `firea
 (495, 'A13005780', 'Sellier & Bellot', 'Side-Arm', 'NP-22', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 14:10:51', 0, 0, '', ''),
 (496, 'A13006651', 'Sellier & Bellot', 'Side-Arm', 'NP-22', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 14:11:00', 0, 0, '', ''),
 (502, 'SP-0136866', 'Sellier & Bellot', 'Side-Arm', 'SIGPRO', '9x19mm', '15', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 15:05:07', 0, 0, '', ''),
-(503, 'SP-0137277', 'Sellier & Bellot', 'Side-Arm', 'SIGPRO', '9x19mm', '15', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 15:05:59', 0, 0, '', ''),
+(503, 'SP-0137277', 'Sellier & Bellot', 'Side-Arm', 'SIGPRO', '9x19mm', '15', 1, 'Duty-Weapon', 'Not-Faulty', 'Not-Available', '2026-06-23 08:24:53', 0, 0, '', ''),
 (504, 'SP-0136845', 'Sellier & Bellot', 'Side-Arm', 'SIGPRO', '9x19mm', '15', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 15:07:07', 0, 0, '', ''),
 (505, 'A13005679', 'Sellier & Bellot', 'Side-Arm', 'NP-22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 15:08:06', 0, 0, '', ''),
 (506, 'A13006542', 'Sellier & Bellot', 'Side-Arm', 'NP-22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 15:08:54', 0, 0, '', ''),
@@ -1265,7 +1117,7 @@ INSERT INTO `firearms` (`firearmID`, `firearm_serial_no`, `manufacturer`, `firea
 (544, 'C422089', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:57:14', 0, 0, '', ''),
 (545, 'F102326', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:00:16', 0, 0, '', ''),
 (546, 'E021888', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:00:55', 0, 0, '', ''),
-(547, 'E021880', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-27 18:34:03', 0, 0, '', ''),
+(547, 'E021880', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Not-Available', '2026-06-10 16:51:36', 0, 0, '', ''),
 (548, 'F141249', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:02:05', 0, 0, '', ''),
 (549, 'C402178', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-27 18:30:44', 0, 0, '', ''),
 (550, 'C422042', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:03:20', 0, 0, '', ''),
@@ -1295,598 +1147,6 @@ INSERT INTO `firearms` (`firearmID`, `firearm_serial_no`, `manufacturer`, `firea
 (574, 'WEGHA', 'BERETTA', 'PISTOL', 'AK6767', '5.56X45MM', '23', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-05-12 17:11:27', 0, 5, '12345 C/INSPR William NTI', 'DADSADADADA'),
 (575, '4623', 'AK', 'PUMP ACTION', 'NP-22', '5.56X45MM', '30', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-05-12 17:18:08', 0, 5, '12345 C/INSPR William NTI', 'adadssadad'),
 (576, 'R1234', 'BERETTA', 'PUMP ACTION', 'NP-18', '5.56X45MM', '30', 1, 'Duty-Weapon', 'Not-Faulty', 'Archived', '2026-05-12 18:04:40', 1, 5, '12345 C/INSPR William NTI', 'GHANADADADAD');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `firearms2`
---
-
-CREATE TABLE `firearms2` (
-  `firearmID` int(200) NOT NULL,
-  `firearm_serial_no` varchar(200) NOT NULL,
-  `manufacturer` varchar(500) NOT NULL,
-  `firearm_type` varchar(200) NOT NULL,
-  `firearm_name` varchar(500) NOT NULL,
-  `firearm_caliber` varchar(200) NOT NULL,
-  `firearm_capacity` varchar(200) NOT NULL,
-  `quantity` int(200) NOT NULL,
-  `firearm_class` varchar(200) NOT NULL,
-  `firearm_state` varchar(200) NOT NULL,
-  `booking_status` varchar(200) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `firearms2`
---
-
-INSERT INTO `firearms2` (`firearmID`, `firearm_serial_no`, `manufacturer`, `firearm_type`, `firearm_name`, `firearm_caliber`, `firearm_capacity`, `quantity`, `firearm_class`, `firearm_state`, `booking_status`, `datetime`) VALUES
-(7, '0011', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-28 23:39:14'),
-(8, '00123', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 10, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-28 23:40:19'),
-(9, 'E004836-4', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-28 23:43:56'),
-(10, 'E004810-1', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-28 23:50:51'),
-(11, 'c326913', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 00:25:08'),
-(12, 'c326913', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 00:25:08'),
-(13, 'f141289', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 00:31:06'),
-(14, 'E021864', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 00:56:09'),
-(15, 'E402183', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 00:59:41'),
-(16, 'C326965', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:04:51'),
-(17, 'D418901', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:08:06'),
-(18, 'C402202', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:09:32'),
-(19, 'D418901', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:15:36'),
-(20, 'D402150', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:21:00'),
-(21, 'C425816', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:22:30'),
-(22, 'E021885', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:24:07'),
-(23, 'E013906', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:25:22'),
-(24, 'C402201', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:26:28'),
-(25, 'F129876', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:27:49'),
-(26, 'F211131', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:29:05'),
-(27, 'F211106', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:30:24'),
-(28, 'F213060', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:31:42'),
-(29, 'F211092', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:33:25'),
-(30, 'F211092', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:33:25'),
-(31, 'F211117', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:34:39'),
-(32, 'E013895', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:36:05'),
-(33, 'E012823', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Spare-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:38:16'),
-(34, 'E021858', 'CZ', 'Rifle', 'CZ807', '9x19mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:40:33'),
-(35, 'E013943', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:41:48'),
-(36, 'E004799', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:43:37'),
-(37, 'C326917', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:44:47'),
-(38, 'E021859', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:45:52'),
-(39, 'E021864', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 01:47:10'),
-(40, 'C069621', 'CZ', 'Rifle', '805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 17:53:50'),
-(41, ' C065685', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'None', 'Available', '2024-08-29 17:59:23'),
-(42, 'C056439', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:01:01'),
-(43, 'C052873', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:05:00'),
-(44, 'C068428', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Spare-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:06:18'),
-(45, 'CC068408', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:07:59'),
-(46, 'C082027', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:09:17'),
-(47, 'C069641', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:11:04'),
-(48, 'C081998', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:13:34'),
-(49, 'C082001', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:15:04'),
-(50, 'C071864', 'CZ', 'Rifle', 'CZ805', '', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:17:35'),
-(51, 'C071864', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:19:01'),
-(52, 'C061894', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:20:29'),
-(53, 'C052885', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'None', 'Available', '2024-08-29 18:22:35'),
-(54, 'C056437', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:24:00'),
-(55, 'C085120', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:26:39'),
-(56, 'C082009', 'CZ', 'Rifle', '805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:28:42'),
-(57, 'C061893', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'None', 'Available', '2024-08-29 18:30:48'),
-(58, 'C069628', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:37:29'),
-(59, 'C082026', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-29 18:40:18'),
-(60, 'C061901', 'CZ', 'Rifle', 'CZ805', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 14:05:19'),
-(61, 'AZ -4233', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'None', 'Available', '2024-08-30 16:17:38'),
-(62, 'AZ-4543', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:20:35'),
-(63, 'AL-0548', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:22:11'),
-(64, '0087', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:24:00'),
-(65, 'NA-201147', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:26:15'),
-(66, '0066', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:27:56'),
-(67, '0028', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:29:23'),
-(68, '1155', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:31:54'),
-(69, '1155', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:35:02'),
-(70, '0044', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:38:42'),
-(71, '0084', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:39:55'),
-(72, '0084', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:41:16'),
-(73, '0024', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-30 16:43:04'),
-(74, '198630-2', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Faulty', 'Available', '2024-08-30 23:53:30'),
-(75, 'HA-3907', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Faulty', 'Available', '2024-08-30 23:57:36'),
-(76, '0070', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Faulty', 'Available', '2024-08-30 23:58:54'),
-(77, '0022-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Faulty', 'Available', '2024-08-31 00:00:34'),
-(78, '0019-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Faulty', 'Available', '2024-08-31 00:01:52'),
-(79, '0011-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'None', 'Available', '2024-08-31 00:03:04'),
-(80, '0005-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Faulty', 'Available', '2024-08-31 00:04:34'),
-(81, '0064-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Faulty', 'Available', '2024-08-31 00:06:28'),
-(82, '0035-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Faulty', 'Available', '2024-08-31 00:10:20'),
-(83, '0025-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Faulty', 'Available', '2024-08-31 00:13:45'),
-(84, '0027-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Faulty', 'Available', '2024-08-31 00:15:24'),
-(85, '0009-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Faulty', 'Available', '2024-08-31 00:16:59'),
-(86, 'M9-211881', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-31 22:47:11'),
-(87, 'M9-215369', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-31 22:49:36'),
-(88, 'M9-212792', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-31 22:57:50'),
-(89, 'M9-211838', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'None', 'Available', '2024-08-31 23:01:35'),
-(90, 'M9-211868', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-31 23:04:44'),
-(91, 'M9-215339', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-31 23:06:54'),
-(92, 'M9-211681', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-31 23:08:21'),
-(93, 'M9-215349', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-31 23:09:55'),
-(94, 'M9-212993', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-31 23:11:20'),
-(95, 'M9-215368', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-31 23:13:07'),
-(96, 'M9-211873', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-31 23:16:45'),
-(97, 'M9-213825', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-08-31 23:18:13'),
-(98, 'M9-211709', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:10:18'),
-(99, 'M9-211749', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:13:58'),
-(100, 'M9-211649', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:16:24'),
-(101, 'M9-213818', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:18:36'),
-(102, 'M9-212982', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:20:11'),
-(103, 'M9-213958', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:21:38'),
-(104, 'M9-213345', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:24:00'),
-(105, 'M9-212759', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:25:35'),
-(106, 'M9-212795', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:26:56'),
-(107, 'M9-212757', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:28:37'),
-(108, 'M9-213956', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:29:50'),
-(109, 'M9-211865', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:31:12'),
-(110, 'M9-211689', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:32:44'),
-(111, 'M9-211859', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:35:56'),
-(112, 'M9-211697', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:39:35'),
-(113, 'M9-213961', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:40:55'),
-(114, 'M9-213820', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:42:22'),
-(115, 'M9-213934', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:45:55'),
-(116, 'M9-212990', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:47:43'),
-(117, 'M9-212789', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 01:50:07'),
-(118, 'M9-211703', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 13:57:56'),
-(119, 'M9-215337', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 13:59:49'),
-(120, 'M9-211690', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 14:00:57'),
-(121, 'M9-213002', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 14:02:49'),
-(122, 'M9-215326', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 14:18:43'),
-(123, 'M9-211854', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 14:20:41'),
-(124, 'M9-213034', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 14:43:16'),
-(125, 'M9-211884', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 14:45:02'),
-(126, 'M9-211855', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 14:48:52'),
-(127, 'M9-211672', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 14:50:33'),
-(128, 'M9-212791', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 14:52:45'),
-(129, 'M9-211704', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 14:55:05'),
-(130, 'M9-211704', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Faulty', 'Available', '2024-09-01 14:58:11'),
-(131, 'M9-212740', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 15:01:17'),
-(132, 'M9-211856', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Faulty', 'Available', '2024-09-01 15:04:58'),
-(133, 'M9-211706', 'BERETTA', 'Side-Arm', 'BERETTA-M9', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 15:07:29'),
-(134, 'H78756Z', 'BERETTA', 'Side-Arm', 'BERETTA-92', '9x19mm', '', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 16:18:50'),
-(135, 'H78691Z', 'BERETTA', 'Side-Arm', 'BERETTA-92', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 16:21:53'),
-(136, 'A13006529', 'NORINCO PISTOL', 'Side-Arm', 'NP22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 16:32:46'),
-(137, 'A13006661', 'NORINCO PISTOL', 'Side-Arm', 'NP22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 16:44:50'),
-(138, 'A13005682', 'NORINCO PISTOL', 'Side-Arm', 'NP22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 16:47:02'),
-(139, 'A13005725', 'NORINCO PISTOL', 'Side-Arm', 'NP22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 16:48:32'),
-(140, 'A13006212', 'NORINCO PISTOL', 'Side-Arm', 'NP22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 16:51:02'),
-(141, 'A13005759', 'NORINCO PISTOL', 'Side-Arm', 'NP22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 16:53:07'),
-(142, 'A13006646', 'NORINCO PISTOL', 'Side-Arm', 'NP22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 16:55:06'),
-(143, 'A13005667', 'NORINCO PISTOL', 'Side-Arm', 'NP22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 16:56:45'),
-(144, 'A13005672', 'NORINCO PISTOL', 'Side-Arm', 'NP22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 16:58:10'),
-(145, '11501846', 'NORINCO PISTOL', 'Side-Arm', 'NP22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 17:00:47'),
-(146, '11501846-6', 'NORINCO PISTOL', 'Side-Arm', '18', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 17:05:35'),
-(147, '115012-7', 'NORINCO PISTOL', 'Side-Arm', 'NP-18', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 17:09:37'),
-(148, '11501827', 'NORINCO PISTOL', 'Side-Arm', 'NP-18', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 17:13:11'),
-(149, '11501276-7', 'NORINCO PISTOL', 'Side-Arm', 'NP-18', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 17:17:13'),
-(150, '11501616-5', 'NORINCO PISTOL', 'Side-Arm', 'NP-18', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 17:19:18'),
-(151, 'SP-1036911', 'SIGPRO', 'Side-Arm', 'SP', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 17:23:10'),
-(152, 'SP-0136960', 'SIGPRO', 'Side-Arm', 'SP', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 17:26:29'),
-(153, 'SP-0137312', 'SIGPRO', 'Side-Arm', 'SP', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 17:30:04'),
-(154, 'SP-0137157', 'SIGPRO', 'Side-Arm', 'SP', '9x19mm', '15', 1, 'Duty-Weapon', 'Not Faulty', 'Available', '2024-09-01 17:32:34'),
-(155, 'C306823', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:39:16'),
-(156, 'C3657557', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:41:55'),
-(157, 'C326989', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:43:12'),
-(158, 'E013946', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:44:11'),
-(159, 'C329819', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:45:06'),
-(160, 'C326935', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:46:00'),
-(161, 'C402184', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:50:23'),
-(162, 'C364551', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:51:27'),
-(163, 'C306840', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:54:11'),
-(164, 'E4004836', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:55:03'),
-(165, 'E4004810', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'None', 'Available', '2026-03-11 14:55:55'),
-(166, 'C422089', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:56:44'),
-(167, 'F102326', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:57:32'),
-(168, 'E021888', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:58:14'),
-(169, 'F141249', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:59:03'),
-(170, 'E021880', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 14:59:52'),
-(171, 'C4023178', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:00:33'),
-(172, 'C422042', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:01:40'),
-(173, 'F141276', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:03:25'),
-(174, 'C402187', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:04:35'),
-(175, 'C3269783', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:05:31'),
-(176, 'C326973', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:06:30'),
-(177, 'F102305', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:09:59'),
-(178, 'C304844', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:31:48'),
-(179, 'E021812', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:32:41'),
-(180, 'E021806', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:34:03'),
-(181, 'F141270', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:35:04'),
-(182, 'C326952', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:36:34'),
-(183, 'E021804', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:37:39'),
-(184, 'E013932', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:38:44'),
-(185, 'E021871', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:39:33'),
-(186, 'E021841', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:40:50'),
-(187, 'C306822', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'None', 'Available', '2026-03-11 15:42:33'),
-(188, 'F129898', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Spare-Weapon', 'Not Faulty', 'Available', '2026-03-11 15:43:57'),
-(189, 'AZ-4233', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 16:56:13'),
-(190, '        8378', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:01:41'),
-(191, ' 371903', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:03:11'),
-(192, '117545', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:04:06'),
-(193, '154368', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:04:43'),
-(194, '207176', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:05:27'),
-(195, 'A-15747', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:06:29'),
-(196, '153872', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:07:56'),
-(197, '153829', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:09:59'),
-(198, '330102', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:12:37'),
-(199, '639544', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:17:53'),
-(200, '639542', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:20:08'),
-(201, '117541', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:21:45'),
-(202, '639549', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:22:56'),
-(203, '639547', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:23:53'),
-(204, '244055', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:25:08'),
-(205, '639964', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:26:00'),
-(206, '639978', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:26:47'),
-(207, '335643', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:27:45'),
-(208, '335644', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:28:38'),
-(209, '335649', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:29:36'),
-(210, '335645', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:30:24'),
-(211, '335641', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:31:08'),
-(212, '574444', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:32:05'),
-(213, '385944', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:33:02'),
-(214, '152290', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:33:55'),
-(215, '639170', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:34:43'),
-(216, '153420', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:35:31'),
-(217, '153685', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:36:23'),
-(218, '574804', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:37:17'),
-(219, '401153', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:39:50'),
-(220, '154233', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:40:49'),
-(221, '574812', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:41:36'),
-(222, '574802', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:42:27'),
-(223, '574808', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:43:38'),
-(224, '403976', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:44:31'),
-(225, '519242', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:45:24'),
-(226, '403782', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:46:13'),
-(227, '90498', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:47:03'),
-(228, '576667', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:48:14'),
-(229, '282982', 'CZ', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:49:11'),
-(230, '571137', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:51:57'),
-(231, '335650', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-16 17:52:57'),
-(232, '640563', 'AK', '', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 05:50:58'),
-(233, '564353', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 05:58:03'),
-(234, '578972', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 05:59:07'),
-(235, '578978', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:00:13'),
-(236, '578975', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:01:03'),
-(237, '438631', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:04:48'),
-(238, '621645', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:07:37'),
-(239, '602581', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:08:46'),
-(240, '574367', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:09:58'),
-(241, '573550', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:10:49'),
-(242, '64359', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:12:33'),
-(243, '175643', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:13:57'),
-(244, '330277', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:14:47'),
-(245, '417630', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:15:35'),
-(246, '330682', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:16:40'),
-(247, '330274', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:17:29'),
-(248, '303849', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:18:41'),
-(249, '210306', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:19:34'),
-(250, '213452', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:20:50'),
-(251, '269721', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:23:19'),
-(252, 'B-95960', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:24:16'),
-(253, '209423', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:25:14'),
-(254, '283092', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:26:13'),
-(255, '213645', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:27:24'),
-(256, '338059', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:28:17'),
-(257, 'B-96793', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:29:42'),
-(258, '283054', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:31:47'),
-(259, '215972', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:32:45'),
-(260, 'AE-405929', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:33:51'),
-(261, 'AL-2577', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:35:04'),
-(262, 'AE-405827', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:36:51'),
-(263, 'NK-405037', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:38:47'),
-(264, '191496', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:40:31'),
-(265, '60199', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:42:42'),
-(266, '146979', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:43:54'),
-(267, '229281', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:44:58'),
-(268, '190440', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:45:55'),
-(269, 'KP-236696', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:47:16'),
-(270, '190337', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:51:52'),
-(271, 'BA-405468', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:53:07'),
-(272, '0058', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:55:22'),
-(273, '0071-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:56:38'),
-(274, '0073-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:58:30'),
-(275, '0047', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 06:59:42'),
-(276, 'AK-371903', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:28:47'),
-(277, '8378', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:35:02'),
-(278, '434339-4', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:38:30'),
-(279, 'AE-406219', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:40:16'),
-(280, 'NK-6114', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:41:51'),
-(281, 'AE-405403', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:43:08'),
-(282, 'KP-231772', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:44:43'),
-(283, '190339', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:46:38'),
-(284, '0104-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:47:48'),
-(285, '0072-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:49:28'),
-(286, '0080-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:50:48'),
-(287, '0103-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:52:18'),
-(288, '0026-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:53:40'),
-(289, '0089-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:54:51'),
-(290, '0076-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:56:07'),
-(291, '0063-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:58:10'),
-(292, '578971', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 08:59:56'),
-(293, '117602', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:01:11'),
-(294, '564358', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:04:54'),
-(295, '571283', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:06:06'),
-(296, '524354', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:11:54'),
-(297, 'B-96411', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:14:52'),
-(298, '445411', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:16:49'),
-(299, '302614', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:18:13'),
-(300, '576669', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:19:30'),
-(301, '146142', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:20:51'),
-(302, '232650', 'AK', 'Rifle', 'AK47', '', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:30:23'),
-(303, 'B-104299', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:32:29'),
-(304, '328640', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:35:36'),
-(305, '328070', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:36:44'),
-(306, '236033', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:37:54'),
-(307, '269746', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:39:26'),
-(308, '288684', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:40:33'),
-(309, '479374', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:42:40'),
-(310, '335642', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:43:52'),
-(311, '335648', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:45:19'),
-(312, '90825', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:47:28'),
-(313, 'B-96419', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:48:50'),
-(314, '90561', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:50:00'),
-(315, '492035', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:52:43'),
-(316, '0106', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:53:56'),
-(317, 'AE-406184', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:55:09'),
-(318, 'AL-2555', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 09:56:23'),
-(319, 'AE-405367', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:00:12'),
-(320, '283091', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:01:17'),
-(321, '563290', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:02:29'),
-(322, '0059-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:03:47'),
-(323, 'A-31251', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:05:28'),
-(324, 'BA-405540', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:06:41'),
-(325, '0029-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:07:56'),
-(326, 'KG-232084', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:10:01'),
-(327, '0088-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:11:14'),
-(328, '0044-19', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:12:25'),
-(329, 'AZ-5201', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:16:29'),
-(330, 'B-96415', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:19:35'),
-(331, 'AL-1956', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:20:53'),
-(332, 'AZ-2600', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:29:18'),
-(333, 'HT-5493', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:30:30'),
-(334, '90446', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:31:57'),
-(335, 'KP-236862', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:35:37'),
-(336, 'AE-405421', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:36:55'),
-(337, '551894', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:38:52'),
-(338, '335647', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:40:07'),
-(339, 'AZ-4315', 'AK', 'Rifle', 'AK47', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:41:37'),
-(340, '229284', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Spare-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:49:00'),
-(341, 'KP-231869', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Spare-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:51:15'),
-(342, 'KP-230476', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Spare-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:52:37'),
-(343, '190854', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:54:09'),
-(344, '38957', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Spare-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:57:43'),
-(345, '189864', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Spare-Weapon', 'Not Faulty', 'Available', '2026-03-17 10:59:08'),
-(346, 'NF-9973-57', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Spare-Weapon', 'Not Faulty', 'Available', '2026-03-17 11:00:41'),
-(347, '191282', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Spare-Weapon', 'Not Faulty', 'Available', '2026-03-17 11:02:05'),
-(348, '0558', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Spare-Weapon', 'Not Faulty', 'Available', '2026-03-17 11:03:39'),
-(349, '0102', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:05:04'),
-(350, '0033', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:06:24'),
-(351, '0025', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:08:52'),
-(352, '0101', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:10:25'),
-(353, '0027', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:11:37'),
-(354, '0070', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:15:12'),
-(355, '0019', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:17:39'),
-(356, '0055', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:19:04'),
-(357, '0035', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:20:24'),
-(358, '0065', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:24:49'),
-(359, '0022', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:26:08'),
-(360, '0011', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:27:29'),
-(361, '0005', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:28:55'),
-(362, '0064', 'AK', 'Rifle', 'AK47', '7.62x39mm', '0', 0, 'Duty-Weapon', 'Faulty', 'Available', '2026-03-17 11:30:41'),
-(363, ' D-135518', 'Sellier & Bellot', 'Rifle', 'SCORPION EVO 3', '', '', 0, 'Duty-Weapon', 'None', 'Available', '2026-03-17 11:43:02'),
-(364, 'D-146198', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 11:46:25'),
-(365, 'D-138536', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 11:47:40'),
-(366, 'D-146193', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 11:49:01'),
-(367, ' D-147201', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 11:50:17'),
-(368, 'D-146208', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 11:51:38'),
-(369, ' D-147243', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 11:53:16'),
-(370, 'D-176116', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 11:54:39'),
-(371, 'D-174853', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 11:56:17'),
-(372, 'D-135518', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:04:06'),
-(373, 'D-147201', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:07:16'),
-(374, 'D-147243', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:09:09'),
-(375, 'D-176064', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:11:02'),
-(376, 'D-176088', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:12:28'),
-(377, 'D-147196', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:14:23'),
-(378, 'D-145322', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:16:11'),
-(379, 'D-145304', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:17:46'),
-(380, 'D-135522', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:19:37'),
-(381, 'D-138488', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:21:20'),
-(382, 'D-174880', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:26:07'),
-(383, 'D-174879', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:38:40'),
-(384, 'D-174832', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:40:25'),
-(385, 'D-174878', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:42:31'),
-(386, 'D-174811', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:44:26'),
-(387, 'D-174828', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:47:19'),
-(388, 'D-174820', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:49:14'),
-(389, 'D-174871', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 12:52:10'),
-(390, 'D-174874', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:00:18'),
-(391, 'D-174835', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:02:36'),
-(392, 'D-174867', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:04:48'),
-(393, 'D-174816', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:07:43'),
-(394, 'D-406050', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:09:39');
-INSERT INTO `firearms2` (`firearmID`, `firearm_serial_no`, `manufacturer`, `firearm_type`, `firearm_name`, `firearm_caliber`, `firearm_capacity`, `quantity`, `firearm_class`, `firearm_state`, `booking_status`, `datetime`) VALUES
-(395, 'D-147264', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:17:06'),
-(396, 'D-151830', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:19:36'),
-(397, 'D-145292', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:21:28'),
-(398, 'D-147275', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:24:39'),
-(399, 'D-145310', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:26:32'),
-(400, 'D-145283', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:28:30'),
-(401, 'D-147217', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:30:35'),
-(402, 'D-406044', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:32:52'),
-(403, 'D-147223', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:34:40'),
-(404, 'D-146181', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:36:30'),
-(405, 'D-406046', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-17 13:38:18'),
-(406, 'D-281590', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-18 05:51:29'),
-(407, 'D-280002', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-18 05:53:04'),
-(408, 'D-279984', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-18 05:55:06'),
-(409, 'D-279985', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-18 05:57:44'),
-(410, 'D-280006', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-18 05:59:30'),
-(411, 'D-279982', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-18 06:01:28'),
-(412, 'D-279990', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-18 06:04:46'),
-(413, 'D-281579', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-18 06:09:45'),
-(414, 'D-281529', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-18 06:13:00'),
-(415, 'D-281528', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-18 06:14:48'),
-(416, 'D-281584', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-18 06:16:47'),
-(417, 'D-281527', 'CZ', 'Rifle', 'SCORPION EVO 3', '9x19mm', '30', 0, 'Duty-Weapon', 'Not Faulty', 'Available', '2026-03-18 06:18:51'),
-(418, 'D-153753', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 11:52:54'),
-(419, 'D-138577', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 11:53:53'),
-(420, 'D-138569', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 11:54:53'),
-(421, 'D-132848', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 11:56:06'),
-(422, 'D-132859', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 11:57:05'),
-(423, 'D-135537', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 11:57:51'),
-(424, 'D-135541', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 11:58:49'),
-(425, 'D-135530', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 11:59:32'),
-(426, 'D-138572', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:00:30'),
-(427, 'D-135536', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:02:15'),
-(428, 'D-135513', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:03:12'),
-(429, 'D-135548', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:04:00'),
-(430, 'D-145305', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:04:50'),
-(431, 'D-406070', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:05:33'),
-(432, 'D-146178', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:06:30'),
-(433, 'D-406085', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:11:21'),
-(434, 'D-147230', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:12:25'),
-(435, 'D-406084', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:13:07'),
-(436, 'D-406100', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:13:56'),
-(437, 'D-406014', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:17:11'),
-(438, 'D-406066', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:17:58'),
-(439, 'D-406078', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:18:52'),
-(440, 'D-406064', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:19:37'),
-(441, 'D-406083', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:20:17'),
-(442, 'D-280017', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:21:03'),
-(443, 'D-280035', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:21:46'),
-(444, 'D-280024', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:22:30'),
-(445, 'D-280013', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:23:17'),
-(446, 'D-280010', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:23:58'),
-(447, 'D-280018', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:26:18'),
-(448, 'D-280019', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:27:09'),
-(449, 'D-279994', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:27:55'),
-(450, 'D-280014', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:28:59'),
-(451, 'D-280023', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:29:40'),
-(452, 'D-280036', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:30:27'),
-(453, 'D-280021', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:31:10'),
-(454, 'D-281567', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:32:09'),
-(455, 'D-281500', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:32:59'),
-(456, 'D-281556', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:33:53'),
-(457, 'D-281588', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:36:54'),
-(458, 'D-281592', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:37:49'),
-(459, 'D-315838', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:39:01'),
-(460, 'D-281536', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:39:49'),
-(461, 'D-281506', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:40:57'),
-(462, 'D-315760', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:41:58'),
-(463, 'D-281573', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:43:33'),
-(464, 'D-281569', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:44:20'),
-(465, 'D-281497', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:45:08'),
-(466, 'M9-211694', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:53:40'),
-(467, 'M9-211713', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:57:10'),
-(468, 'M9-215316', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:58:06'),
-(469, 'M9-212154', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 12:59:14'),
-(470, 'M9-215359', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:02:08'),
-(471, 'M9-211716', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:03:30'),
-(472, 'M9-211864', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:04:46'),
-(473, 'M9-212766', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:06:30'),
-(474, 'M9-213927', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:07:39'),
-(475, 'M9-211892', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:08:54'),
-(476, 'M9-212749', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:09:40'),
-(477, 'M9-212910', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:10:36'),
-(478, 'M9-211693', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:11:56'),
-(479, 'M9-215353', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:13:10'),
-(480, 'M9-212183', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:14:01'),
-(481, 'M9-213012', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:14:53'),
-(482, 'M9-211682', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:16:10'),
-(483, 'M9-213995', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:17:14'),
-(484, 'M9-212977', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:18:48'),
-(485, 'M9-212991', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:19:37'),
-(486, 'M9-215367', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:20:36'),
-(487, 'M9-212989', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:21:48'),
-(488, 'H78755Z', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:24:30'),
-(489, 'H78690Z', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:25:26'),
-(490, '11501827', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:27:40'),
-(491, '11501846', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:28:35'),
-(492, '11501276', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:31:34'),
-(493, 'A13005780', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:32:42'),
-(494, 'A13006651', 'Sellier & Bellot', 'Side-Arm', '', '9x19mm', '15', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:33:44'),
-(495, 'AZ-3054', 'AK', 'Rifle', '', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 13:52:58'),
-(496, '3054', 'CZ', 'Rifle', '', '9x19mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 14:01:15'),
-(497, 'CZ1234', 'CZ', 'Rifle', 'CZ-SCORPION', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 14:35:10'),
-(498, 'CZ2222', 'CZ', 'Rifle', 'CZ-SCORPION', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 14:36:18'),
-(499, 'CZX1234', 'CZ', 'Rifle', 'CZ-SCORPION', '7.62x39mm', '30', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 14:58:52'),
-(500, 'SP-0136866', 'Sellier & Bellot', 'Side-Arm', 'SIGPRO', '9x19mm', '15', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 15:05:07'),
-(501, 'SP-0137277', 'Sellier & Bellot', 'Side-Arm', 'SIGPRO', '9x19mm', '15', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 15:05:59'),
-(502, 'SP-0136845', 'Sellier & Bellot', 'Side-Arm', 'SIGPRO', '9x19mm', '15', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 15:07:07'),
-(503, 'A13005679', 'Sellier & Bellot', 'Side-Arm', 'NP-22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 15:08:06'),
-(504, 'A13006542', 'Sellier & Bellot', 'Side-Arm', 'NP-22', '9x19mm', '15', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-18 15:08:54'),
-(505, 'H78688Z', 'BERETTA', 'Side-Arm', 'BERETTA-92', '9x19mm', '15', 1, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-20 18:00:40'),
-(506, 'C402178', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-25 11:40:44'),
-(507, 'C061858', 'CZ', 'Rifle', 'CZ805', '5.56x45mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-25 13:10:08'),
-(508, 'C065683', 'CZ', 'Rifle', 'CZ805', '5.56x45mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-25 13:10:47'),
-(509, 'C065686', 'CZ', 'Rifle', 'CZ805', '5.56x45mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-25 13:12:50'),
-(510, 'C064616', 'CZ', 'Rifle', 'CZ805', '5.56x45mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-25 13:13:24'),
-(511, 'C082013', 'CZ', 'Rifle', 'CZ805', '5.56x45mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-25 13:13:50'),
-(512, 'C402150', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:15:18'),
-(513, 'C326917', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:25:55'),
-(514, 'F141289', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:26:36'),
-(515, 'C306823', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:27:56'),
-(516, 'E021859', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:28:33'),
-(517, 'E004799', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:29:14'),
-(518, 'E021858', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:30:29'),
-(519, 'C367557', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:31:41'),
-(520, 'C402201', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:32:33'),
-(521, 'E021864', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:33:26'),
-(522, 'E013895', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:36:44'),
-(523, 'E021885', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:37:19'),
-(524, 'C326989', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:38:18'),
-(525, 'C425816', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:39:03'),
-(526, 'C326913', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:39:45'),
-(527, 'E013946', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:40:32'),
-(528, 'C329819', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:41:21'),
-(529, 'C326935', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:41:59'),
-(530, 'D418901', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:42:30'),
-(531, 'C402184', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:44:12'),
-(532, 'C402202', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:44:58'),
-(533, 'E021823', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:45:37'),
-(534, 'C364551', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:46:17'),
-(535, 'C326965', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:47:01'),
-(536, 'C402183', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:47:44'),
-(537, 'C306840', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:48:34'),
-(538, 'E013943', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:49:39'),
-(539, 'E013906', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:50:16'),
-(540, 'E004836', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:54:56'),
-(541, 'E004810', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:55:35'),
-(542, 'C422089', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 07:57:14'),
-(543, 'F102326', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:00:16'),
-(544, 'E021888', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:00:55'),
-(545, 'E021880', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:01:30'),
-(546, 'F141249', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:02:05'),
-(547, 'C402178', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:02:38'),
-(548, 'C422042', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:03:20'),
-(549, 'F141276', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:03:54'),
-(550, 'C402187', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:04:40'),
-(551, 'C326975', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:05:35'),
-(552, 'C326973', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:06:11'),
-(553, 'F102305', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:06:55'),
-(554, 'C304844', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:07:26'),
-(555, 'E021812', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:08:01'),
-(556, 'E021806', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:08:33'),
-(557, 'F141270', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:09:22'),
-(558, 'C326952', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:09:54'),
-(559, 'E021804', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:10:32'),
-(560, 'E013932', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:11:10'),
-(561, 'E021871', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:13:54'),
-(562, 'E021841', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:14:32'),
-(563, 'C306822', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:15:07'),
-(564, 'F211131', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:16:10'),
-(565, 'F211106', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:16:37'),
-(566, 'F211117', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:17:33'),
-(567, 'F211092', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:18:15'),
-(568, 'F213060', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:18:55'),
-(569, 'F129876', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-03-26 08:19:34'),
-(570, 'E013855', 'CZ', 'Rifle', 'CZ807', '7.62x39mm', '30', 0, 'Duty-Weapon', 'Not-Faulty', 'Available', '2026-04-14 06:53:19');
 
 -- --------------------------------------------------------
 
@@ -2334,21 +1594,37 @@ INSERT INTO `login_activity` (`loginID`, `admin_username`, `user_role`, `last_lo
 (445, 'william', 'Armourer', 'Tuesday 12th of May 2026 03:09:11 PM', '2026-05-12 15:09:11'),
 (446, 'williams', 'Administrator', 'Tuesday 12th of May 2026 04:00:51 PM', '2026-05-12 16:00:51'),
 (447, 'williams', 'Administrator', 'Tuesday 12th of May 2026 04:48:27 PM', '2026-05-12 16:48:27'),
-(448, 'williams', 'Administrator', 'Tuesday 12th of May 2026 06:02:01 PM', '2026-05-12 18:02:01');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `login_activity2`
---
-
-CREATE TABLE `login_activity2` (
-  `loginID` int(200) NOT NULL,
-  `admin_username` varchar(500) NOT NULL,
-  `user_role` varchar(200) NOT NULL,
-  `last_login_time` varchar(200) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(448, 'williams', 'Administrator', 'Tuesday 12th of May 2026 06:02:01 PM', '2026-05-12 18:02:01'),
+(449, 'boampong', 'Armourer', 'Wednesday 10th of June 2026 04:40:56 PM', '2026-06-10 16:40:56'),
+(450, 'boampong', 'Armourer', 'Wednesday 10th of June 2026 04:41:22 PM', '2026-06-10 16:41:22'),
+(451, 'boampong', 'Armourer', 'Wednesday 10th of June 2026 04:45:46 PM', '2026-06-10 16:45:46'),
+(452, 'boampong', 'Armourer', 'Wednesday 10th of June 2026 04:49:33 PM', '2026-06-10 16:49:33'),
+(453, 'boampong', 'Armourer', 'Wednesday 10th of June 2026 04:53:06 PM', '2026-06-10 16:53:06'),
+(454, 'boampong', 'Armourer', 'Wednesday 10th of June 2026 04:56:31 PM', '2026-06-10 16:56:31'),
+(455, 'boampong', 'Armourer', 'Thursday 11th of June 2026 06:05:34 AM', '2026-06-11 06:05:34'),
+(456, 'boampong', 'Armourer', 'Thursday 11th of June 2026 06:06:22 AM', '2026-06-11 06:06:22'),
+(457, 'boampong', 'Armourer', 'Thursday 11th of June 2026 06:28:02 AM', '2026-06-11 06:28:02'),
+(458, 'boampong', 'Armourer', 'Thursday 11th of June 2026 06:48:34 AM', '2026-06-11 06:48:34'),
+(459, 'boampong', 'Armourer', 'Thursday 11th of June 2026 06:54:16 AM', '2026-06-11 06:54:16'),
+(460, 'boampong', 'Armourer', 'Thursday 11th of June 2026 07:00:17 AM', '2026-06-11 07:00:17'),
+(461, 'boampong', 'Armourer', 'Thursday 11th of June 2026 07:01:43 AM', '2026-06-11 07:01:43'),
+(462, 'boampong', 'Armourer', 'Friday 12th of June 2026 09:17:01 AM', '2026-06-12 09:17:01'),
+(463, 'boampong', 'Armourer', 'Friday 12th of June 2026 09:50:49 AM', '2026-06-12 09:50:49'),
+(464, 'boampong', 'Armourer', 'Monday 15th of June 2026 07:34:27 AM', '2026-06-15 07:34:27'),
+(465, 'boampong', 'Armourer', 'Friday 19th of June 2026 06:26:20 AM', '2026-06-19 06:26:20'),
+(466, 'boampong', 'Armourer', 'Friday 19th of June 2026 11:41:00 AM', '2026-06-19 11:41:00'),
+(467, 'boampong', 'Armourer', 'Saturday 20th of June 2026 07:20:00 PM', '2026-06-20 19:20:00'),
+(468, 'boampong', 'Armourer', 'Monday 22nd of June 2026 07:02:28 AM', '2026-06-22 07:02:28'),
+(469, 'boampong', 'Armourer', 'Monday 22nd of June 2026 04:41:11 PM', '2026-06-22 16:41:11'),
+(470, 'boampong', 'Armourer', 'Monday 22nd of June 2026 04:50:17 PM', '2026-06-22 16:50:17'),
+(471, 'boampong', 'Armourer', 'Monday 22nd of June 2026 05:11:11 PM', '2026-06-22 17:11:11'),
+(472, 'owoahene@22', 'Armourer', 'Monday 22nd of June 2026 05:16:57 PM', '2026-06-22 17:16:57'),
+(473, 'owoahene@22', 'Armourer', 'Tuesday 23rd of June 2026 06:52:20 AM', '2026-06-23 06:52:20'),
+(474, 'owoahene@22', 'Armourer', 'Tuesday 23rd of June 2026 06:52:51 AM', '2026-06-23 06:52:51'),
+(475, 'owoahene@22', 'Armourer', 'Tuesday 23rd of June 2026 06:58:43 AM', '2026-06-23 06:58:43'),
+(476, 'owoahene@22', 'Armourer', 'Tuesday 23rd of June 2026 07:27:19 AM', '2026-06-23 07:27:19'),
+(477, 'owoahene@22', 'Armourer', 'Tuesday 23rd of June 2026 08:17:04 AM', '2026-06-23 08:17:04'),
+(478, 'owoahene@22', 'Armourer', 'Tuesday 23rd of June 2026 10:04:30 AM', '2026-06-23 10:04:30');
 
 -- --------------------------------------------------------
 
@@ -2558,76 +1834,48 @@ INSERT INTO `logout_activity` (`logoutID`, `loginID`, `admin_username`, `user_ro
 (256, 443, 'williams', 'Administrator', 'Tuesday 12th of May 2026 02:57:11 PM', '2026-05-12 14:57:11'),
 (257, 444, 'williams', 'Administrator', 'Tuesday 12th of May 2026 04:00:30 PM', '2026-05-12 16:00:30'),
 (258, 446, 'williams', 'Administrator', 'Tuesday 12th of May 2026 04:48:09 PM', '2026-05-12 16:48:09'),
-(259, 447, 'williams', 'Administrator', 'Tuesday 12th of May 2026 06:00:40 PM', '2026-05-12 18:00:40');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `logout_activity2`
---
-
-CREATE TABLE `logout_activity2` (
-  `logoutID` int(200) NOT NULL,
-  `admin_username` varchar(500) NOT NULL,
-  `user_role` varchar(200) NOT NULL,
-  `last_logout_time` varchar(200) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `messages`
---
-
-CREATE TABLE `messages` (
-  `msg_id` int(200) NOT NULL,
-  `incoming_msg_id` int(255) NOT NULL,
-  `outgoing_msg_id` int(255) NOT NULL,
-  `msg` varchar(1000) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `messages2`
---
-
-CREATE TABLE `messages2` (
-  `msg_id` int(200) NOT NULL,
-  `incoming_msg_id` int(255) NOT NULL,
-  `outgoing_msg_id` int(255) NOT NULL,
-  `msg` varchar(1000) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `notifications`
---
-
-CREATE TABLE `notifications` (
-  `id` int(100) NOT NULL,
-  `noti_user_uniqueid` varchar(100) NOT NULL,
-  `noti_status` varchar(100) NOT NULL,
-  `noti_date` varchar(100) NOT NULL,
-  `noti_type` varchar(100) NOT NULL,
-  `noti_url` varchar(100) NOT NULL,
-  `noti_uniqueid` varchar(100) NOT NULL,
-  `noti_table` varchar(100) NOT NULL,
-  `noti_seen` varchar(100) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `notifications`
---
-
-INSERT INTO `notifications` (`id`, `noti_user_uniqueid`, `noti_status`, `noti_date`, `noti_type`, `noti_url`, `noti_uniqueid`, `noti_table`, `noti_seen`, `datetime`) VALUES
-(1, '12345', 'active', '02/072024', 'Going', 'https://www.wonderglory.com', '1234567', 'Toyota', 'Yes', '2024-07-22 02:31:12'),
-(2, '12345', 'active', '02/072024', 'Going', 'https://www.wonderglory.com', '1234567', 'Toyota', 'Yes', '2024-07-22 02:31:17');
+(259, 447, 'williams', 'Administrator', 'Tuesday 12th of May 2026 06:00:40 PM', '2026-05-12 18:00:40'),
+(260, 445, 'william', 'Armourer', 'Wednesday 13th of May 2026 05:36:57 AM', '2026-05-13 05:36:57'),
+(261, 451, 'williams', 'Administrator', 'Wednesday 13th of May 2026 06:52:25 AM', '2026-05-13 06:52:25'),
+(262, 452, 'williams', 'Administrator', 'Wednesday 13th of May 2026 08:10:13 AM', '2026-05-13 08:10:13'),
+(263, 453, 'williams', 'Administrator', 'Wednesday 13th of May 2026 08:24:52 AM', '2026-05-13 08:24:52'),
+(264, 454, 'williams', 'Administrator', 'Wednesday 13th of May 2026 10:56:12 AM', '2026-05-13 10:56:12'),
+(265, 457, 'william', 'Armourer', 'Wednesday 13th of May 2026 11:53:46 AM', '2026-05-13 11:53:46'),
+(266, 455, 'williams', 'Administrator', 'Wednesday 13th of May 2026 11:54:18 AM', '2026-05-13 11:54:18'),
+(267, 459, 'williams', 'Administrator', 'Wednesday 13th of May 2026 11:54:57 AM', '2026-05-13 11:54:57'),
+(268, 460, 'williams', 'Administrator', 'Wednesday 13th of May 2026 11:56:15 AM', '2026-05-13 11:56:15'),
+(269, 458, 'william', 'Armourer', 'Wednesday 13th of May 2026 11:57:29 AM', '2026-05-13 11:57:29'),
+(270, 462, 'williams', 'Administrator', 'Wednesday 13th of May 2026 12:21:48 PM', '2026-05-13 12:21:48'),
+(271, 463, 'williams', 'Administrator', 'Wednesday 13th of May 2026 02:35:38 PM', '2026-05-13 14:35:38'),
+(272, 461, 'william', 'Armourer', 'Wednesday 13th of May 2026 02:36:47 PM', '2026-05-13 14:36:47'),
+(273, 465, 'william', 'Armourer', 'Tuesday 19th of May 2026 11:50:06 PM', '2026-05-19 23:50:06'),
+(274, 466, 'william', 'Armourer', 'Wednesday 20th of May 2026 06:11:26 AM', '2026-05-20 06:11:26'),
+(275, 467, 'william', 'Armourer', 'Wednesday 20th of May 2026 08:11:02 AM', '2026-05-20 08:11:02'),
+(276, 468, 'william', 'Armourer', 'Wednesday 20th of May 2026 10:20:38 AM', '2026-05-20 10:20:38'),
+(277, 469, 'william', 'Armourer', 'Wednesday 20th of May 2026 11:01:24 AM', '2026-05-20 11:01:24'),
+(278, 470, 'william', 'Armourer', 'Thursday 21st of May 2026 08:35:47 AM', '2026-05-21 08:35:47'),
+(279, 471, 'william', 'Armourer', 'Thursday 21st of May 2026 09:16:34 AM', '2026-05-21 09:16:34'),
+(280, 472, 'william', 'Armourer', 'Thursday 21st of May 2026 01:37:33 PM', '2026-05-21 13:37:33'),
+(281, 473, 'william', 'Armourer', 'Thursday 21st of May 2026 04:21:42 PM', '2026-05-21 16:21:42'),
+(282, 474, 'william', 'Armourer', 'Friday 22nd of May 2026 06:17:48 AM', '2026-05-22 06:17:48'),
+(283, 479, 'william', 'Armourer', 'Friday 22nd of May 2026 11:07:38 AM', '2026-05-22 11:07:38'),
+(284, 480, 'william', 'Armourer', 'Monday 25th of May 2026 12:57:57 PM', '2026-05-25 12:57:57'),
+(285, 481, 'william', 'Armourer', 'Monday 25th of May 2026 01:42:23 PM', '2026-05-25 13:42:23'),
+(286, 482, 'william', 'Armourer', 'Monday 25th of May 2026 04:28:22 PM', '2026-05-25 16:28:22'),
+(287, 483, 'william', 'Armourer', 'Monday 25th of May 2026 06:56:59 PM', '2026-05-25 18:56:59'),
+(288, 486, 'william', 'Armourer', 'Thursday 28th of May 2026 09:34:56 AM', '2026-05-28 09:34:56'),
+(289, 490, 'williams', 'Administrator', 'Thursday 4th of June 2026 07:37:29 PM', '2026-06-04 19:37:29'),
+(290, 491, 'william', 'Armourer', 'Sunday 7th of June 2026 12:45:09 PM', '2026-06-07 12:45:09'),
+(291, 493, 'william', 'Armourer', 'Thursday 11th of June 2026 01:32:15 PM', '2026-06-11 13:32:15'),
+(292, 494, 'william', 'Armourer', 'Thursday 11th of June 2026 02:01:35 PM', '2026-06-11 14:01:35'),
+(293, 495, 'williams', 'Administrator', 'Sunday 14th of June 2026 10:03:59 AM', '2026-06-14 10:03:59'),
+(294, 500, 'williams', 'Administrator', 'Monday 15th of June 2026 12:57:58 AM', '2026-06-15 00:57:58'),
+(295, 501, 'williams', 'Administrator', 'Monday 15th of June 2026 01:48:47 AM', '2026-06-15 01:48:47'),
+(296, 502, 'williams', 'Administrator', 'Monday 15th of June 2026 02:11:35 AM', '2026-06-15 02:11:35'),
+(297, 503, 'williams', 'Administrator', 'Monday 15th of June 2026 02:29:58 AM', '2026-06-15 02:29:58'),
+(298, 499, 'william', 'Armourer', 'Monday 15th of June 2026 02:30:07 AM', '2026-06-15 02:30:07'),
+(299, 505, 'william', 'Armourer', 'Monday 22nd of June 2026 05:18:07 AM', '2026-06-22 05:18:07'),
+(300, 508, 'william', 'Armourer', 'Tuesday 23rd of June 2026 10:16:11 PM', '2026-06-23 22:16:11');
 
 -- --------------------------------------------------------
 
@@ -2694,7 +1942,7 @@ INSERT INTO `officers` (`officerID`, `officer_status`, `officer_image`, `officer
 (42, 'Active In Service', '670969b38c1b62.57633076.jpg', '51727', 'SGT', 'Gyamfi Adu ', 'Male', 'CTD', '0243564537', 'soldiersoldierss674@gmail.com', '2026-03-11 12:17:33', 0),
 (43, 'Active In Service', '67096b307bc127.62073914.jpg', '54296', 'CPL', 'Thomas Abu', 'Male', 'CTD', '0244060406', 'nanaabu156@gmail.com', '2026-03-11 17:41:37', 0),
 (44, 'Active In Service', '67096c20261ed8.73226717.jpg', '58213', 'L/CPL', 'Abraham  Nkumdow ', 'Male', 'CTD', '0243786382', 'nkumdowa@gmail.com', '2026-03-11 11:39:29', 0),
-(45, 'Active In Service', '6709733c1bdde0.34082951.jpg', '', 'INSPR', 'Fred Akafo Sena ', 'Male', 'CTD', '0246264161', 'akafofredsena@gmail.com', '2026-03-24 16:10:47', 0),
+(45, 'Active In Service', '6709733c1bdde0.34082951.jpg', '', 'C/INSPR', 'Fred Akafo Sena', 'Male', 'CTD', '0246264161', 'akafofredsena@gmail.com', '2026-06-23 23:08:52', 0),
 (46, 'Active In Service', '670974a6ebcdc9.60476512.jpg', '58239', 'L/CPL', 'Enerst Anim ', 'Male', 'CTD', '0241020547', 'animernerst2646@gmail.com', '2026-03-11 11:39:51', 0),
 (47, 'Transferred', '6709770413fd45.59674583.jpg', '57889', 'L/CPL', 'Alhassan Titia ', 'Male', 'CTD', '0243907377', 'titiaalhassan90@gmail.com', '2026-03-24 11:42:50', 0),
 (48, 'Active In Service', '670978348f1886.12923791.jpg', '55363', 'L/CPL', 'Eric Acquah', 'Male', 'CTD', '0240339746', 'acquahkojo3@gmail.com', '2026-03-25 11:16:45', 0),
@@ -2820,7 +2068,7 @@ INSERT INTO `officers` (`officerID`, `officer_status`, `officer_image`, `officer
 (1145, 'Active In Service', '69b2cbcdd59f45.56974849.jpg', '66791', 'CONST', 'Assana Abdul Rahman Ganiwu', 'Male', 'CTD', '0599328115', 'abdulrahmanganiwuassana@gmail.com', '2026-03-12 14:21:01', 0),
 (1146, 'Active In Service', '69b2cd68e94e54.42744321.jpg', '65917', 'CONST', 'Paul Akrong Quaye', 'Male', 'CTD', '0536568552', 'pquaye378@gmail.com', '2026-03-12 14:27:52', 0),
 (1147, 'Active In Service', '69b2d06c19e8a5.62502934.jpg', '67199', 'CONST', 'Sule Yahaya', 'Male', 'CTD', '0547170359', 'yahayasule@gmail.com', '2026-03-12 14:40:44', 0),
-(1148, 'Active In Service', '69b2d17a2b8438.44320500.jpg', '67304', 'CONST', 'Baba Osman ', 'Male', 'CTD', '0548072080', 'babaosman1986@gmail.com', '2026-03-12 14:45:14', 0),
+(1148, 'Transferred', '69b2d17a2b8438.44320500.jpg', '67304', 'CONST', 'Baba Osman', 'Male', 'CTD', '0548072080', 'babaosman1986@gmail.com', '2026-06-23 22:55:11', 0),
 (1149, 'Active In Service', '69b2d281d64c82.44534104.jpg', '66670', 'CONST', 'Asubonteng Fredrick', 'Male', 'CTD', '0547481399', 'yawmiles1@gmail.com', '2026-03-12 14:49:37', 0),
 (1150, 'Active In Service', '69b2d3fa0e8871.83843518.jpg', '65839', 'CONST', 'Felix Addison Adu', 'Male', 'CTD', '0256379156', 'felixaduaddison@gmail.com', '2026-03-12 14:55:54', 0),
 (1151, 'Active In Service', '69b2f8a91edce0.97653095.jpg', '66458', 'CONST', 'Anefor Williams', 'Male', 'CTD', '0599288161', 'williamsaneforkhiss70@gmail.com', '2026-03-12 17:32:25', 0),
@@ -2835,369 +2083,37 @@ INSERT INTO `officers` (`officerID`, `officer_status`, `officer_image`, `officer
 (1160, 'Active In Service', '69b42aa1ef4329.51153481.jpg', '66124', 'CONST', 'Osei Bismark', 'Male', 'CTD', '0597763537', 'oseibis106@gmail.com', '2026-03-13 15:17:53', 0),
 (1161, 'Active In Service', '69b442eed55d23.65814209.jpg', '67156', 'CONST', 'Tenadu Asiedu', 'Male', 'CTD', '0554260760', 'tenadu3310@icloud.com', '2026-03-13 17:01:34', 0),
 (1162, 'Active In Service', '69b550add89769.58634026.jpg', '66500', 'CONST', 'Yakubu Amadu', 'Male', 'CTD', '0555711002', 'amaduy@gmail.com', '2026-03-14 12:12:29', 0),
-(1163, 'Active', '69bce289990f39.37091879.jpg', '66769', 'CONST', 'Yankyera Thomas', 'Male', 'CTD', '0558492095', 'yankyerathomas23@gmail.com', '2026-03-20 06:00:41', 0),
-(1164, 'Active', '69bce39d3b06a5.99956353.jpg', '15769', 'CONST', 'Asante Jessica Afful ', 'Female', 'CTD', '0244510656', 'jessicaasante74@gmail.com', '2026-03-20 06:05:17', 0),
-(1165, 'Active', '69bd84a0a80689.68502703.jpg', '67007', 'CONST', 'Reuben Asumah', 'Male', 'CTD', '0542587059', 'reubenasumah01@gmail.com', '2026-03-20 17:32:16', 0),
-(1168, 'Active', '69c3a7c099b0e9.68472705.jpg', '49742', 'SGT', 'Edward Ayendago', 'Male', 'CTD', '0246628571', 'Ayendagoedward3@gmail.com', '2026-03-25 09:15:44', 0),
-(1169, 'Active', '69c3a9b8581cc8.62015692.jpg', '27086', 'INSPR', 'Frank Marful', 'Male', 'CTD', '0548285999', 'frankmarful84@gmail.com', '2026-03-25 09:25:07', 0),
-(1170, 'Active', '69c3aa91cf7eb5.81512693.png', '55097', 'CPL', 'Emmanuel Aboagye', 'Male', 'CTD', '0242904539', 'blackprophet1985@gmail.com', '2026-03-25 09:27:45', 0),
-(1171, 'Active', '69c3ac439acf70.08104489.jpg', '58271', 'L/CPL', 'A. Prosper Kwakye', 'Male', 'CTD', '0243606763', 'aprosper405@gmail.com', '2026-03-25 09:34:59', 0),
-(1172, 'Active', '69c3ad1c7201f8.79338066.jpg', '58197', 'L/CPL', 'George Ankomah', 'Male', 'CTD', '0559964341', 'Georgeankomah020@gmail.com', '2026-03-25 09:38:36', 0),
-(1173, 'Active', '69c3ae9b2ce9e9.79018434.jpg', '54287', 'CPL', 'Fatawo A. Braimah', 'Male', 'CTD', '0542474114', 'Nanababraimah44@gmail.com', '2026-03-25 10:54:32', 0),
-(1174, 'Active', '69c3bbce7f7977.71041849.jpg', '58427', 'L/CPL', 'Jacob Badu', 'Male', 'CTD', '0247703756', 'Jacobamonbadu7@gmail.com', '2026-03-25 10:41:18', 0),
-(1175, 'Active', '69c3bced7d1868.43486601.jpg', '56138', 'L/CPL', 'Quayson Eric Asare', 'Male', 'CTD', '0240855167', 'nanaqwame.kawbell@gmail.com', '2026-03-25 10:46:05', 0),
-(1176, 'Active', '69c3be922ec201.47863688.png', '55212', 'CPL', ' Paul Fosu Brobbey', 'Male', 'CTD', '0545491866', 'Paulfosubrobbey720@gmaii.com', '2026-03-25 10:53:53', 0),
-(1177, 'Active', '69c3c7211d6974.48505792.png', '48825', 'SGT', 'Godfred Zanu', 'Male', 'CTD', '0245178034', 'zanufred@yahoo.com', '2026-03-25 11:29:37', 0),
-(1178, 'Active', '69c3e1b9194382.02045786.jpg', '55928', 'L/CPL', 'Mathias Bature ', 'Male', 'CTD', '0248240420', 'batuuremathias49@gmail.com', '2026-03-25 13:23:05', 0),
-(1179, 'Active', '69c3e23a112e60.03991408.jpg', '54307', 'CPL', 'Joseph Otu Odonkor', 'Male', 'CTD', '0241716850', 'niiotuu75@gmail.com', '2026-03-25 13:25:14', 0),
-(1180, 'Active', '69c3e2a5125c49.34994302.jpg', '54658', 'CPL', 'Albert Cliff Koomson', 'Male', 'CTD', '0546167396', 'ackoomson@gmail.com', '2026-03-25 13:27:01', 0),
-(1181, 'Active', '69c3f2a8571a26.20419835.jpg', '57816', 'L/CPL', 'Simon Obeng', 'Male', 'CTD', '0245634560', 'simonobeng@gmail.com', '2026-03-25 14:35:20', 0),
-(1182, 'Active', '69c3fe3c5bfaa4.08886840.jpg', '11762', 'L/CPL', 'Patience Cobbinah', 'Female', 'CTD', '0249623271', 'emeldapcobbinah01@gmail.com', '2026-03-25 15:24:44', 0),
-(1183, 'Active', '69c3ff72b9bd51.03282168.jpg', '56390', 'L/CPL', 'Yakubu Musah', 'Male', 'CTD', '0249359176', 'everyoungmusahgafaru.mag@gmail.com', '2026-03-25 15:29:54', 0),
-(1184, 'Active', '69c4179793acc6.76574488.png', '58459', 'L/CPL', 'Lawrence Acheampong', 'Male', 'CTD', '0241752325', 'lawrencejay19@yahoo.com', '2026-03-25 17:12:55', 0),
-(1185, 'Active', '69c41825edcc14.61652171.jpg', '56082', 'L/CPL', 'Frank Asamoah Appeakorang', 'Male', 'CTD', '0240576031', 'frankasamoahapeakorang@gmail.com', '2026-03-25 17:15:17', 0),
-(1186, 'Active', '69c418c96b4ec6.93227738.jpg', '58499', 'L/CPL', 'Alexander Owusu', 'Male', 'CTD', '0248818745', 'Alowusu47@gmail.com', '2026-03-25 17:18:01', 0),
-(1187, 'Active', '69c4cbec24def5.72052878.jpg', '58503', 'L/CPL', 'Clinton Marfo', 'Male', 'CTD', '0548030754', 'Marfoclintonyaw@gmail.com', '2026-03-26 06:02:20', 0),
-(1188, 'Active', '69c4cc9c92ed24.40038970.jpg', '58488', 'L/CPL', 'Nelson Prince Asare', 'Male', 'CTD', '0245800557', 'Asarenelson1999@gmail.com', '2026-03-26 06:05:16', 0),
-(1189, 'Active', '69c511ca1873b3.76233401.jpg', '58533', 'L/CPL', 'Darko William Ampem', 'Male', 'CTD', '0548815986', 'Williamdarko327@gmail.com', '2026-03-26 11:00:26', 0),
-(1190, 'Active', '69c5125608d7e1.61040660.jpg', '58249', 'L/CPL', 'Evans Ofosu', 'Male', 'CTD', '0546396899', 'ofosuevans6@gmail.com', '2026-03-26 11:02:46', 0),
-(1191, 'Active', '69c8da3e8de570.88509270.jpg', '53635', 'CPL', 'Benjamin Fevlo', 'Male', 'CTD', '0246182649', 'fevlobenjamin@gmail.com', '2026-03-29 07:52:30', 0),
-(1192, 'Active', '69c8daed8f25d9.41154386.jpg', 'PN', 'INSPR', 'Stephen Nyavor', 'Male', 'CTD', '0245933521', 'Steveposi6@gmail.com', '2026-03-29 07:55:25', 0),
-(1193, 'Active', '69c8db9010cc79.91548550.jpg', '56208', 'L/CPL', 'John Tawiah', 'Male', 'CTD', '0241801900', 'johntawiah280@gmail.com', '2026-03-29 07:58:08', 0),
-(1194, 'Active', '69c9aac0bd6f59.62327774.jpg', '56277', 'L/CPL', 'Benjamin Antwi-Kusi', 'Male', 'CTD', '0241105215', 'benjaminantwikusi@gmail.com', '2026-03-29 22:42:08', 0),
-(1196, 'Active', '69e31f9a5b5769.06168966.jpg', '55104', 'CPL', 'Samuel Opoku', 'Male', 'CTD', '0249737363', 'opokusamuel334@gmail.com', '2026-04-18 06:07:22', 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `officers2`
---
-
-CREATE TABLE `officers2` (
-  `officerID` int(100) NOT NULL,
-  `officer_status` varchar(100) NOT NULL,
-  `officer_image` varchar(500) NOT NULL,
-  `officer_service_no` varchar(500) NOT NULL,
-  `rank` varchar(500) NOT NULL,
-  `full_name` varchar(500) NOT NULL,
-  `gender` varchar(100) NOT NULL,
-  `dept_unit` varchar(500) NOT NULL,
-  `phone_no` varchar(100) NOT NULL,
-  `officer_email` varchar(500) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `officers2`
---
-
-INSERT INTO `officers2` (`officerID`, `officer_status`, `officer_image`, `officer_service_no`, `rank`, `full_name`, `gender`, `dept_unit`, `phone_no`, `officer_email`, `datetime`) VALUES
-(8, 'Active In Service', '6703fd151a37c3.14771957.jpg', '58553', 'CONST', 'Mumin fuseni Abdul ', 'Male', 'CTD', '0242937844', 'fuseniabdulmuni62@gmail.com', '2024-10-07 15:24:05'),
-(9, 'Active In Service', '670413824bd6d9.66769177.jpg', '56140', 'L/CPL', 'Samuel Ntim', 'Male', 'CTD', '0558110251', 'dreevil200@gmail.com', '2024-10-07 16:59:46'),
-(10, 'Active In Service', '670414b5f1c316.79734802.jpg', '56530', 'L/CPL', 'Stephen Owusu', 'Male', 'CTD', '0559536194', 'stephenwusu018@gmail.com', '2024-10-07 17:04:53'),
-(11, 'Active In Service', '67041579c4d831.81684806.jpg', '58473', 'CONST', 'Eugene Bronya', 'Male', 'CTD', '0547582507', 'bronyaeugene@gmail.com', '2024-10-07 17:08:09'),
-(12, 'Active In Service', '67041648580437.44530840.jpg', '58330', 'CONST', 'Stephen Darko', 'Male', 'CTD', '0549052144', 'ember7@gmail.com', '2024-10-07 17:11:36'),
-(13, 'Active In Service', '6704174d634f39.73322795.jpg', '58595', 'CONST', 'Gehead Yeboah', 'Male', 'CTD', '0543100787', 'Geheady@gmail.com', '2024-10-07 17:15:57'),
-(14, 'Active In Service', '670418a21a45d6.39486442.jpg', '57863', 'CONST', 'Bismark Mills', 'Male', 'CTD', '0545382372', 'mllsb1995@gmail.com', '2024-10-07 17:21:38'),
-(15, 'Active In Service', '67042786b8ea45.90840463.jpg', '46522', 'SGT', 'Gordwin Afenyo', 'Male', 'CTD', '0246419071', 'estoppelgodwin@yahoo.com', '2024-10-07 18:25:10'),
-(16, 'Active In Service', '6704289ec91cf0.11312930.jpg', '58459', 'CONST', 'Lawrence Acheampong', 'Male', 'CTD', '0241752325', 'lawrencejay19@yahoo.com', '2024-10-07 18:29:50'),
-(17, 'Active In Service', '670429df5240a6.06880408.jpg', '58547', 'CONST', 'Abudu Abubakari', 'Male', 'CTD', '0267085827', 'abubakariWd@gmai.com', '2024-10-07 18:35:11'),
-(18, 'Active In Service', '67042ae3572ec4.98068389.jpg', '53894', 'L/CPL', 'Aikins Emmanuel', 'Male', 'CTD', '0538054793.', 'aikinsemmanuel597@gmail.com', '2024-10-07 18:39:31'),
-(19, 'Active In Service', '67042c90164ed9.78428298.jpg', '53606', 'L/CPL', 'Ebenezer Aning Nti', 'Male', 'CTD', '0554676667', 'aningnti100@gmail.com', '2024-10-07 18:46:40'),
-(20, 'Active In Service', '67042def908e34.16990129.jpg', '54669', 'L/CPL', 'Felix Appiah', 'Male', 'CTD', '0547296972', 'Appiahfelix36@gmail.com', '2024-10-07 18:52:31'),
-(21, 'Active In Service', '6704415cc86bd6.27878216.jpg', '57569', 'CONST', 'Abdul Malik  Yussif', 'Male', 'CTD', '0546771101', 'malikabduyussif@gmail.com', '2024-10-07 20:15:24'),
-(22, 'Active In Service', '670442c4111208.16560713.jpg', '54551', 'L/CPL', 'Paul Opolibi Yegben', 'Male', 'CTD', '0244196398', 'paulopo402@gmail.com', '2024-10-07 20:21:24'),
-(23, 'Active In Service', '670445e19dc7f3.40837212.jpg', '22455', 'INSPR', 'Roland Tetteh', 'Male', 'CTD', '0243518867', 'rolandcole2000@gmail.com', '2024-10-07 20:34:41'),
-(24, 'Active In Service', '67047d6b7f6336.57061364.jpg', '58460', 'CONST', 'Alex Pwatiu', 'Male', 'CTD', '0244939364', 'PWATIU@gmail.com', '2024-10-08 00:31:39'),
-(25, 'Active In Service', '67048942aa7eb4.33246253.jpg', '58125', 'CONST', 'Benjamin Asiedu ', 'Male', 'CTD', '0244806120', 'kwekumensahadiepena@gmail.com', '2024-10-08 01:22:10'),
-(26, 'Active In Service', '67048c1cbb2b82.22334787.jpg', '58353', 'CONST', 'Paul Father Tsibuah', 'Male', 'CTD', '0243016905', 'paulfathertsiboah@gmail.com', '2024-10-08 01:34:20'),
-(27, 'Active In Service', '670531cf0db154.03197498.jpg', '58551', 'CONST', 'Bright OPoku Agyei', 'Male', 'CTD', '05582962533', 'Brightopuku2010@gmail.com', '2024-10-08 13:21:19'),
-(28, 'Active In Service', '670532ff162947.50573292.jpg', '58516', 'CONST', 'Ernest Yeboah', 'Male', 'CTD', '0550249176', 'ernestyeboah484@gmail.com', '2024-10-08 13:26:23'),
-(29, 'Active In Service', '6705344089fe95.00990441.jpg', '58571', 'CONST', 'Hubert Osei Boamteng ', 'Male', 'CTD', '0558750440', 'hubert.oseiboateng111@gmail.com', '2024-10-08 13:31:44'),
-(30, 'Active In Service', '6705354df1c810.04457986.jpg', '58092', 'CONST', 'Benjamin Sarpong ', 'Male', 'CTD', '0249270443', 'sarpongbenjamin000@gmail.com', '2024-10-08 13:36:13'),
-(31, 'Active In Service', '670536abe9c706.72689736.jpg', '58442', 'CONST', 'David Sedem', 'Male', 'CTD', '0243505841', 'sedemreal@gmail.com', '2024-10-08 13:42:03'),
-(32, 'Active In Service', '670538041656d2.46636766.jpg', '58515', 'CONST', 'Francis Kyei', 'Male', 'CTD', '0245955040', 'fkyei65@gmail.com', '2024-10-08 13:47:48'),
-(33, 'Active In Service', '67053feeb2b394.69718031.jpg', '57914', 'CONST', 'Kenny Adarkwah ', 'Male', 'CTD', '0245620209', 'sirkenny44@gmail.com', '2024-10-08 14:21:34'),
-(34, 'Active In Service', '67054194c8c660.32184331.jpg', '58214', 'CONST', 'Biney Alex Mensah', 'Male', 'CTD', '0207393654', 'mensahbineyalex001@gmail.com', '2024-10-08 14:28:36'),
-(35, 'Active In Service', '67054263363cb2.26951630.jpg', '58463', 'CONST', 'Benjamin Addy ', 'Male', 'CTD', '0241441803', 'addybenjamin78@gmail.com', '2024-10-08 14:32:03'),
-(36, 'Active In Service', '670543f75f17e1.72713618.jpg', '5593.1', 'L/CPL', 'George  Osei Agyemang ', 'Male', 'CTD', '0554143127', 'oseiagyemenggeorge5076@gmail.com', '2024-10-08 14:38:47'),
-(37, 'Active In Service', '670545d449f8b8.81272890.jpg', '46035', 'SGT', 'Solomon Mensah Kojo ', 'Male', 'CTD', '0243056464', 'solomonkojomensah1985@gmail.com', '2024-10-08 14:46:44'),
-(38, 'Active In Service', '67054cb706d9d9.70134585.jpg', '49749', 'CPL', 'Rpbert Azamati ', 'Male', 'CTD', '0244156972', 'azamatirobert18@gmail.com', '2024-10-08 15:16:07'),
-(39, 'Active In Service', '6706886537d993.29867182.jpg', '50128', 'CPL', 'Samuel Quaicoe ', 'Male', 'CTD', '0240447273', 'samuelquaicoe462@gmail.com', '2024-10-09 13:43:01'),
-(40, 'Active In Service', '6706961e416552.04808775.jpg', '58198', 'CONST', 'Solomon Asomani ', 'Male', 'CTD', '0249900151', 'asomanisolomon939@gmail.com', '2024-10-09 14:41:34'),
-(41, 'Active In Service', '670697d72147b2.04817119.jpg', '45232', 'SGT', 'Richard Boampong', 'Male', 'CTD', '0246846556', 'kofiboampong541@gmail.com', '2024-10-09 14:48:55'),
-(42, 'Active In Service', '6707d8bf931f64.46150517.jpg', '55044 ', 'CONST', 'Fred  Agyekum ', 'Male', 'CTD', '0205084186', 'Fredagyekum83@gmail.com', '2024-10-10 13:38:07'),
-(43, 'Active In Service', '6707dc04e99862.44989633.jpg', '57976', 'CONST', 'Richmond  Agyei Yeboah ', 'Male', 'CTD', '0505204123', 'Agyeiyeboah123@gmail.com', '2024-10-10 13:52:04'),
-(44, 'Active In Service', '67095ae1ebd535.45336542.jpg', '56462', 'L/CPL', 'Maxwel  Darko ', 'Male', 'CTD', '0241271891', 'darkomaxwrll@gmail.com', '2024-10-11 17:05:37'),
-(45, 'Active In Service', '67095c08ceab31.21111925.jpg', '46462', 'SGT', 'Simon Bryan  Tibila ', 'Male', 'NVU', '0241084244', 'simontbryan.stb@gmail.com', '2024-10-11 17:10:32'),
-(46, 'Active In Service', '67095d077b5231.06692709.jpg', '53616 ', 'L/CPL', 'Richard  Asare', 'Male', 'CTD', '0247966351', 'asarevuga41@gmail.com', '2024-10-11 17:14:47'),
-(47, 'Active In Service', '67095e65d81f22.13401100.jpg', '58604', 'CONST', 'Richard  Ntiamoah', 'Male', 'CTD', '0242586566', 'richntiamoah07@gmail.com', '2024-10-11 17:20:37'),
-(48, 'Active In Service', '67095f75266453.32938529.jpg', '55068', 'L/CPL', 'Anthony Darko ', 'Male', 'CTD', '0247041041', 'tonydarko31@gmail.com', '2024-10-11 17:25:09'),
-(49, 'Active In Service', '670969b38c1b62.57633076.jpg', '51727', 'CPL', 'Gyamfi Adu ', 'Male', 'CTD', '0243564537', 'soldiersoldierss674@gmail.com', '2024-10-11 18:08:51'),
-(50, 'Active In Service', '67096b307bc127.62073914.jpg', '54296', 'L/CPL', 'Thomas Abu', 'Male', 'CTD', '0244060406', 'nanaabu156@gmail.com', '2024-10-11 18:15:12'),
-(51, 'Active In Service', '67096c20261ed8.73226717.jpg', '58213', 'CONST', 'Abraham  Nkumdow ', 'Male', 'CTD', '0243786382', 'nkumdowa@gmail.com', '2024-10-11 18:19:12'),
-(52, 'Active In Service', '6709733c1bdde0.34082951.jpg', '49546', 'SGT', 'Fred Akafo Sena ', 'Male', 'CTD', '0246264161', 'akafofredsena@gmail.com', '2024-10-11 18:49:32'),
-(53, 'Active In Service', '670974a6ebcdc9.60476512.jpg', '58239', 'CONST', 'Enerst Anim ', 'Male', 'CTD', '0241020547', 'animernerst2646@gmail.com', '2024-10-11 18:55:34'),
-(54, 'Active In Service', '6709770413fd45.59674583.jpg', '57889', 'CONST', 'Alhassan Titia ', 'Male', 'CTD', '0243907377', 'titiaalhassan90@gmail.com', '2024-10-11 19:05:40'),
-(55, 'Active In Service', '670978348f1886.12923791.jpg', '55363', 'L/CPL', 'Erick Acquah', 'Male', 'CTD', '0240339746', 'acquahkojo3@gmail.com', '2024-10-11 19:10:44'),
-(56, 'Active In Service', '6709794af04955.95178375.jpg', '55103', 'L/CPL', 'Samuel  Fianko ', 'Male', 'CTD', '0240508231', 'nanadomprehgolgi7449@gmai.com', '2024-10-11 19:15:22'),
-(57, 'Active In Service', '67097ced866503.04367163.jpg', '54309', 'L/CPL', 'Yakubu  Abdul Majeed ', 'Male', 'CTD', '044478856', 'abdulmajeedyakubu@gmail.com', '2024-10-11 19:30:53'),
-(58, 'Active In Service', '670991afc3be08.69093032.jpg', '49665', 'SGT', 'Wilson Agbley Selorm ', 'Male', 'CTD', '024794954799', 'nanayaowilson@gmail.com', '2024-10-11 20:59:27'),
-(59, 'Active In Service', '6709930ecb00a7.47826854.jpg', '53906', 'L/CPL', 'Jonathanthn1@gmail.com Tansang ', 'Male', 'CTD', '0540116494', 'tansangjn@gmail.com', '2024-10-11 21:05:18'),
-(60, 'Active In Service', '6709946aaa8ea4.72606989.jpg', '55101', 'L/CPL', 'Reuben Ayivi ', 'Male', 'NVU', '0542464600', 'reubenselasi19@gmailk.com', '2024-10-11 21:11:06'),
-(61, 'Active In Service', '6709d347ed8bc6.57513439.jpg', '55933', 'L/CPL', 'Kamaldeen  Awudu', 'Male', 'CTD', '0549269235', 'kamaldeen.999k@gmail.com', '2024-10-12 01:39:19'),
-(62, 'Active In Service', '670a788174fa91.75312494.jpg', '10569', 'CONST', 'Alberta Asieduwaa', 'Male', 'CTD', '0540417582', 'amoakoalberta49@gmail.com', '2024-10-12 13:24:17'),
-(63, 'Active In Service', '670a7a37a5ed83.64890035.jpg', '10706', 'L/CPL', 'Emelia Akyamaa', 'Female', 'CTD', '0247656515', 'glakpeemelia8@gmail.com', '2024-10-12 13:31:35'),
-(64, 'Active In Service', '670a7b25510500.45378903.jpg', '58443', 'CONST', 'David Mpanga Tamanja', 'Male', 'CTD', '0547301280', 'mpangatamanja@gmail.com', '2024-10-12 13:35:33'),
-(65, 'Active In Service', '670a7c1c5ceac9.61008012.jpg', '58461', 'CONST', 'Bismark Kyeremeh ', 'Male', 'CTD', '0556074895', 'kyeremehb82@gmail.com', '2024-10-12 13:39:40'),
-(66, 'Active In Service', '670a7d13d26c27.84839470.jpg', '10048', 'L/CPL', 'Elizabet Appiah', 'Female', 'CTD', '0247138046', 'appiaelizabet496@gmail.com', '2024-10-12 13:43:47'),
-(67, 'Active In Service', '670a7e0a6529a5.53658237.jpg', '53610', 'L/CPL', 'Foster Asante', 'Male', 'CTD', '0545215780', 'asantefoster720@gmail.com', '2024-10-12 13:47:54'),
-(68, 'Active In Service', '670a7fa8700e36.74567968.jpg', '58283', 'L/CPL', 'Ebenezer Mortey ', 'Male', 'CTD', '0552792323', 'ebenezermortey1@gmail.com', '2024-10-12 13:54:48'),
-(69, 'Active In Service', '670a851cc27c22.41754167.jpg', '53589', 'L/CPL', 'Robert Owusu ', 'Male', 'CTD', '0554494169', 'st.owusu9494@gmail.com', '2024-10-12 14:18:04'),
-(70, 'Active In Service', '670a8715558cb9.30761193.jpg', '58113', 'CONST', 'Emmanuel Quarshie Acquah', 'Male', 'CTD', '0549564963', 'flexibee22@gmail.com', '2024-10-12 14:26:29'),
-(71, 'Active In Service', '670a87ec729e25.33018494.jpg', '48463', 'CPL', 'Selorm Awuku', 'Male', 'CTD', '0246887020', 'selormawuku12@gmail.com', '2024-10-12 14:30:04'),
-(72, 'Active In Service', '670a8980872d51.88148350.jpg', '54302', 'L/CPL', 'Wisdom Aglili ', 'Male', 'CTD', '0548117289', 'aglili10@gmail.com', '2024-10-12 14:36:48'),
-(73, 'Active In Service', '670a8b3005c3e4.93267699.jpg', '58387', 'CONST', 'Isaac Owusu Antwi', 'Male', 'CTD', '0243685312', 'paajoe667@gmail.com', '2024-10-12 14:44:00'),
-(74, 'Active In Service', '670aa6c3e17112.83450091.jpg', '56529', 'L/CPL', 'Braimah  Winitor Amissah ', 'Male', 'CTD', '0546482791', 'winitoramissabraimah@gmail.com', '2024-10-12 16:41:39'),
-(75, 'Active In Service', '670aa85533dd36.36976861.jpg', '57984', 'CONST', 'Issac Osei Bonsu', 'Male', 'CTD', '0241045801', 'isaacoseibnsu7732@gmail.com', '2024-10-12 16:48:21'),
-(76, 'Active In Service', '670aab5c426928.37810581.jpg', '58039', 'CONST', 'Clement Aryeetey ', 'Male', 'CTD', '0558270613', 'cleair101@gmail.com', '2024-10-12 17:01:16'),
-(77, 'Active In Service', '670aaea75d7490.66417044.jpg', '56599', 'L/CPL', 'Nicholas Awum,bila ', 'Male', 'CTD', '0240670007', 'awumbilanicholas36@gmail.com', '2024-10-12 17:15:19'),
-(78, 'Active In Service', '670ab0510bdb64.64060199.jpg', '53631', 'L/CPL', 'Degraft Appiah Kwadwo ', 'Male', 'CTD', '0245745772', 'Degraftappiah18@gmail.com', '2024-10-12 17:22:25'),
-(79, 'Active In Service', '670ab127615669.03921218.jpg', '56091', 'L/CPL', 'Bright Nkrumah', 'Male', 'CTD', '0241449009', 'Brightnkrumah18@gmail.com', '2024-10-12 17:25:59'),
-(80, 'Active In Service', '670ab42e2616e8.61771138.jpg', '53888', 'CONST', 'John Kojo Aggrey ', 'Male', 'CTD', '0241105981', 'kojoaggrey99@gmail.com', '2024-10-12 17:38:54'),
-(81, 'Active In Service', '670ab5a24c8953.16320159.jpg', '53671', 'L/CPL', 'Francis Osei', 'Male', 'CTD', '0550161564', 'oseiy660@gmail.com', '2024-10-12 17:45:06'),
-(82, 'Active In Service', '670ab6609f0a80.70525852.jpg', '48725', 'CPL', 'Ebenezer Oti ', 'Male', 'NVU', '0245023676', 'Otiebenezer686@gmail.com', '2024-10-12 17:48:16'),
-(83, 'Active In Service', '670ab7932da7e3.88717539.jpg', '53887', 'L/CPL', 'Justice Ankah ', 'Male', 'CTD', '0544122908', 'kofiankah75@gmail.com', '2024-10-12 17:53:23'),
-(84, 'Active In Service', '670ac0b641edb5.29866001.jpg', '55065', 'L/CPL', 'Patrick Togobo', 'Male', 'CTD', '0241476070', 'liltyme95@gmail.com', '2024-10-12 18:32:22'),
-(85, 'Active In Service', '670ac218c13706.05787201.jpg', '47143', 'L/CPL', 'Julius Sewordo', 'Male', 'CTD', '0243622999', 'juliusheyman2015@gmail.com', '2024-10-12 18:38:16'),
-(86, 'Active In Service', '670ac34473f1e2.40200754.jpg', '54664', 'L/CPL', 'Isaac Obeng ', 'Male', 'CTD', '0248204201', 'obengisaac301@gmail.com', '2024-10-12 18:43:16'),
-(87, 'Active In Service', '670ac4f0bcb576.09985468.jpg', '56139', 'L/CPL', 'Attuquaye Nii Clottey', 'Male', 'CTD', '0541120424', 'clotteyjoel18@gmail.com', '2024-10-12 18:50:24'),
-(88, 'Active In Service', '670ac61da09a43.12621180.jpg', '54678', 'L/CPL', 'Ibrahim Seidu ', 'Male', 'CTD', '0549462670', 'seidu.ibrahim10000@gmail.com', '2024-10-12 18:55:25'),
-(89, 'Active In Service', '670ac72b992a43.86282595.jpg', '55996', 'L/CPL', 'Isaac Oberko ', 'Male', 'CTD', '0244349008', 'Abilityagyei@gmail.com', '2024-10-12 18:59:55'),
-(90, 'Active In Service', '670ac852744c44.93605111.jpg', '56297', 'L/CPL', 'Emmanuel Owusu Ntow ', 'Male', 'CTD', '0241245625', 'owusuntow18@gmail.com', '2024-10-12 19:04:50'),
-(91, 'Active In Service', '670ad384951d08.94188639.jpg', '58339', 'CONST', 'Emmanuel Painstsil', 'Male', 'CTD', '0245138073', 'emmanuelpainstsil02@gmail.com', '2024-10-12 19:52:36'),
-(92, 'Active In Service', '670ad4a7d285e4.09754654.jpg', '53900', 'L/CPL', 'Micheal Baah', 'Male', 'CTD', '0243209811', 'michealbaahhanson@gmail.com', '2024-10-12 19:57:27'),
-(93, 'Active In Service', '670ad60e995dc5.86438225.jpg', '55864', 'L/CPL', 'Ambrose Lier', 'Male', 'CTD', '0248672121', 'ambroselier21@gmail.com', '2024-10-12 20:03:26'),
-(94, 'Active In Service', '670ad6ddef2d01.25590632.jpg', '56213', 'L/CPL', 'Peter Adu ', 'Male', 'CTD', '0541614101', 'adupeterr@gmail.com', '2024-10-12 20:06:53'),
-(95, 'Active In Service', '670ad8e6cea4b1.70198742.jpg', '56337', 'L/CPL', 'Oxford Owusu ', 'Male', 'CTD', '0558341356', 'oxfordgyimah19@gmail.com', '2024-10-12 20:15:34'),
-(96, 'Active In Service', '670ada05d2f565.68256574.jpg', '58416', 'CONST', 'Clement Oteng ', 'Male', 'CTD', '0532371094', 'clementoteng8@gmail.com', '2024-10-12 20:20:21'),
-(97, 'Active In Service', '670adb5973df83.05469489.jpg', '54668', 'L/CPL', 'Karim Abass Abdul', 'Male', 'CTD', '0249535523', 'abasskarim321@gmail.com', '2024-10-12 20:26:01'),
-(98, 'Active In Service', '670adc8a819672.08670500.jpg', '56216', 'L/CPL', 'Emmanuel Annor ', 'Male', 'CTD', '0541383646', 'annoremmanuel063@gmali.com', '2024-10-12 20:31:06'),
-(99, 'Active In Service', '670addcd1feb23.40568844.jpg', '54312', 'L/CPL', 'Winfred Afewu ', 'Male', 'CTD', '0507296427', 'yaowinfred78@gmail.com', '2024-10-12 20:36:29'),
-(100, 'Active In Service', '670adeeb140c29.45500728.jpg', '56062', 'L/CPL', 'James  Akotto Baffour ', 'Male', 'CTD', '0251960417', 'jbafour122@gmail.com', '2024-10-12 20:41:15'),
-(101, 'Active In Service', '670ae03a4d0604.03854794.jpg', '57935', 'CONST', 'Sadique Abubakar ', 'Male', 'CTD', '0552338383', 'abubakarsadique2623@gmail.com', '2024-10-12 20:46:50'),
-(102, 'Active In Service', '670ae167040ab7.17350822.jpg', '56247', 'L/CPL', 'Daniel Korto', 'Male', 'CTD', '0241699424', 'kortodaniel@gmail.com', '2024-10-12 20:51:51'),
-(103, 'Active In Service', '670ae245348c63.88837686.jpg', '58487', 'CONST', 'Francis Ofori ', 'Male', 'CTD', '0242324278', 'Oforifrancis864@gmasil.com', '2024-10-12 20:55:33'),
-(104, 'Active In Service', '670ae3a26186c5.95821787.jpg', '54284', 'L/CPL', 'Tetteh Addo ', 'Male', 'CTD', '0543604447', 'Holysam654@gmail.com', '2024-10-12 21:01:22'),
-(105, 'Active In Service', '670ae4a224aad6.70461340.jpg', '56014', 'L/CPL', 'Philip Glakpe', 'Male', 'CTD', '0240133404', 'mck777e@gmail.com', '2024-10-12 21:05:38'),
-(106, 'Active In Service', '670ae607928de3.09545957.jpg', '56350', 'L/CPL', 'Isaac Mensah ', 'Male', 'CTD', '0240204534', 'Christikemenz072@gmail.com', '2024-10-12 21:11:35'),
-(107, 'Active In Service', '670ae71e96e904.47633737.jpg', '58068', 'CONST', 'Magnus Ediem Yankson', 'Male', 'CTD', '0547099126', 'magnusyankson90@gmail.com', '2024-10-12 21:16:14'),
-(108, 'Active In Service', '670b03f835e4a4.06242592.jpg', '4422', 'INSPR', 'Seidu Issah', 'Male', 'CTD', '0244870265', 'seidudollar4@gmail.com', '2024-10-12 23:19:20'),
-(109, 'Active In Service', '670b05f9101409.52035554.jpg', '54666', 'L/CPL', 'Emmanuel  Kokwa ', 'Male', 'CTD', '0547092530', 'kokwaemmanuel@gmail.com', '2024-10-12 23:27:53'),
-(110, 'Active In Service', '670b086f9fd9a3.75123873.jpg', '54660', 'L/CPL', 'Laud Kpodo Kwaku ', 'Male', 'CTD', '0550662014', 'kweku.banini@gmail.com', '2024-10-12 23:38:23'),
-(111, 'Active In Service', '670b0b12d75bf7.81499515.jpg', '54253', 'L/CPL', 'Wisdom  Adzasu', 'Male', 'CTD', '02426501744', 'wisdomonej@gmai.com', '2024-10-12 23:49:38'),
-(112, 'Active In Service', '670b0e4de89b78.04704670.jpg', '58192', 'CONST', 'Ibrahim Abubakari', 'Male', 'CTD', '0209240782', 'iabubakari1994@gmail.com', '2024-10-13 00:03:25'),
-(113, 'Active In Service', '670b0f642ad830.10357336.jpg', '58414', 'CONST', 'Clement  Ofori ', 'Male', 'CTD', '0244599805', 'Oforiclement66@gmail.com', '2024-10-13 00:08:04'),
-(114, 'Active In Service', '670b109763c445.83896096.jpg', '58578', 'CONST', 'Emmanuel Appiah Agyei ', 'Male', 'CTD', '0544697741', 'appiaagyeiemmanuel96@gmail.com', '2024-10-13 00:13:11'),
-(115, 'Active In Service', '670b1283ce2595.34242330.jpg', '54663', 'L/CPL', 'Godwill  Kyereme', 'Male', 'CTD', '0543643401', 'godwillkyereme@gmail.com', '2024-10-13 00:21:23'),
-(116, 'Active In Service', '670d52cc85ef84.62698389.jpg', '53634', 'L/CPL', 'Junior Asare Isaac', 'Male', 'CTD', '0242343147', 'asareisaac474@gmail.com', '2024-10-14 17:20:12'),
-(117, 'Active In Service', '670da65a50ed80.41477792.jpg', '51977', 'L/CPL', 'Micheal Arlloo', 'Male', 'CTD', '0248259370', 'yawmichealarlloo@gmail.com', '2024-10-14 23:16:42'),
-(118, 'Active In Service', '670da7cc028bb3.05153100.jpg', '56468', 'L/CPL', 'Mohammed Nkrumah ', 'Male', 'CTD', '0555522171', 'nkrumahmohammed1956@gmail.com', '2024-10-14 23:22:52'),
-(119, 'Active In Service', '670da935ee7401.13602923.jpg', '58173', 'CONST', 'David Gmakikubi Tabil', 'Male', 'CTD', '0543592166', 'tdmgmakikubi12@gmail.com', '2024-10-14 23:28:53'),
-(120, 'Active In Service', '670daa943fab19.34119200.jpg', '53629', 'L/CPL', 'Samuel  Asante Antwi ', 'Male', 'CTD', '0548583917', 'samuelantwiasante1992@gmail.com', '2024-10-14 23:34:44'),
-(121, 'Active In Service', '670e96c98a31a9.37399505.jpg', '57955', 'CONST', 'Mohammed  Laryea Nuredeen ', 'Male', 'CTD', '0557458370', 'Kingnuredeenlaryea@gmail.com', '2024-10-15 16:22:33'),
-(122, 'Active In Service', '670e9a5707ac50.56725284.jpg', '55932', 'L/CPL', 'Micheal  Antwi George ', 'Male', 'CTD', '0504641395', 'GeargeAntwiMicheal@gmail.com', '2024-10-15 16:37:43'),
-(123, 'Active In Service', '670e9bca6aa497.94327449.jpg', '44842', 'SGT', 'Ernerst  Appiah', 'Male', 'CTD', '0244973310', 'ernerstnick310@gmaii.com', '2024-10-15 16:43:54'),
-(124, 'Active In Service', '670e9d362d9503.60323358.jpg', '54675', 'L/CPL', 'Samuel  Owusu ', 'Male', 'CTD', '0248058550', 'getsavioula16@gmail.com', '2024-10-15 16:49:58'),
-(125, 'Active In Service', '670e9e8f112572.82339985.jpg', '58585', 'CONST', 'Williams  Kwoffie ', 'Male', 'CTD', '0591056732', 'WilliamsonKwoffie@gmail.com', '2024-10-15 16:55:43'),
-(126, 'Active In Service', '670e9ff297ae84.16146429.jpg', '58532 ', 'CONST', 'Richard  Ankamah ', 'Male', 'CTD', '0558405524', 'richardankamah222@gmail.com', '2024-10-15 17:01:38'),
-(127, 'Active In Service', '670ea1955af439.95203150.jpg', '58549', 'L/CPL', 'David  Midzodzi Cudjoe ', 'Male', 'CTD', '0287495827', 'Cudjoedavid74@gmail.com', '2024-10-15 17:08:37'),
-(128, 'Active In Service', '670ea374472154.55132401.jpg', '47808', 'CPL', 'Bernard Balig ', 'Male', 'CTD', '0546959690', 'bernardbalig@gmail.com', '2024-10-15 17:16:36'),
-(129, 'Active In Service', '670eaaf6eea390.74345655.jpg', '22139', 'INSPR', 'Mathias Nwaaro ', 'Male', 'CTD', '0269474394', 'humbletiger6868@gmail.com', '2024-10-15 17:48:38'),
-(130, 'Active In Service', '670efdd7079978.67363791.jpg', '56503', 'L/CPL', 'Benjamin  Osei Owusu ', 'Male', 'CTD', '0553369882', 'oseiowusubenjamin22@gmail.com', '2024-10-15 23:42:15'),
-(131, 'Active In Service', '670f141f8f5cf4.81811940.jpg', '58636', 'CONST', 'Collins  Agyei', 'Male', 'CTD', '0541783579', 'temperature467@gmail.com', '2024-10-16 01:17:19'),
-(132, 'Active In Service', '670fc8b77b4539.14632392.jpg', '58049 ', 'CONST', 'Ezekiel  Wayo A. ', 'Male', 'CTD', '0541054160', 'WAYORANKING90@GMAIL.COM', '2024-10-16 14:07:51'),
-(133, 'Active In Service', '670fc9c0ded073.95799658.jpg', '58431', 'CONST', 'Richard  Amankwah ', 'Male', 'CTD', '0244602812', 'RICHARDAMANKWAH2019@GMAIL.COM', '2024-10-16 14:12:16'),
-(134, 'Active In Service', '670fca9cde93d6.18099682.jpg', '58331 ', 'CONST', 'Philip Sakah ', 'Male', 'CTD', '0534957494', 'SAKAH27@GMAIL.COM', '2024-10-16 14:15:56'),
-(135, 'Active In Service', '670fcb76e29b28.13122470.jpg', '45323', 'SGT', 'Peter Owusu Mensah', 'Male', 'CTD', '0542746146', 'PETEROWUSU222@GMAIL.COM', '2024-10-16 14:19:34'),
-(136, 'Active In Service', '670fcc9348a5e5.56365837.jpg', '53889', 'L/CPL', 'Fredrick  Owusu Ansah ', 'Male', 'CTD', '0209104547', 'OWUSUANSAHFREDRICK807@GMAIL.COM', '2024-10-16 14:24:19'),
-(137, 'Active In Service', '670fcdcdc6ae86.95719341.jpg', '55948', 'L/CPL', 'Joe  Nakojah M. ', 'Male', 'CTD', '0558818568', 'NAKOJAH0011@GMAIL.COM', '2024-10-16 14:29:33'),
-(138, 'Active In Service', '670fcef185c541.02107135.jpg', '46896', 'CPL', 'Eugene Odame Debrah', 'Male', 'CTD', '0240233318', 'KOLIKOBAAKO@GTMAIL.COM', '2024-10-16 14:34:25'),
-(139, 'Active In Service', '670fd0477d9141.75726054.jpg', '44534', 'SGT', 'Daniel Kitiaku', 'Male', 'CTD', '0591474939', 'KIKIATUTETTEH@GMAIL.COM', '2024-10-16 14:40:07'),
-(140, 'Active In Service', '670fd1b2d22ca9.13432080.jpg', '55984', 'L/CPL', 'Kingsford Ansere ', 'Male', 'CTD', '0540780767', 'KINGSFORDANSERE2@GMAIL.COM', '2024-10-16 14:46:10'),
-(141, 'Active In Service', '670fd34369cb21.44909681.jpg', '53890', 'L/CPL', 'Sampson Otoo', 'Male', 'CTD', '0248307380', 'IDEASOTOO@GMAIL.COM', '2024-10-16 14:52:51'),
-(142, 'Active In Service', '670fd4b3aee4d9.94687653.jpg', '58306', 'CONST', 'Humphrey  Eduah B.', 'Male', 'CTD', '0596876814', 'HUMPHREYNANAEDUAH@GMAIL.COM', '2024-10-16 14:58:59'),
-(143, 'Active In Service', '670fd610966c88.94983645.jpg', '56493', 'L/CPL', 'Godwin Mensah', 'Male', 'CTD', '0591989567', 'GODWINB13@GMAIL.COM', '2024-10-16 15:04:48'),
-(144, 'Active In Service', '67102e9ba84e35.21649175.jpg', '11916', 'CONST', 'Esther  Agyei ', 'Male', 'CTD', '0244754637', 'adepaagyei40@gmail.com', '2024-10-16 21:22:35'),
-(145, 'Active In Service', '67105ca5b1ba30.08382331.jpg', '11904', 'CONST', 'Nancy Fuseini ', 'Male', 'CTD', '0532598389', 'Nancyfuseini24@gmail.com', '2024-10-17 00:39:01'),
-(146, 'Active In Service', '67105d576c1de4.91825395.jpg', '56382', 'L/CPL', 'Emmanuel Appau', 'Male', 'CTD', '0453164389', 'EAPPAU17@GMAIL.COM', '2024-10-17 00:41:59'),
-(147, 'Active In Service', '67105ecf0dce67.96627026.jpg', '58270', 'CONST', 'Clinton Boakye Yiadom', 'Male', 'CTD', '0240735757', 'BYIADOM762@GMAIL.COM', '2024-10-17 00:48:15'),
-(148, 'Active In Service', '67106044468c99.30415501.jpg', '10049', 'L/CPL', 'Bridgette Asor Anokye', 'Female', 'CTD', '0553626125', 'BRIDGETTE.ANNOKYE@GMAIL.COM', '2024-10-17 00:54:28'),
-(149, 'Active In Service', '67106242c07bd2.82366560.jpg', '53892', 'L/CPL', 'Evans Boakye ', 'Male', 'CTD', '0241083650', 'BBOAKYEEVI@GMAIL.COM', '2024-10-17 01:02:58'),
-(150, 'Active In Service', '6710635aac50c3.80618134.jpg', '58029', 'CONST', 'Williams Ansah', 'Male', 'CTD', '0547365406', 'AKWO22@GMAIL.COM', '2024-10-17 01:07:38'),
-(151, 'Active In Service', '6710655ac0cad5.87332520.jpg', '53903', 'L/CPL', 'Emmanuel Aidoo', 'Male', 'CTD', '0531119455', 'AIDOOEMMA1166@GMAIL.COM', '2024-10-17 01:16:10'),
-(152, 'Active In Service', '671066be0594f1.65799854.jpg', '58630', 'CONST', 'Jacob Agyei', 'Male', 'CTD', '0550798563', 'AGYEIJACOB88@GMAIL.COM', '2024-10-17 01:22:06'),
-(153, 'Active In Service', '671069627df518.15753064.jpg', '58598', 'CONST', 'Mankuyali Kofi Dawuni', 'Male', 'CTD', '0247382090', 'MANKUYALID@GMAIL.COM', '2024-10-17 01:33:22'),
-(154, 'Active In Service', '69b24df2e50153.09990062.jpg', '66855', 'CONST', 'Bawah Abdul Isumaila ', 'Male', 'CTD', '0246810812', 'michealwonderful22@gmail.com', '2026-03-12 05:24:02'),
-(155, 'Active In Service', '69b251142e0b44.85058804.jpg', '67163', 'CONST', 'Jeffery Boakye', 'Male', 'CTD', '0556717311', 'nanighjnrnanighjnr@gmail.com', '2026-03-12 05:37:24'),
-(156, 'Active In Service', '69b251f1773cf9.61070979.jpg', '65851', 'CONST', 'Gabriel Ahiable', 'Male', 'CTD', '0552888103', 'xylemgabby5@gmail.com', '2026-03-12 05:41:05'),
-(157, 'Active In Service', '69b2597f9064b9.89473236.jpg', '65848', 'CONST', 'Ebenezer Aidoo', 'Male', 'CTD', '0592334730', 'ebenezerbracka93@gmail.com', '2026-03-12 06:13:19'),
-(158, 'Active In Service', '69b28705873187.89831585.jpg', '66046', 'CONST', 'Samuel Zogli', 'Male', 'CTD', '0571670027', 'zoglisamuel@gmai.com', '2026-03-12 09:27:33'),
-(159, 'Active In Service', '69b28830d5ea93.99641637.jpg', '66138', 'CONST', 'Isaac Appiah', 'Male', 'CTD', '0539293015', 'isaacappiah444@gmail.com', '2026-03-12 09:32:32'),
-(160, 'Active In Service', '69b2894147e6f0.79616494.jpg', '66837', 'CONST', 'Francis Atuobi', 'Male', 'CTD', '0557800168', 'francisatuobi62@gmail.com', '2026-03-12 09:37:05'),
-(161, 'Active In Service', '69b28aba198b96.79213544.jpg', '65808', 'CONST', 'Prosper Dagadu', 'Male', 'CTD', '0555369540', 'shelterdagadu@gmail.com', '2026-03-12 09:43:22'),
-(162, 'Active In Service', '69b2a8b5a0b385.86651086.jpg', '66219', 'CONST', 'Joseph Tannor', 'Male', 'CTD', '0538128270', 'okrahjoseph13@gmail.com', '2026-03-12 11:51:17'),
-(163, 'Active In Service', '69b2aa991b1001.24627116.jpg', '15866', 'CONST', 'Patience Issajoulun', 'Female', 'CTD', '0554570883', 'issajolunp@gmail.com', '2026-03-12 11:59:21'),
-(164, 'Active In Service', '69b2abc99108b8.01318054.jpg', '65827', 'CONST', 'Raymond Asimah', 'Male', 'NVU', '0248184299', 'raymondasimah@gmail.com', '2026-03-12 12:04:25'),
-(165, 'Active In Service', '69b2ae62c20632.37644830.jpg', '66519', 'CONST', 'Eugene Ayirebi Okyere', 'Male', 'CTD', '0508935594', 'eugeneokyere3@gmail.com', '2026-03-12 12:15:30'),
-(166, 'Active In Service', '69b2b12bde6fe0.29997882.jpg', '66741', 'CONST', 'Abdulai Sualisu', 'Male', 'CTD', '0246378819', 'abdulaisualisu353@gmail.com', '2026-03-12 12:27:23'),
-(167, 'Active In Service', '69b2b2125deac3.56142041.jpg', '15815', 'CONST', 'Nancy Agyei', 'Female', 'CTD', '0532856866', 'agyeinancy6866@gmail.com', '2026-03-12 12:31:14'),
-(168, 'Active In Service', '69b2b35c6d4509.23082572.jpg', '67255', 'CONST', 'Abdul Rauf Abdul Rahaman', 'Male', 'CTD', '0549242214', 'raufabinchi@gmail.com', '2026-03-12 12:36:44'),
-(169, 'Active In Service', '69b2b489043f43.52712900.jpg', '66792', 'CONST', 'Haruna Abdulai ', 'Male', 'CTD', '0550404432', 'haruna0550404432@gmail.com', '2026-03-12 12:41:45'),
-(170, 'Active In Service', '69b2b5740c7629.03560368.jpg', '66060', 'CONST', 'Evans Agyampah', 'Male', 'CTD', '0551034576', 'EVANSAGYAMPAH@GMAIL.COM', '2026-03-12 12:45:40'),
-(171, 'Active In Service', '69b2b7397ebdf7.67152389.jpg', '66049', 'CONST', 'Prince Amofah ', 'Male', 'CTD', '0558639069', 'amofahprince2030@icloud.com', '2026-03-12 12:53:13'),
-(172, 'Active In Service', '69b2b87e86c893.11790425.jpg', '66598', 'CONST', 'Samuel Kwesi Tawiah', 'Male', 'CTD', '0542372180', 'samuelkwasitawiah1926@gmail.com', '2026-03-12 12:58:38'),
-(173, 'Active In Service', '69b2b95193a3d8.56421490.jpg', '67049', 'CONST', 'Awudu Ali', 'Male', 'CTD', '0596153167', 'awuduali055@icloud.com', '2026-03-12 13:02:09'),
-(174, 'Active In Service', '69b2baf03834b0.04813811.jpg', '65834', 'CONST', 'Rodney Nii Lantey Lamptey ', 'Male', 'CTD', '0558742835', 'rdnlamptey@gmail.com', '2026-03-12 13:09:04'),
-(175, 'Active In Service', '69b2bc524662a2.74163110.jpg', '67234', 'CONST', 'Rahaman Wajack Abdul', 'Male', 'CTD', '0592661926', 'wajackabdulrahaman5@gmail.com', '2026-03-12 13:14:58'),
-(176, 'Active In Service', '69b2bd3cb037e5.33126265.jpg', '66307', 'CONST', 'Samuel Adyei Nortey', 'Male', 'CTD', '0209341282', 'makonzidc440@gmail.com', '2026-03-12 13:18:52'),
-(177, 'Active In Service', '69b2be2c2a1009.79216770.jpg', '65980', 'CONST', 'Emmanuel Amidini ', 'Male', 'CTD', '0246454723', 'amidiniemmanuel@gmail.com', '2026-03-12 13:22:52'),
-(178, 'Active In Service', '69b2bfe98bc695.49146455.jpg', '66394', 'CONST', 'Samuel Laweh Teye ', 'Male', 'CTD', '0538308646', 'samuelteye527@gmail.com', '2026-03-12 13:30:17'),
-(179, 'Active In Service', '69b2c14ae3f559.34963057.jpg', '66942', 'CONST', 'Apreku Felix', 'Male', 'CTD', '0553487047', 'aprekufelix4@gmail.com', '2026-03-12 13:36:10'),
-(180, 'Active In Service', '69b2c2c1658767.20009656.jpg', '15819', 'CONST', 'Boateng Anna', 'Female', 'CTD', '0247165116', 'Boatenganna1102@gmail.com', '2026-03-12 13:42:25'),
-(181, 'Active In Service', '69b2c4191e5091.89079150.jpg', '67271', 'CONST', 'Asuikanlow Mark', 'Male', 'CTD', '0240940792', 'asuikanlowm@gmail.com', '2026-03-12 13:48:09'),
-(182, 'Active In Service', '69b2c50a361300.94350811.jpg', '66296', 'CONST', 'Arkoh Ebenezer', 'Male', 'CTD', '0558448315', 'ebenezerarkoh@gmail.com', '2026-03-12 13:52:10'),
-(183, 'Active In Service', '69b2cbcdd59f45.56974849.jpg', '66791', 'CONST', 'Assana Abdul Rahman Ganiwu', 'Male', 'CTD', '0599328115', 'abdulrahmanganiwuassana@gmail.com', '2026-03-12 14:21:01'),
-(184, 'Active In Service', '69b2cd68e94e54.42744321.jpg', '65917', 'CONST', 'Paul Akrong Quaye', 'Male', 'CTD', '0536568552', 'pquaye378@gmail.com', '2026-03-12 14:27:52'),
-(185, 'Active In Service', '69b2d06c19e8a5.62502934.jpg', '67199', 'CONST', 'Sule Yahaya', 'Male', 'CTD', '0547170359', 'yahayasule@gmail.com', '2026-03-12 14:40:44'),
-(186, 'Active In Service', '69b2d17a2b8438.44320500.jpg', '67304', 'CONST', 'Baba Osman ', 'Male', 'CTD', '0548072080', 'babaosman1986@gmail.com', '2026-03-12 14:45:14'),
-(187, 'Active In Service', '69b2d281d64c82.44534104.jpg', '66670', 'CONST', 'Asubonteng Fredrick', 'Male', 'CTD', '0547481399', 'yawmiles1@gmail.com', '2026-03-12 14:49:37'),
-(188, 'Active In Service', '69b2d3fa0e8871.83843518.jpg', '65839', 'CONST', 'Felix Addison Adu', 'Male', 'CTD', '0256379156', 'felixaduaddison@gmail.com', '2026-03-12 14:55:54'),
-(189, 'Active In Service', '69b2f8a91edce0.97653095.jpg', '66458', 'CONST', 'Anefor Williams', 'Male', 'CTD', '0599288161', 'williamsaneforkhiss70@gmail.com', '2026-03-12 17:32:25'),
-(190, 'Active In Service', '69b2fc8cb94e66.84077538.jpg', '15994', 'CONST', 'Bafanayah Dennis Helena ', 'Female', 'CTD', '0203722939', 'hbafanayah@gmail.com', '2026-03-12 17:49:00'),
-(191, 'Active In Service', '69b2fdc92e8410.97623710.jpg', '15860', 'CONST', 'Akortia Ursula Arthur', 'Female', 'CTD', '0538025083', 'arthurursula060@gmail.com', '2026-03-12 17:54:17'),
-(192, 'Active In Service', '69b3baf9d62454.47629496.jpg', 'PN26827', 'INSPR', 'Asamoah Frank', 'Male', 'CTD', '0241696977', 'asamoahf18@gmail.com', '2026-03-13 07:21:29'),
-(193, 'Active In Service', '69b3c9592099d1.82925269.jpg', '67232', 'CONST', 'Seth Woolley', 'Male', 'CTD', '0243822471', 'woollieseth71@gmail.com', '2026-03-13 08:22:49'),
-(194, 'Active In Service', '69b3cb1a952059.88393048.jpg', '66407', 'CONST', 'Obeng Joseph Konadu', 'Male', 'CTD', '0547042526', 'obengkonadujoseph@gmail.com', '2026-03-13 08:30:18'),
-(195, 'Active In Service', '69b3cd18cfe4f4.37406090.jpg', '66022', 'CONST', 'Ampomah Emmanuel Anyan', 'Male', 'CTD', '0556834853', 'Ampomaanyan@gmail.com', '2026-03-13 08:38:48'),
-(196, 'Active In Service', '69b3d189ebcde0.37827881.jpg', '66461', 'CONST', 'Terkpertey Samuel Sappor', 'Male', 'CTD', '0243872876', 'kwameopinion2@gmail.com', '2026-03-13 08:57:45'),
-(197, 'Active In Service', '69b42921a9f0b9.40916173.jpg', '61265', 'CONST', 'Fawaz Iddriss', 'Male', 'CTD', '0559917174', 'fawazabdulmugees@gmail.com', '2026-03-13 15:11:29'),
-(198, 'Active In Service', '69b42aa1ef4329.51153481.jpg', '66124', 'CONST', 'Osei Bismark', 'Male', 'CTD', '0597763537', 'oseibis106@gmail.com', '2026-03-13 15:17:53'),
-(199, 'Active In Service', '69b442eed55d23.65814209.jpg', '67156', 'CONST', 'Tenadu Asiedu', 'Male', 'CTD', '0554260760', 'tenadu3310@icloud.com', '2026-03-13 17:01:34'),
-(200, 'Active In Service', '69b550add89769.58634026.jpg', '66500', 'CONST', 'Yakubu Amadu', 'Male', 'CTD', '0555711002', 'amaduy@gmail.com', '2026-03-14 12:12:29'),
-(201, 'Active', '69bce289990f39.37091879.jpg', '66769', 'CONST', 'Yankyera Thomas', 'Male', 'CTD', '0558492095', 'yankyerathomas23@gmail.com', '2026-03-20 06:00:41'),
-(202, 'Active', '69bce39d3b06a5.99956353.jpg', '15769', 'CONST', 'Asante Jessica Afful ', 'Female', 'CTD', '0244510656', 'jessicaasante74@gmail.com', '2026-03-20 06:05:17'),
-(203, 'Active', '69bd84a0a80689.68502703.jpg', '67007', 'CONST', 'Reuben Asumah', 'Male', 'CTD', '0542587059', 'reubenasumah01@gmail.com', '2026-03-20 17:32:16'),
-(204, 'Active', '69c38834ba6b50.29334719.jpg', '56082', 'L/CPL', 'Frank Asamoah Appeakorang', 'Male', 'CTD', '0240576031', 'frankasamoahapeakorang@gmail.com', '2026-03-25 07:01:08'),
-(205, 'Active', '69c38c2ea01995.01356689.png', '58459', 'L/CPL', 'Lawrence Acheampong', 'Male', 'CTD', '0241752325', 'lawrencejay19@yahoo.com', '2026-03-25 07:18:06'),
-(206, 'Active', '69c3a7c099b0e9.68472705.jpg', '49742', 'SGT', 'Edward Ayendago', 'Male', 'CTD', '0246628571', 'Ayendagoedward3@gmail.com', '2026-03-25 09:15:44'),
-(207, 'Active', '69c3a9b8581cc8.62015692.jpg', 'Pn', 'INSPR', 'Frank Marful', 'Male', 'CTD', '0548285999', 'frankmarful84@gmail.com', '2026-03-25 09:24:08'),
-(208, 'Active', '69c3aa91cf7eb5.81512693.png', '55097', 'CPL', 'Emmanuel Aboagye', 'Male', 'CTD', '0242904539', 'blackprophet1985@gmail.com', '2026-03-25 09:27:45'),
-(209, 'Active', '69c3ac439acf70.08104489.jpg', '58271', 'L/CPL', 'A. Prosper Kwakye', 'Male', 'CTD', '0243606763', 'aprosper405@gmail.com', '2026-03-25 09:34:59'),
-(210, 'Active', '69c3ad1c7201f8.79338066.jpg', '58197', 'L/CPL', 'George Ankomah', 'Male', 'CTD', '0559964341', 'Georgeankomah020@gmail.com', '2026-03-25 09:38:36'),
-(211, 'Active', '69c3ae9b2ce9e9.79018434.jpg', '54287', 'CPL', 'A. Fatawo Braimah', 'Male', 'CTD', '0542474114', 'Nanababraimah44@gmail.com', '2026-03-25 09:44:59'),
-(212, 'Active', '69c3bbce7f7977.71041849.jpg', '58427', 'L/CPL', 'Jacob Badu', 'Male', 'CTD', '0247703756', 'Jacobamonbadu7@gmail.com', '2026-03-25 10:41:18'),
-(213, 'Active', '69c3bced7d1868.43486601.jpg', '56138', 'L/CPL', 'Quayson Eric Asare', 'Male', 'CTD', '0240855167', 'nanaqwame.kawbell@gmail.com', '2026-03-25 10:46:05'),
-(214, 'Active', '69c3be922ec201.47863688.png', '55212', 'CPL', 'Fosu Paul Brobbey', 'Male', 'CTD', '0545491866', 'Paulfosubrobbey720@gmaii.com', '2026-03-25 10:53:06'),
-(215, 'Active', '69c3c7211d6974.48505792.png', '48825', 'SGT', 'Godfred Zanu', 'Male', 'CTD', '0245178034', 'zanufred@yahoo.com', '2026-03-25 11:29:37'),
-(216, 'Active', '69c3e1b9194382.02045786.jpg', '55928', 'L/CPL', 'Mathias Bature ', 'Male', 'CTD', '0248240420', 'batuuremathias49@gmail.com', '2026-03-25 13:23:05'),
-(217, 'Active', '69c3e23a112e60.03991408.jpg', '54307', 'CPL', 'Joseph Otu Odonkor', 'Male', 'CTD', '0241716850', 'niiotuu75@gmail.com', '2026-03-25 13:25:14'),
-(218, 'Active', '69c3e2a5125c49.34994302.jpg', '54658', 'CPL', 'Albert Cliff Koomson', 'Male', 'CTD', '0546167396', 'ackoomson@gmail.com', '2026-03-25 13:27:01'),
-(219, 'Active', '69c3f2a8571a26.20419835.jpg', '57816', 'L/CPL', 'Simon Obeng', 'Male', 'CTD', '0245634560', 'simonobeng@gmail.com', '2026-03-25 14:35:20'),
-(220, 'Active', '69c3fe3c5bfaa4.08886840.jpg', '11762', 'L/CPL', 'Patience Cobbinah', 'Female', 'CTD', '0249623271', 'emeldapcobbinah01@gmail.com', '2026-03-25 15:24:44'),
-(221, 'Active', '69c3ff72b9bd51.03282168.jpg', '56390', 'L/CPL', 'Yakubu Musah', 'Male', 'CTD', '0249359176', 'everyoungmusahgafaru.mag@gmail.com', '2026-03-25 15:29:54'),
-(222, 'Active', '69c4179793acc6.76574488.png', '58459', 'L/CPL', 'Lawrence Acheampong', 'Male', 'CTD', '0241752325', 'lawrencejay19@yahoo.com', '2026-03-25 17:12:55'),
-(223, 'Active', '69c41825edcc14.61652171.jpg', '56082', 'L/CPL', 'Frank Asamoah Appeakorang', 'Male', 'CTD', '0240576031', 'frankasamoahapeakorang@gmail.com', '2026-03-25 17:15:17'),
-(224, 'Active', '69c418c96b4ec6.93227738.jpg', '58499', 'L/CPL', 'Alexander Owusu', 'Male', 'CTD', '0248818745', 'Alowusu47@gmail.com', '2026-03-25 17:18:01'),
-(225, 'Active', '69c4cbec24def5.72052878.jpg', '58503', 'L/CPL', 'Clinton Marfo', 'Male', 'CTD', '0548030754', 'Marfoclintonyaw@gmail.com', '2026-03-26 06:02:20'),
-(226, 'Active', '69c4cc9c92ed24.40038970.jpg', '58488', 'L/CPL', 'Nelson Prince Asare', 'Male', 'CTD', '0245800557', 'Asarenelson1999@gmail.com', '2026-03-26 06:05:16'),
-(227, 'Active', '69c511ca1873b3.76233401.jpg', '58533', 'L/CPL', 'Darko William Ampem', 'Male', 'CTD', '0548815986', 'Williamdarko327@gmail.com', '2026-03-26 11:00:26'),
-(228, 'Active', '69c5125608d7e1.61040660.jpg', '58249', 'L/CPL', 'Evans Ofosu', 'Male', 'CTD', '0546396899', 'ofosuevans6@gmail.com', '2026-03-26 11:02:46'),
-(229, 'Active', '69c8da3e8de570.88509270.jpg', '53635', 'CPL', 'Benjamin Fevlo', 'Male', 'CTD', '0246182649', 'fevlobenjamin@gmail.com', '2026-03-29 07:52:30'),
-(230, 'Active', '69c8daed8f25d9.41154386.jpg', 'PN', 'INSPR', 'Stephen Nyavor', 'Male', 'CTD', '0245933521', 'Steveposi6@gmail.com', '2026-03-29 07:55:25'),
-(231, 'Active', '69c8db9010cc79.91548550.jpg', '56208', 'L/CPL', 'John Tawiah', 'Male', 'CTD', '0241801900', 'johntawiah280@gmail.com', '2026-03-29 07:58:08'),
-(232, 'Active', '69c9aac0bd6f59.62327774.jpg', '56277', 'L/CPL', 'Benjamin Antwi-Kusi', 'Male', 'CTD', '0241105215', 'benjaminantwikusi@gmail.com', '2026-03-29 22:42:08'),
-(233, 'Active', '69e082268d9ea2.33187317.jpg', '55104', 'CPL', 'Samuel Opoku', 'Male', 'CTD', '0249737363', 'opokusamuel334@gmail.com', '2026-04-16 06:31:02'),
-(234, 'Active', '69e31f9a5b5769.06168966.jpg', '55104', 'CPL', 'Samuel Opoku', 'Male', 'CTD', '0249737363', 'opokusamuel334@gmail.com', '2026-04-18 06:07:22');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `other_assets`
---
-
-CREATE TABLE `other_assets` (
-  `assetID` int(200) NOT NULL,
-  `asset_image` varchar(500) NOT NULL,
-  `asset_serial_no` varchar(200) NOT NULL,
-  `manufacturer` varchar(500) NOT NULL,
-  `asset_name` varchar(500) NOT NULL,
-  `asset_quantity` varchar(200) NOT NULL,
-  `asset_state` varchar(200) NOT NULL,
-  `booking_status` varchar(200) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `other_assets2`
---
-
-CREATE TABLE `other_assets2` (
-  `assetID` int(200) NOT NULL,
-  `asset_image` varchar(500) NOT NULL,
-  `asset_serial_no` varchar(200) NOT NULL,
-  `manufacturer` varchar(500) NOT NULL,
-  `asset_name` varchar(500) NOT NULL,
-  `asset_quantity` varchar(200) NOT NULL,
-  `asset_state` varchar(200) NOT NULL,
-  `booking_status` varchar(200) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `user_id` int(100) NOT NULL,
-  `unique_id` int(255) NOT NULL,
-  `fname` varchar(500) NOT NULL,
-  `lname` varchar(500) NOT NULL,
-  `email` varchar(500) NOT NULL,
-  `password` varchar(200) NOT NULL,
-  `img` varchar(200) NOT NULL,
-  `status` varchar(200) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`user_id`, `unique_id`, `fname`, `lname`, `email`, `password`, `img`, `status`, `datetime`) VALUES
-(1, 1415932073, 'William', 'Ntisem', 'williamntisem123@gmail.com', 'da6323f18608d4e26f562320fca718ca', '1721608304face5.jpg', 'Offline now', '2024-07-22 00:32:26');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users2`
---
-
-CREATE TABLE `users2` (
-  `user_id` int(100) NOT NULL,
-  `unique_id` int(255) NOT NULL,
-  `fname` varchar(500) NOT NULL,
-  `lname` varchar(500) NOT NULL,
-  `email` varchar(500) NOT NULL,
-  `password` varchar(200) NOT NULL,
-  `img` varchar(200) NOT NULL,
-  `status` varchar(200) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+(1163, 'Active In Service', '69bce289990f39.37091879.jpg', '66769', 'CONST', 'Yankyera Thomas', 'Male', 'CTD', '0558492095', 'yankyerathomas23@gmail.com', '2026-06-23 07:37:59', 0),
+(1164, 'Active In Service', '69bce39d3b06a5.99956353.jpg', '15769', 'CONST', 'Asante Jessica Afful ', 'Female', 'CTD', '0244510656', 'jessicaasante74@gmail.com', '2026-06-23 07:38:56', 0),
+(1165, 'Active In Service', '69bd84a0a80689.68502703.jpg', '67007', 'CONST', 'Reuben Asumah', 'Male', 'CTD', '0542587059', 'reubenasumah01@gmail.com', '2026-06-23 07:46:28', 0),
+(1168, 'Active In Service', '69c3a7c099b0e9.68472705.jpg', '49742', 'SGT', 'Edward Ayendago', 'Male', 'CTD', '0246628571', 'Ayendagoedward3@gmail.com', '2026-06-23 07:39:36', 0),
+(1169, 'Active In Service', '69c3a9b8581cc8.62015692.jpg', '27086', 'INSPR', 'Frank Marful', 'Male', 'CTD', '0548285999', 'frankmarful84@gmail.com', '2026-06-23 07:40:24', 0),
+(1170, 'Active In Service', '69c3aa91cf7eb5.81512693.png', '55097', 'CPL', 'Emmanuel Aboagye', 'Male', 'CTD', '0242904539', 'blackprophet1985@gmail.com', '2026-06-23 07:45:23', 0),
+(1171, 'Active In Service', '69c3ac439acf70.08104489.jpg', '58271', 'L/CPL', 'A. Prosper Kwakye', 'Male', 'CTD', '0243606763', 'aprosper405@gmail.com', '2026-06-23 07:45:54', 0),
+(1172, 'Active In Service', '69c3ad1c7201f8.79338066.jpg', '58197', 'L/CPL', 'George Ankomah', 'Male', 'CTD', '0559964341', 'Georgeankomah020@gmail.com', '2026-06-23 07:46:52', 0),
+(1173, 'Active In Service', '69c3ae9b2ce9e9.79018434.jpg', '54287', 'CPL', 'Fatawo A. Braimah', 'Male', 'CTD', '0542474114', 'Nanababraimah44@gmail.com', '2026-06-23 07:47:25', 0),
+(1174, 'Active In Service', '69c3bbce7f7977.71041849.jpg', '58427', 'L/CPL', 'Jacob Badu', 'Male', 'CTD', '0247703756', 'Jacobamonbadu7@gmail.com', '2026-06-23 07:47:42', 0),
+(1175, 'Active In Service', '69c3bced7d1868.43486601.jpg', '56138', 'L/CPL', 'Quayson Eric Asare', 'Male', 'CTD', '0240855167', 'nanaqwame.kawbell@gmail.com', '2026-06-23 07:48:04', 0),
+(1176, 'Active In Service', '69c3be922ec201.47863688.png', '55212', 'CPL', ' Paul Fosu Brobbey', 'Male', 'CTD', '0545491866', 'Paulfosubrobbey720@gmaii.com', '2026-06-23 07:49:02', 0),
+(1177, 'Active In Service', '69c3c7211d6974.48505792.png', '48825', 'SGT', 'Godfred Zanu', 'Male', 'CTD', '0245178034', 'zanufred@yahoo.com', '2026-06-23 07:50:13', 0),
+(1178, 'Active In Service', '69c3e1b9194382.02045786.jpg', '55928', 'L/CPL', 'Mathias Bature ', 'Male', 'CTD', '0248240420', 'batuuremathias49@gmail.com', '2026-06-23 07:50:33', 0),
+(1179, 'Active In Service', '69c3e23a112e60.03991408.jpg', '54307', 'CPL', 'Joseph Otu Odonkor', 'Male', 'CTD', '0241716850', 'niiotuu75@gmail.com', '2026-06-23 07:50:48', 0),
+(1180, 'Active In Service', '69c3e2a5125c49.34994302.jpg', '54658', 'CPL', 'Albert Cliff Koomson', 'Male', 'CTD', '0546167396', 'ackoomson@gmail.com', '2026-06-23 07:51:05', 0),
+(1181, 'Active In Service', '69c3f2a8571a26.20419835.jpg', '57816', 'L/CPL', 'Simon Obeng', 'Male', 'CTD', '0245634560', 'simonobeng@gmail.com', '2026-06-23 07:51:22', 0),
+(1182, 'Active In Service', '69c3fe3c5bfaa4.08886840.jpg', '11762', 'L/CPL', 'Patience Cobbinah', 'Female', 'CTD', '0249623271', 'emeldapcobbinah01@gmail.com', '2026-06-23 07:51:41', 0),
+(1183, 'Active In Service', '69c3ff72b9bd51.03282168.jpg', '56390', 'L/CPL', 'Yakubu Musah', 'Male', 'CTD', '0249359176', 'everyoungmusahgafaru.mag@gmail.com', '2026-06-23 07:45:00', 0),
+(1184, 'Active In Service', '69c4179793acc6.76574488.png', '58459', 'L/CPL', 'Lawrence Acheampong', 'Male', 'CTD', '0241752325', 'lawrencejay19@yahoo.com', '2026-06-23 07:44:40', 0),
+(1185, 'Active In Service', '69c41825edcc14.61652171.jpg', '56082', 'L/CPL', 'Frank Asamoah Appeakorang', 'Male', 'CTD', '0240576031', 'frankasamoahapeakorang@gmail.com', '2026-06-23 07:44:14', 0),
+(1186, 'Active In Service', '69c418c96b4ec6.93227738.jpg', '58499', 'L/CPL', 'Alexander Owusu', 'Male', 'CTD', '0248818745', 'Alowusu47@gmail.com', '2026-06-23 07:43:19', 0),
+(1187, 'Active In Service', '69c4cbec24def5.72052878.jpg', '58503', 'L/CPL', 'Clinton Marfo', 'Male', 'CTD', '0548030754', 'Marfoclintonyaw@gmail.com', '2026-06-23 07:43:50', 0),
+(1188, 'Active In Service', '69c4cc9c92ed24.40038970.jpg', '58488', 'L/CPL', 'Nelson Prince Asare', 'Male', 'CTD', '0245800557', 'Asarenelson1999@gmail.com', '2026-06-23 07:42:55', 0),
+(1189, 'Active In Service', '69c511ca1873b3.76233401.jpg', '58533', 'L/CPL', 'Darko William Ampem', 'Male', 'CTD', '0548815986', 'Williamdarko327@gmail.com', '2026-06-23 07:42:30', 0),
+(1190, 'Active In Service', '69c5125608d7e1.61040660.jpg', '58249', 'L/CPL', 'Evans Ofosu', 'Male', 'CTD', '0546396899', 'ofosuevans6@gmail.com', '2026-06-23 07:42:15', 0),
+(1191, 'Active In Service', '69c8da3e8de570.88509270.jpg', '53635', 'CPL', 'Benjamin Fevlo', 'Male', 'CTD', '0246182649', 'fevlobenjamin@gmail.com', '2026-06-23 07:42:00', 0),
+(1192, 'Active In Service', '69c8daed8f25d9.41154386.jpg', 'PN', 'INSPR', 'Stephen Nyavor', 'Male', 'CTD', '0245933521', 'Steveposi6@gmail.com', '2026-06-23 07:41:45', 0),
+(1193, 'Active In Service', '69c8db9010cc79.91548550.jpg', '56208', 'L/CPL', 'John Tawiah', 'Male', 'CTD', '0241801900', 'johntawiah280@gmail.com', '2026-06-23 07:41:25', 0),
+(1194, 'Active In Service', '69c9aac0bd6f59.62327774.jpg', '56277', 'L/CPL', 'Benjamin Antwi-Kusi', 'Male', 'CTD', '0241105215', 'benjaminantwikusi@gmail.com', '2026-06-23 07:41:08', 0),
+(1196, 'Active In Service', '69e31f9a5b5769.06168966.jpg', '55104', 'CPL', 'Samuel Opoku', 'Male', 'CTD', '0249737363', 'opokusamuel334@gmail.com', '2026-06-23 07:40:50', 0);
 
 --
 -- Indexes for dumped tables
@@ -3252,15 +2168,15 @@ ALTER TABLE `asset_bookings2`
   ADD PRIMARY KEY (`bookAssetID`);
 
 --
+-- Indexes for table `blank_ammo_bookings`
+--
+ALTER TABLE `blank_ammo_bookings`
+  ADD PRIMARY KEY (`blank_ammoID`);
+
+--
 -- Indexes for table `bookings`
 --
 ALTER TABLE `bookings`
-  ADD PRIMARY KEY (`bookingID`);
-
---
--- Indexes for table `bookings2`
---
-ALTER TABLE `bookings2`
   ADD PRIMARY KEY (`bookingID`);
 
 --
@@ -3276,45 +2192,15 @@ ALTER TABLE `faulty_ammo`
   ADD PRIMARY KEY (`faulty_ammoID`);
 
 --
--- Indexes for table `faulty_ammo2`
---
-ALTER TABLE `faulty_ammo2`
-  ADD PRIMARY KEY (`faulty_ammoID`);
-
---
--- Indexes for table `faulty_asset`
---
-ALTER TABLE `faulty_asset`
-  ADD PRIMARY KEY (`faulty_assetID`);
-
---
--- Indexes for table `faulty_asset2`
---
-ALTER TABLE `faulty_asset2`
-  ADD PRIMARY KEY (`faulty_assetID`);
-
---
 -- Indexes for table `faulty_weapons`
 --
 ALTER TABLE `faulty_weapons`
   ADD PRIMARY KEY (`faulty_weaponID`);
 
 --
--- Indexes for table `faulty_weapons2`
---
-ALTER TABLE `faulty_weapons2`
-  ADD PRIMARY KEY (`faulty_weaponID`);
-
---
 -- Indexes for table `firearms`
 --
 ALTER TABLE `firearms`
-  ADD PRIMARY KEY (`firearmID`);
-
---
--- Indexes for table `firearms2`
---
-ALTER TABLE `firearms2`
   ADD PRIMARY KEY (`firearmID`);
 
 --
@@ -3348,58 +2234,16 @@ ALTER TABLE `login_activity`
   ADD PRIMARY KEY (`loginID`);
 
 --
--- Indexes for table `login_activity2`
---
-ALTER TABLE `login_activity2`
-  ADD PRIMARY KEY (`loginID`);
-
---
 -- Indexes for table `logout_activity`
 --
 ALTER TABLE `logout_activity`
   ADD PRIMARY KEY (`logoutID`);
 
 --
--- Indexes for table `logout_activity2`
---
-ALTER TABLE `logout_activity2`
-  ADD PRIMARY KEY (`logoutID`);
-
---
--- Indexes for table `messages`
---
-ALTER TABLE `messages`
-  ADD PRIMARY KEY (`msg_id`);
-
---
--- Indexes for table `messages2`
---
-ALTER TABLE `messages2`
-  ADD PRIMARY KEY (`msg_id`);
-
---
--- Indexes for table `notifications`
---
-ALTER TABLE `notifications`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `officers`
 --
 ALTER TABLE `officers`
   ADD PRIMARY KEY (`officerID`);
-
---
--- Indexes for table `officers2`
---
-ALTER TABLE `officers2`
-  ADD PRIMARY KEY (`officerID`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -3409,7 +2253,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admin_lists`
 --
 ALTER TABLE `admin_lists`
-  MODIFY `adminID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `adminID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `admin_lists2`
@@ -3454,22 +2298,22 @@ ALTER TABLE `asset_bookings2`
   MODIFY `bookAssetID` int(200) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `blank_ammo_bookings`
+--
+ALTER TABLE `blank_ammo_bookings`
+  MODIFY `blank_ammoID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `bookingID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=272;
-
---
--- AUTO_INCREMENT for table `bookings2`
---
-ALTER TABLE `bookings2`
-  MODIFY `bookingID` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `bookingID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=275;
 
 --
 -- AUTO_INCREMENT for table `daily_activities`
 --
 ALTER TABLE `daily_activities`
-  MODIFY `activityID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `activityID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=200;
 
 --
 -- AUTO_INCREMENT for table `faulty_ammo`
@@ -3478,33 +2322,9 @@ ALTER TABLE `faulty_ammo`
   MODIFY `faulty_ammoID` int(200) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `faulty_ammo2`
---
-ALTER TABLE `faulty_ammo2`
-  MODIFY `faulty_ammoID` int(200) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `faulty_asset`
---
-ALTER TABLE `faulty_asset`
-  MODIFY `faulty_assetID` int(200) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `faulty_asset2`
---
-ALTER TABLE `faulty_asset2`
-  MODIFY `faulty_assetID` int(200) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `faulty_weapons`
 --
 ALTER TABLE `faulty_weapons`
-  MODIFY `faulty_weaponID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- AUTO_INCREMENT for table `faulty_weapons2`
---
-ALTER TABLE `faulty_weapons2`
   MODIFY `faulty_weaponID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
@@ -3512,12 +2332,6 @@ ALTER TABLE `faulty_weapons2`
 --
 ALTER TABLE `firearms`
   MODIFY `firearmID` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=577;
-
---
--- AUTO_INCREMENT for table `firearms2`
---
-ALTER TABLE `firearms2`
-  MODIFY `firearmID` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=571;
 
 --
 -- AUTO_INCREMENT for table `firearm_calibers`
@@ -3547,61 +2361,19 @@ ALTER TABLE `firearm_name`
 -- AUTO_INCREMENT for table `login_activity`
 --
 ALTER TABLE `login_activity`
-  MODIFY `loginID` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=449;
-
---
--- AUTO_INCREMENT for table `login_activity2`
---
-ALTER TABLE `login_activity2`
-  MODIFY `loginID` int(200) NOT NULL AUTO_INCREMENT;
+  MODIFY `loginID` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=479;
 
 --
 -- AUTO_INCREMENT for table `logout_activity`
 --
 ALTER TABLE `logout_activity`
-  MODIFY `logoutID` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=260;
-
---
--- AUTO_INCREMENT for table `logout_activity2`
---
-ALTER TABLE `logout_activity2`
-  MODIFY `logoutID` int(200) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `messages`
---
-ALTER TABLE `messages`
-  MODIFY `msg_id` int(200) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `messages2`
---
-ALTER TABLE `messages2`
-  MODIFY `msg_id` int(200) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `notifications`
---
-ALTER TABLE `notifications`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `logoutID` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=301;
 
 --
 -- AUTO_INCREMENT for table `officers`
 --
 ALTER TABLE `officers`
-  MODIFY `officerID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1201;
-
---
--- AUTO_INCREMENT for table `officers2`
---
-ALTER TABLE `officers2`
-  MODIFY `officerID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=235;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `user_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `officerID` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1203;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
